@@ -19,7 +19,7 @@
             </div>
         </div>
         <div id="Login" class="col s12">
-            <form action="php/index.php" method="POST">
+            <form action="index.php?controller=loginController&action=login" method="POST">
                 <div class="card-panel">
                     <h4 class="center-align">Inicie sesión para acceder</h4>
                     <div class="input-field col s12 l12 xl12">
@@ -35,7 +35,7 @@
             </form>
         </div>
         <div id="Registro" class="col s12">
-            <form action="php/index.php" method="POST">
+            <form action="index.php?controller=loginController&action=register" method="POST">
                 <div class="card-panel">
                     <h4 class="center-align">Registrese</h4>
                     <div class="row">
@@ -56,9 +56,6 @@
                             <input type="Password" name="rep" id="rep" required>
                             <label for="rep">Repita su contraseña</label>
                         </div>
-                        <div class="col s12 l6 xl6">
-                            Aqui va la selección de admin o vendedor
-                        </div>
                     </div>
                     <button class="btn" type="submit" name="Enviar">Enviar</button>
                 </div>
@@ -67,6 +64,6 @@
     </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script src="js/index.js"></script>
+<script src="<?=base_url?>js/index.js"></script>
 
 </html>
