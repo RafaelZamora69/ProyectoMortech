@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 27-06-2020 a las 21:38:25
+-- Tiempo de generación: 28-06-2020 a las 22:42:21
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -21,9 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `mortechsaldo`
 --
-DROP DATABASE IF EXISTS `mortechsaldo`;
-CREATE DATABASE IF NOT EXISTS `mortechsaldo`;
+CREATE DATABASE IF NOT EXISTS `mortechsaldo` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `mortechsaldo`;
+
 -- --------------------------------------------------------
 
 --
@@ -50,17 +50,19 @@ CREATE TABLE IF NOT EXISTS `empleado` (
   `Nombre` varchar(70) NOT NULL,
   `Correo` varchar(40) NOT NULL,
   `Usuario` varchar(20) NOT NULL,
-  `Password` varchar(150) NOT NULL,
+  `Password` varchar(255) NOT NULL,
   `Jerarquia` varchar(50) NOT NULL,
   PRIMARY KEY (`idEmpleado`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `empleado`
 --
 
 INSERT INTO `empleado` (`idEmpleado`, `Nombre`, `Correo`, `Usuario`, `Password`, `Jerarquia`) VALUES
-(1, 'Empleado de prueba', 'prueba@hotmail.com', 'prueba', '123', 'admin');
+(1, 'Empleado de prueba', 'prueba@hotmail.com', 'prueba', '123', 'admin'),
+(14, 'Prueba', '', 'aver123', '$2y$10$R5rN.4obWjZX8OtaqPtKU.MF8WJ9LzJrPiVrIi6AfDKWaE/t8dBYu', 'vendedor'),
+(16, 'PruebaSesion', '', 'aver', '$2y$10$nNQ2W4Oh23ti3zVTulAu3OoFacbX1uj1boaKUANWNVdihDPxty1pu', 'vendedor');
 
 -- --------------------------------------------------------
 

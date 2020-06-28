@@ -1,9 +1,11 @@
 <?php
+    session_start();
     require_once 'autoload.php';
     require_once 'config/parameters.php';
     require_once 'config/conexion.php';
+    require_once 'helpers/utils.php';
     if (isset($_GET['controller'])) {
-        $controllerName = $_GET['controller'];
+        $controllerName = $_GET['controller'].'Controller';
         if (strcmp('loginController', $controllerName) != 0) {
             require_once 'views/layouts/navbar.php';
             require_once 'views/layouts/sidenav.php';

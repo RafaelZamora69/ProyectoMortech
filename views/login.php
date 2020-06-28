@@ -7,7 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recargas</title>
 </head>
-
+<?php 
+    utils::deleteSession('register');
+?>
 <body>
     <div class="container">
         <div class="row">
@@ -19,7 +21,7 @@
             </div>
         </div>
         <div id="Login" class="col s12">
-            <form action="index.php?controller=loginController&action=login" method="POST">
+            <form action="<?=base_url?>login/login" method="POST">
                 <div class="card-panel">
                     <h4 class="center-align">Inicie sesión para acceder</h4>
                     <div class="input-field col s12 l12 xl12">
@@ -35,7 +37,7 @@
             </form>
         </div>
         <div id="Registro" class="col s12">
-            <form action="<?=base_url?>loginController/register" method="POST">
+            <form action="<?=base_url?>login/register" method="POST">
                 <div class="card-panel">
                     <h4 class="center-align">Registrese</h4>
                     <div class="row">

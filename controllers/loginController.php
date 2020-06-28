@@ -8,7 +8,10 @@
         }
 
         public function login() {
-            
+            if(isset($_POST)){
+                $user = new user();
+                $user ->loginUser($_POST['User'], $_POST['Password']);
+            }
         }
 
         public function register() {

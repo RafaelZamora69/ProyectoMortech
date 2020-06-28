@@ -3,7 +3,8 @@
         private $Nombre, $User, $Password, $Mail, $Herarchy, $connection;
 
         function __construct(){
-             $this->connection = dbConnect::connect();
+            $connect = new dbConnect();
+            $this->connection = $connect->connect();
         }
 
         function setNombre($Nombre){
@@ -50,8 +51,30 @@
         function registerUser(){
             //Inserción de datos
             $register = $this->connection->prepare("insert into empleado(Nombre, Correo, Usuario, Password, Jerarquia) values (?,?,?,?,?);");
-            $register->bind_param("sssss", $this->getNombre(), $this->getMail(), $this->getUser(), $this->getPassword(), $this->getHerarchy());
-            return $register->execute() ? true : false;
+            $register->bind_param("sssss", $Nombre, $Mail, $User, $Password, $Herarchy); 
+            $register->execute() ? $_SESSION['register'] = "complete" : $_SESSION['register'] = "failed";
+            $register->close();
+            header('Location: ' . base_url . 'principal/index');
+        }
+
+        function loginUser($User, $Password){
+            var_dump($User);
+            var_dump($Password);
+            $login = $this->connection->prepare("select Nombre, Password from empleado where Usuario = ?");
+            $login->bind_param("s", $User);
+            $login->execute();
+            $login->bind_result($Nombre, $UserPassword);
+            $login->fetch();
+            if($Nombre){
+                $verify = password_verify($Password, $UserPassword);
+                if($verify){
+                    header('Location: ' . base_url . 'principal/index');
+                } else {
+                    echo 'Incorrect password';
+                }
+            } else {
+                echo 'No existe este usuario';
+            }
         }
     }
     
