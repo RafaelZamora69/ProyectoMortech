@@ -21,7 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `mortechsaldo`
 --
-
+DROP DATABASE IF EXISTS `mortechsaldo`;
+CREATE DATABASE IF NOT EXISTS `mortechsaldo`;
+USE `mortechsaldo`;
 -- --------------------------------------------------------
 
 --

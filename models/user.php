@@ -1,21 +1,13 @@
 <?php 
     class user {
-        private $id, $Nombre, $User, $Password, $Mail, $Herarchy, $connection;
+        private $Nombre, $User, $Password, $Mail, $Herarchy, $connection;
 
         function __construct(){
              $this->connection = dbConnect::connect();
         }
 
-        function setId($id){
-            $this->id = $id;
-        }
-
-        function getId(){
-            return $this->id;
-        }
-
         function setNombre($Nombre){
-            $this->Nombre = $Nombre;
+            $this->Nombre = $this->connection->real_escape_string($Nombre);
         }
 
         function getNombre(){
@@ -23,7 +15,7 @@
         }
 
         function setUser($User){
-            $this->User = $User;
+            $this->User = $this->connection->real_escape_string($User);
         }
 
         function getUser(){
@@ -32,7 +24,7 @@
 
         function setPassword($Password){
             //Salt encryption
-            $this->Password = password_hash($Password);
+            $this->Password = password_hash($this->connection->real_escape_string($Password),PASSWORD_DEFAULT); 
         }
 
         function getPassword(){
@@ -40,15 +32,15 @@
         }
 
         function setMail($Mail){
-            return $this->Mail;
+            $this->Mail = $this->connection->real_escape_string($this->Mail);
         }
 
         function getMail(){
-            return $this->Mail;
+            return $this->connection->real_escape_string($this->Mail);
         }
 
         function setHerarchy($Herarchy){
-            $this->Herarchy = $Herarchy;
+            $this->Herarchy = $this->connection->real_escape_string($Herarchy);
         }
 
         function getHerarchy(){
@@ -58,12 +50,8 @@
         function registerUser(){
             //Inserción de datos
             $register = $this->connection->prepare("insert into empleado(Nombre, Correo, Usuario, Password, Jerarquia) values (?,?,?,?,?);");
-            $register->bind_param(1, $this->getNombre());
-            $register->bind_param(2, $this->getMail());
-            $register->bind_param(3, $this->getUser());
-            $register->bind_param(4, $this->getPassword());
-            $register->bind_param(5, $this->getHerarchy());
-            $register->execute();
+            $register->bind_param("sssss", $this->getNombre(), $this->getMail(), $this->getUser(), $this->getPassword(), $this->getHerarchy());
+            return $register->execute() ? true : false;
         }
     }
     

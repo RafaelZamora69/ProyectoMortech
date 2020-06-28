@@ -35,13 +35,17 @@
             </form>
         </div>
         <div id="Registro" class="col s12">
-            <form action="index.php?controller=loginController&action=register" method="POST">
+            <form action="<?=base_url?>loginController/register" method="POST">
                 <div class="card-panel">
                     <h4 class="center-align">Registrese</h4>
                     <div class="row">
                         <div class="input-field col s12 l6 xl6">
                             <input type="text" name="Nombre" id="Nombre" required>
                             <label for="Nombre">Nombre</label>
+                        </div>
+                        <div class="input-field col s12 l6 xl6">
+                            <input type="text" name="Usuario" id="Usuario" required>
+                            <label for="Usuario">Usuario</label>
                         </div>
                         <div class="input-field col s12 l6 xl6">
                             <input type="text" name="Correo" id="Correo" required
