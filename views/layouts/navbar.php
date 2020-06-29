@@ -21,13 +21,13 @@
 </nav>
 <!-- dropDown -->
 <ul id="dropdownMenu" class="dropdown-content">
-    <li><a class="waves-effect" href="index.php">Inicio</a></li>
+    <li><a class="waves-effect" href="principal.php">Inicio</a></li>
     <li class="divider"></li>
     <li><a class="waves-effect">Venta de servicio</a></li>
-    <li><a href="" class="waves-effect">Busqueda de cliente</a></li>
+    <li><a href="cliente" class="waves-effect">Busqueda de cliente</a></li>
     <li class="divider"></li>
-    <li><a class="waves-effect">Reportes</a></li>
-    <li><a class="waves-effect">Ventas</a></li>
-    <li><a class="waves-effect">Corte</a></li>
+    <li><a href="reportes" class="waves-effect">Ventas</a></li>
+    <li><a href="corte" class="waves-effect">Corte</a></li>
+    <li><a href="utilidad" class="waves-effect">Utilidades</a></li>
 </ul>
 <div class="container">

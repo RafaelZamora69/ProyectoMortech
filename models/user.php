@@ -53,13 +53,10 @@
             $register = $this->connection->prepare("insert into empleado(Nombre, Correo, Usuario, Password, Jerarquia) values (?,?,?,?,?);");
             $register->bind_param("sssss", $Nombre, $Mail, $User, $Password, $Herarchy); 
             $register->execute() ? $_SESSION['register'] = "complete" : $_SESSION['register'] = "failed";
-            $register->close();
             header('Location: ' . base_url . 'principal/index');
         }
 
         function loginUser($User, $Password){
-            var_dump($User);
-            var_dump($Password);
             $login = $this->connection->prepare("select Nombre, Password from empleado where Usuario = ?");
             $login->bind_param("s", $User);
             $login->execute();

@@ -1,7 +1,19 @@
+<?php 
+    require_once 'config/parameters.php'; 
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="<?=base_url?>styles/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recargas</title>
+</head>
 <?php
     session_start();
     require_once 'autoload.php';
-    require_once 'config/parameters.php';
     require_once 'config/conexion.php';
     require_once 'helpers/utils.php';
     require_once 'models/api.php';
@@ -35,5 +47,5 @@
 </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script src="js/index.js"></script>
+<script src="<?=base_url?>js/index.js"></script>
 </html>
