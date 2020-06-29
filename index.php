@@ -4,6 +4,7 @@
     require_once 'config/parameters.php';
     require_once 'config/conexion.php';
     require_once 'helpers/utils.php';
+    require_once 'models/api.php';
     if (isset($_GET['controller'])) {
         $controllerName = $_GET['controller'].'Controller';
         if (strcmp('loginController', $controllerName) != 0) {
