@@ -19,7 +19,7 @@
                 </div>
                 <div class="row">
                     <div class="col s12">
-                        <div class="input-field chips" required>
+                        <div class="input-field chips">
                         </div>
                     </div>
                 </div>
@@ -46,11 +46,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s12">
+                    <div class="col s9">
                         <div class="input-field">
                             <textarea name="Nota" id="Nota" class="materialize-textarea" required></textarea>
                             <label for="Nota">Observaciones</label>
                         </div>
+                    </div>
+                    <div class="col s3">
+                        <p>
+                            <label>
+                                <input type="checkbox" class="pagado">
+                                <span>Pagado</span>
+                            </label>
+                        </p>
                     </div>
                 </div>
                 <div class="row">

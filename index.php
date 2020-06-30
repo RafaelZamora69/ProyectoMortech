@@ -1,5 +1,13 @@
 <?php 
     require_once 'config/parameters.php'; 
+    require_once 'autoload.php';
+    require_once 'config/conexion.php';
+    require_once 'helpers/utils.php';
+    require_once 'models/api.php';
+    $controllerName = $_GET['controller'].'Controller';
+    if((strcmp($controllerName, 'serviciosController') == 0) && (strcmp($_GET['action'], 'recargaSaldo') == 0)){
+        goto salto;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,12 +20,7 @@
 </head>
 <?php
     session_start();
-    require_once 'autoload.php';
-    require_once 'config/conexion.php';
-    require_once 'helpers/utils.php';
-    require_once 'models/api.php';
     if (isset($_GET['controller'])) {
-        $controllerName = $_GET['controller'].'Controller';
         if (strcmp('loginController', $controllerName) != 0) {
             require_once 'views/layouts/navbar.php';
             require_once 'views/layouts/sidenav.php';
@@ -29,6 +32,7 @@
         echo 'No existe este controlador';
         exit();
     }
+    salto:
     if (class_exists($controllerName)) {
         $controller = new $controllerName();
         if (isset($_GET['action']) && method_exists($controller, $_GET['action'])) {
@@ -38,14 +42,12 @@
             $default = defaultAction;
             $controller->$default();
         } else {
-            echo 'No existe este método';
+            echo 'No existe este método ' . $_GET['action'];
         }
     } else {
-        echo 'No existe esta clase';
+        echo 'No existe esta clase ' . $controllerName;
+    }
+    if(strcmp($_GET['action'], 'recargaSaldo') != 0){
+        include_once 'views/layouts/footer.php';
     }
 ?>
-</div>
-</body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script src="<?=base_url?>js/index.js"></script>
-</html>

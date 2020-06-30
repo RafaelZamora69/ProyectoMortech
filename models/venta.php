@@ -4,7 +4,7 @@
 
         function __construct(){
             $connect = new dbConnect();
-            $this->connection = $connect;
+            $this->connection = $connect->connect();
             $client = new api();
             $this->api = $client;
         }
@@ -77,7 +77,7 @@
             $registro = $this->connection->prepare("insert into cliente (nombre) values (?)");
             $registro->bind_param("s", $NombreCliente);
             $registro->execute();
-            return getIdCliente($NombreCliente);
+            return $this->getIdCliente($NombreCliente);
         }
 
         private function getIdCliente($NombreCliente){
@@ -89,7 +89,7 @@
             if($idCliente){
                 return $idCliente;
             } else {
-                return registrarCliente($NombreCliente);
+                return $this->registrarCliente($NombreCliente);
             }
         }
 
@@ -102,11 +102,21 @@
             return $idEmpleado;
         }
 
-        function InsertarRecarga($NombreCliente, $NombreEmpleado, $NombreServicio, $NumTel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones){
-            $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, PrecioVenta, Pagado, Observaciones, Fecha) values(?,?,?,?,?,?,?,?,?,?);");
-            $idCliente = getIdCliente($NombreCliente);
-            $idEmpleado = getIdEmpleado($NombreEmpleado);
-            $venta->bind_param("iisssddiss", $idCliente, $idEmpleado, 'Recarga Saldo', $NumTel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones,DateTime::getTimestamp());
-            $register->execute();
+        function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones){
+            
+            $arr = json_decode($telefonos, true);
+            try {
+                for ($i=0; $i < count($arr); $i++) {
+                    $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, PrecioVenta, Pagado, Observaciones, Fecha) values(?,?,?,?,?,?,?,?,?,?);");
+                    $idCliente = $this->getIdCliente($NombreCliente);
+                    $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
+                    $tel = $arr[$i]['tag'];
+                    $venta->bind_param("iisssddiss", $idCliente, $idEmpleado, 'Recarga Saldo', $tel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones, DateTime::getTimestamp());
+                    $register->execute();
+                }
+                echo 'Terminado';
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
         }
     }
