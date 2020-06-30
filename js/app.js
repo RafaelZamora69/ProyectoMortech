@@ -8,13 +8,20 @@ form.addEventListener('submit', RecargaSaldo);
 function RecargaSaldo(e) {
     e.preventDefault();
     var datos = new FormData(form);
-    fetch('/servicios/recargaSaldo', {
+    fetch('servicios&action=recargaSaldo', {
         method: 'POST',
         body: datos
     })
         .then(res => res.json())
-        .then(data => {
-            console.log(data);
+        .then(res => {
+            if(res.succes){
+                console.log('Correcto');
+            } else {
+                console.log('Error');
+            }
+        })
+        .catch(function(e){
+            console.log(e.message);
         });
     /*
     let chips = document.getElementsByClassName("chips");

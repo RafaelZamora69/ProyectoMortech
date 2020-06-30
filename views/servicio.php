@@ -77,4 +77,4 @@
     </div>
 </div>
 </div>
-<script src="<?=base_url?>js/venta.js"></script>
+<script src="<?=base_url?>js/app.js"></script>

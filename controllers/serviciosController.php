@@ -8,9 +8,9 @@
 
         public function recargaSaldo(){
             if(isset($_POST)){
-                json_encode('Datos recibidos');
+                echo json_encode('Datos recibidos');
             } else {
-                json_encode('Datos no recibidos');
+                echo json_encode('Datos no recibidos');
             }
         }
 

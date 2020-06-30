@@ -3,7 +3,6 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="<?=base_url?>styles/styles.css">
@@ -23,6 +22,7 @@
             require_once 'views/layouts/navbar.php';
             require_once 'views/layouts/sidenav.php';
         }
+        
     } elseif(!isset($_GET['controller']) && !isset($_GET['action'])) {
         $controllerName = defaultController;
     }else {
