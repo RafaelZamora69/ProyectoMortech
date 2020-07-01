@@ -23,6 +23,12 @@
             }
         }
 
+        public function nombresClientes(){
+            $venta = new venta();
+            echo json_encode($venta->obtenerClientes());
+            
+        }
+
         public function ventaServicio(){
 
         }

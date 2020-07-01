@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
         placeholder: "Numeros",
         secondaryPlaceholder: "+ Numero"
     });
+    //Operadoras
     var autocom = document.querySelectorAll('.autocomplete');
     var instances = M.Autocomplete.init(autocom, {
         data: {

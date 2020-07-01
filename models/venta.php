@@ -73,6 +73,15 @@
             return $this->Observaciones;
         }
 
+        public function obtenerClientes(){
+            $clientes = [];
+            $query = $this->connection->query("select Nombre from cliente;");
+            while($row = $query->fetch_assoc()){
+                $clientes[] = array("Nombre" => $row["Nombre"], "Img" => null);
+            }
+            return $clientes;
+        }
+
         private function registrarCliente($NombreCliente){
             $registro = $this->connection->prepare("insert into cliente (nombre) values (?)");
             $registro->bind_param("s", $NombreCliente);
@@ -104,16 +113,8 @@
 
         private function recarga($Telefono, $Monto){
             $respuesta = $this->api->recargaTae(1, $Telefono, $Monto);
-            var_dump($respuesta);
-            if(strcmp($respuesta[0], '0') == 0){
-                array_push($mensajes, $Telefono);
-                array_push($mensajes, "Código", $respuesta[0]);
-                array_push($mensajes, "Mensaje", $respuesta[1]);
-                var_dump($mensajes);
-                return true;
-            } else {
-                return false;
-            }
+            $this->mensajes[] = array('Tel' => $Telefono, 'Codigo' => $respuesta[0], 'Mensaje' => $respuesta[1]);
+            return strcmp($respuesta[0], '0') == 0 ? true : false;
         }
 
         function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones){
@@ -129,14 +130,12 @@
                         $venta->bind_param("iisssddis", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones);
                         if(!$venta->execute()){
                             echo 'Error en la inserción ' . $venta->error;
-                        } else {
-                            //Si se hizo la recarga y se insertó
                         }
                     }
                 }
-                return json_encode('Terminado');
+                return json_encode($this->mensajes);
             } catch (Exception $e) {
-                echo $e->getMessage();
+                return json_encode($e->getMessage());
             }
         }
     }

@@ -1,9 +1,24 @@
-var elems = document.querySelectorAll('.modal');
-var instance = M.Modal.init(elems);
+var data = ObtenerClientes();
 let btnEnviar = document.getElementById('finalizarVenta');
 let form = document.getElementById('FormSaldo');
 
 form.addEventListener('submit', RecargaSaldo);
+
+function ObtenerClientes() {
+    fetch('servicios&action=nombresClientes')
+        .then(res => res.json())
+        .then(res => {
+            console.log(res);
+            var text = "";
+            for (var i in res) {
+                text += '"' + res[i].Nombre + '": ' + res[i].Img + ',';
+            }
+            return text;
+        })
+        .catch(function (e) {
+            console.log(e.message);
+        });
+}
 
 function RecargaSaldo(e) {
     e.preventDefault();
@@ -18,16 +33,25 @@ function RecargaSaldo(e) {
     })
         .then(res => res.json())
         .then(res => {
-            console.log(elems);
-            elems[0].M_Modal.__proto__.open
+            console.log(res);
+            for (var i in res) {
+                console.log(res[i].Tel);
+                console.log(res[i].Codigo);
+                console.log(res[i].Mensaje);
+            }
         })
         .catch(function (e) {
             console.log(e.message);
         });
-    /*
-    let chips = document.getElementsByClassName("chips");
-    let data = chips[0].M_Chips.chipsData;
-    if (data.length == 0) {
-        alert("Introduzca un número telefónico");
-    }*/
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    //modal de notificación
+    var elems = document.querySelectorAll('.modal');
+    var instance = M.Modal.init(elems);
+    //Nombres de clientes
+    var autocomName = document.querySelectorAll('.autocompleteName');
+    var instances = M.Autocomplete.init(autocomName, {
+        data: { data }
+    });
+});
