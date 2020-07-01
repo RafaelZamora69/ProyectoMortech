@@ -9,7 +9,7 @@
         public function recargaSaldo(){
             if(isset($_POST)){
                 $venta = new venta();
-                $venta->InsertarRecarga($_POST['Name'],
+                echo $venta->InsertarRecarga($_POST['Name'],
                                         'Prueba',
                                         $_POST['numeros'],
                                         'Recarga de salgo',

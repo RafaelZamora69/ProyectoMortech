@@ -32,5 +32,9 @@
             $recargaTae = $this->client->recargaTae($Params);
             $doc = new DOMDocument;
             $doc->loadXML($recargaTae->data);
+            //Creamos un arreglo [codigo, mensaje]
+            $array = array($doc->getElementsByTagName('codigo')->item(0)->nodeValue,
+                    $doc->getElementsByTagName('mensaje')->item(0)->nodeValue);
+            return $array;
         }
     }

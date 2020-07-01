@@ -1,6 +1,6 @@
-<?php 
+<?php
     class venta {
-        private $NombreCliente, $NombreEmpleado, $NumTel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones, $connection, $api;
+        private $NombreCliente, $NombreEmpleado, $NumTel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones, $connection, $api, $mensajes = [];
 
         function __construct(){
             $connect = new dbConnect();
@@ -102,20 +102,39 @@
             return $idEmpleado;
         }
 
+        private function recarga($Telefono, $Monto){
+            $respuesta = $this->api->recargaTae(1, $Telefono, $Monto);
+            var_dump($respuesta);
+            if(strcmp($respuesta[0], '0') == 0){
+                array_push($mensajes, $Telefono);
+                array_push($mensajes, "Código", $respuesta[0]);
+                array_push($mensajes, "Mensaje", $respuesta[1]);
+                var_dump($mensajes);
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones){
             $arr = json_decode($telefonos, true);
             try {
                 for ($i=0; $i < count($arr); $i++) {
-                    $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, PrecioVenta, Pagado, Observaciones, Fecha) values(?,?,?,?,?,?,?,?,?,?);");
-                    $idCliente = $this->getIdCliente($NombreCliente);
-                    $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
                     $tel = $arr[$i]['tag'];
-                    $dateTime = new DateTime();
-                    $fecha = $dateTime->getTimestamp();
-                    $venta->bind_param("iisssddiss", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones, $fecha);
-                    $venta->execute();
+                    //Si se realiza la recarga
+                    if($this->recarga($tel, $Monto)){
+                        $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, PrecioVenta, Pagado, Observaciones, Fecha) values(?,?,?,?,?,?,?,?,?,now());");
+                        $idCliente = $this->getIdCliente($NombreCliente);
+                        $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
+                        $venta->bind_param("iisssddis", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones);
+                        if(!$venta->execute()){
+                            echo 'Error en la inserción ' . $venta->error;
+                        } else {
+                            //Si se hizo la recarga y se insertó
+                        }
+                    }
                 }
-                echo json_encode('Terminado');
+                return json_encode('Terminado');
             } catch (Exception $e) {
                 echo $e->getMessage();
             }
