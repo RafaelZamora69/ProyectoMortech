@@ -103,7 +103,6 @@
         }
 
         function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones){
-            
             $arr = json_decode($telefonos, true);
             try {
                 for ($i=0; $i < count($arr); $i++) {
@@ -111,10 +110,12 @@
                     $idCliente = $this->getIdCliente($NombreCliente);
                     $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
                     $tel = $arr[$i]['tag'];
-                    $venta->bind_param("iisssddiss", $idCliente, $idEmpleado, 'Recarga Saldo', $tel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones, DateTime::getTimestamp());
-                    $register->execute();
+                    $dateTime = new DateTime();
+                    $fecha = $dateTime->getTimestamp();
+                    $venta->bind_param("iisssddiss", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones, $fecha);
+                    $venta->execute();
                 }
-                echo 'Terminado';
+                echo json_encode('Terminado');
             } catch (Exception $e) {
                 echo $e->getMessage();
             }

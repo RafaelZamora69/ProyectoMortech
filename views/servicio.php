@@ -63,7 +63,7 @@
                 </div>
                 <div class="row">
                     <div class="col s12">
-                        <input type="submit" id="finalizarVenta" value="Enviar" class="btn waves-effect waves-red">
+                        <input type="submit" id="finalizarVenta" value="Enviar" class="btn-flat waves-effect waves-red">
                     </div>
                 </div>
             </div>
@@ -83,6 +83,14 @@
             </div>
         </form>
     </div>
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Modal Header</h4>
+            <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+    </div>
 </div>
 </div>
-<script src="<?=base_url?>js/app.js"></script>
