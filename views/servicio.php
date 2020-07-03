@@ -122,8 +122,17 @@
     </div>
     <div id="modal1" class="modal">
         <div class="modal-content">
-            <h4>Modal Header</h4>
-            <p>A bunch of text</p>
+            <h4 id="ModalHeader">Modal Header</h4>
+            <table class="stripped centered">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Mensaje</th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+                </tbody>
+            </table>
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>

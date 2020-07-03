@@ -45,11 +45,20 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 for (var i in res) {
+                    var tr = document.createElement("tr");
+                    var Numero = document.createElement("td");
+                    var Mensaje = document.createElement("td");
                     res[i].Codigo == 0 ? 
-                    M.toast({html: 'Venta registrada, número: ' + res[i].Tel + ' cargado correctamente.', classes: 'green white-text'}) : 
-                    M.toast({html: 'Error con el número: ' + res[i].Tel + ' , ' + res[i].Mensaje, classes: 'red white-text'})
+                    Numero.classList.add("green-text") :
+                    Numero.classList.add("red-text");
+                    Numero.innerText = res[i].Tel;
+                    Mensaje.innerText = res[i].Mensaje;
+                    tr.appendChild(Numero);
+                    tr.appendChild(Mensaje);
+                    var table = document.getElementById("table");
+                    table.appendChild(tr);
                 }
-                instance.open();
+                modalAviso.open();
             })
             .catch(function (e) {
                 console.log(e.message);
