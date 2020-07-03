@@ -10,12 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
     //Tabs formulario login o registro 
     var tabs = document.querySelectorAll('.tabs');
     var instance = M.Tabs.init(tabs);
-    //Números de teléfono
-    var chips = document.querySelectorAll('.chips');
-    var instances = M.Chips.init(chips, {
-        placeholder: "Numeros",
-        secondaryPlaceholder: "+ Numero"
-    });
     //Operadoras
     var autocom = document.querySelectorAll('.autocomplete');
     var instances = M.Autocomplete.init(autocom, {
