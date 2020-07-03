@@ -30,6 +30,16 @@
         }
 
         public function ventaServicio(){
-
+            if(isset($_POST)){
+                $venta = new venta();
+                echo $venta->VentaServicio($_POST['NombreCliente'],
+                                            'Prueba',
+                                            $_POST['Service'],
+                                            $_POST['CobroServicio'],
+                                            $_POST['Pagado'],
+                                            $_POST['NotaServicio']);
+            } else {
+                echo json_encode('Datos no recibidos');
+            }
         }
     }

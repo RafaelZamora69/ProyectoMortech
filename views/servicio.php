@@ -70,13 +70,50 @@
         </form>
     </div>
     <div id="otro" class="col s12">
-        <form action="" method="post">
+        <form action="" method="post" id="FormServicio">
             <div class="card-panel">
                 <div class="row">
-                    <div class="col s12">
+                    <div class="col s12 l6">
                         <div class="input-field">
-                            <input name="Name" type="text" class="autocomplete" id="autocompleteName">
-                            <label for="Name"></label>
+                            <input name="NombreCliente" type="text" class="autocomplete" id="autocompleteName">
+                            <label for="Name">Nombre</label>
+                        </div>
+                    </div>
+                    <div class="col s12 l6">
+                        <div class="input-field">
+                            <input name="Service" type="text">
+                            <label for="Service">Servicio</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 l9">
+                        <div class="input-field">
+                            <textarea name="NotaServicio" id="NotaServicio" class="materialize-textarea" required></textarea>
+                            <label for="NotaServicio">Observaciones</label>
+                        </div>
+                    </div>
+                    <div class="col s12 l3">
+                        <div class="input-field">
+                            <input name="CobroServicio" type="text">
+                            <label for="CobroServicio">Cobro</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s6">
+                        <div class="input-field">
+                        <input type="submit" id="finalizarServicio" value="Enviar" class="btn-flat waves-effect waves-red">
+                        </div>
+                    </div>
+                    <div class="col s6">
+                        <div class="input-field">
+                            <p>
+                                <label>
+                                    <input type="checkbox" class="servicioPagado">
+                                    <span>Pagado</span>
+                                </label>
+                            </p>
                         </div>
                     </div>
                 </div>

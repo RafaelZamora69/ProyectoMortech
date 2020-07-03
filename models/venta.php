@@ -138,4 +138,8 @@
                 return json_encode($e->getMessage());
             }
         }
+
+        function VentaServicio($NombreCliente, $NombreEmpleado, $NombreServicio, $PrecioVenta, $Pagado, $Observaciones){
+            
+        }
     }

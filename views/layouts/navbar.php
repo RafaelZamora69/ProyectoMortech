@@ -21,7 +21,7 @@
 </nav>
 <!-- dropDown -->
 <ul id="dropdownMenu" class="dropdown-content">
-    <li><a class="waves-effect" href="principal.php">Inicio</a></li>
+    <li><a class="waves-effect" href="/proyectoMortech/principal">Inicio</a></li>
     <li class="divider"></li>
     <li><a class="waves-effect">Venta de servicio</a></li>
     <li><a href="cliente" class="waves-effect">Busqueda de cliente</a></li>
