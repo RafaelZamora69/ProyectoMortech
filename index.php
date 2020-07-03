@@ -5,7 +5,7 @@
     require_once 'helpers/utils.php';
     require_once 'models/api.php';
     $controllerName = $_GET['controller'].'Controller';
-    if((strcmp($controllerName, 'serviciosController') == 0) && (strcmp($_GET['action'], 'recargaSaldo') == 0 || strcmp($_GET['action'], 'nombresClientes') == 0)){
+    if((strcmp($controllerName, 'serviciosController') == 0) && (strcmp($_GET['action'], 'recargaSaldo') == 0 || strcmp($_GET['action'], 'nombresClientes') == 0 || strcmp($_GET['action'], 'ventaServicio') == 0)){
         goto salto;
     }
 ?>
@@ -47,7 +47,7 @@
     } else {
         echo 'No existe esta clase ' . $controllerName;
     }
-    if((strcmp($_GET['action'], 'recargaSaldo') != 0) && (strcmp($_GET['action'], 'nombresClientes') != 0)){
+    if((strcmp($_GET['action'], 'recargaSaldo') != 0) && (strcmp($_GET['action'], 'nombresClientes') != 0) && (strcmp($_GET['action'], 'ventaServicio') != 0)){
         include_once 'views/layouts/footer.php';
     }
 ?>

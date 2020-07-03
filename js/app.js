@@ -1,7 +1,9 @@
 let btnEnviar = document.getElementById('finalizarVenta');
+let formSaldo = document.getElementById('FormSaldo');
+let formServicio = document.getElementById('FormServicio');
 
-form.addEventListener('submit', RecargaSaldo);
-form.addEventListener('submit', VentaServicio);
+formSaldo.addEventListener('submit', RecargaSaldo);
+formServicio.addEventListener('submit', VentaServicio);
 
 function RecargaSaldo(e) {
     e.preventDefault();
@@ -40,7 +42,9 @@ function VentaServicio(e){
     })
         .then(res => res.json())
         .then(res => {
-            //Lógica de resultado
+            res[0].Codigo == 0 ?
+            M.toast({html: res[0].Mensaje, classes: 'green white-text'}) :
+            M.toast({html: 'Error ' + res[0].Mensaje, classes: 'red white-text'})
         })
 }
 
