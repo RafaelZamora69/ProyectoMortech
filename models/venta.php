@@ -112,13 +112,13 @@
         }
 
         private function recarga($Telefono, $Monto){
-            $this->mensajes = [];
             $respuesta = $this->api->recargaTae(1, $Telefono, $Monto);
             $this->mensajes[] = array('Tel' => $Telefono, 'Codigo' => $respuesta[0], 'Mensaje' => $respuesta[1]);
             return strcmp($respuesta[0], '0') == 0 ? true : false;
         }
 
         function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones){
+            $this->mensajes = [];
             $arr = json_decode($telefonos, true);
             try {
                 for ($i=0; $i < count($arr); $i++) {

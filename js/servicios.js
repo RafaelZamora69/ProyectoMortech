@@ -36,21 +36,29 @@ document.addEventListener('DOMContentLoaded', function () {
         let form = document.getElementById('FormSaldo');
         var datos = new FormData(form);
         let numeros = document.getElementsByClassName('chips')[0].M_Chips.chipsData;
+        console.log(numeros);
         datos.append('numeros', JSON.stringify(numeros));
         pagado[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
+        //Eliminar la antigua tabla de resultados
+        var del = document.getElementById("table");
+        del.remove();
         fetch('servicios&action=recargaSaldo', {
             method: 'POST',
             body: datos
         })
             .then(res => res.json())
             .then(res => {
+                var table = document.getElementById("TablaMensajes");
+                var tbody = document.createElement("tbody");
+                tbody.id = "table";
+                //Añadir tbody a la tabla
+                table.appendChild(tbody);
+                console.log(res);
                 for (var i in res) {
                     var tr = document.createElement("tr");
                     var Numero = document.createElement("td");
                     var Mensaje = document.createElement("td");
-                    res[i].Codigo == 0 ? 
-                    Numero.classList.add("green-text") :
-                    Numero.classList.add("red-text");
+                    res[i].Codigo == 0 ? Numero.classList.add("green-text") : Numero.classList.add("red-text");
                     Numero.innerText = res[i].Tel;
                     Mensaje.innerText = res[i].Mensaje;
                     tr.appendChild(Numero);
@@ -61,6 +69,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 modalAviso.open();
             })
             .catch(function (e) {
+                var tbody = document.createElement("tbody");
+                tbody.id = "table";
+                table.appendChild(tbody);
                 console.log(e.message);
             });
     }

@@ -123,7 +123,7 @@
     <div id="modal1" class="modal">
         <div class="modal-content">
             <h4 id="ModalHeader">Modal Header</h4>
-            <table class="stripped centered">
+            <table class="stripped centered" id="TablaMensajes">
                 <thead>
                     <tr>
                         <th>Número</th>
