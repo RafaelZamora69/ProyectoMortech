@@ -10,14 +10,4 @@ document.addEventListener('DOMContentLoaded', function () {
     //Tabs formulario login o registro 
     var tabs = document.querySelectorAll('.tabs');
     var instance = M.Tabs.init(tabs);
-    //Operadoras
-    var autocom = document.querySelectorAll('.autocomplete');
-    var instances = M.Autocomplete.init(autocom, {
-        data: {
-            "Telcel": null,
-            "Movistar": null,
-            "Unefon": null,
-            "AT&T": null
-        }
-    });
 });

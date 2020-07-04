@@ -1,20 +1,37 @@
 document.addEventListener('DOMContentLoaded', function () {
+    //Operadoras
+    var autocom = document.querySelectorAll('.autocomplete');
+    var operadora = M.Autocomplete.init(autocom, {
+        data: {
+            "Telcel": null,
+            "Movistar": null,
+            "Unefon": null,
+            "AT&T": null
+        },
+        onAutocomplete: function (res) {
+            cargarMonto(res);
+        }
+    });
     //Modal de aviso
-    var elems = document.getElementById('modal1');
-    var modalAviso = M.Modal.init(elems);
+    var modal = document.getElementById('modal1');
+    var modalAviso = M.Modal.init(modal);
     //Números de teléfono
     var chips = document.querySelectorAll('.chips');
     var telefonos = M.Chips.init(chips, {
         placeholder: "Numeros",
         secondaryPlaceholder: "+Numero"
     });
+    //Monto a pagar
+    var select = document.querySelectorAll('select');
+    var montos = M.FormSelect.init(select);
+    //Formulario
     let btnEnviar = document.getElementById('finalizarVenta');
     let formSaldo = document.getElementById('FormSaldo');
     let formServicio = document.getElementById('FormServicio');
 
     formSaldo.addEventListener('submit', RecargaSaldo);
     formServicio.addEventListener('submit', VentaServicio);
-    
+
     ObtenerClientes();
     function ObtenerClientes() {
         fetch('servicios&action=nombresClientes')
@@ -29,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log(e.message);
             });
     }
-    
+
     function RecargaSaldo(e) {
         e.preventDefault();
         let pagado = document.getElementsByClassName('pagado');
@@ -64,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     tr.appendChild(Numero);
                     tr.appendChild(Mensaje);
                     var table = document.getElementById("table");
-                    table.appendChild(tr);
                 }
                 modalAviso.open();
             })
@@ -76,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    function VentaServicio(e){
+    function VentaServicio(e) {
         e.preventDefault();
         let form = document.getElementById('FormServicio');
         let pagado = document.getElementsByClassName('servicioPagado');
@@ -89,11 +105,53 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 res[0].Codigo == 0 ?
-                M.toast({html: res[0].Mensaje, classes: 'green white-text'}) :
-                M.toast({html: 'Error ' + res[0].Mensaje, classes: 'red white-text'})
-                if(res[0].Codigo == 0){
+                    M.toast({ html: res[0].Mensaje, classes: 'green white-text' }) :
+                    M.toast({ html: 'Error ' + res[0].Mensaje, classes: 'red white-text' })
+                if (res[0].Codigo == 0) {
                     formServicio.reset();
                 }
             })
+    }
+
+    function cargarMonto(res) {
+        switch (res) {
+            case 'Telcel':
+                let telcel = [100, 150, 200, 300, 500];
+                for (i in telcel) {
+                    let opciones = document.getElementById("Monto");
+                    let opcion = document.createElement("option");
+                    opcion.value = telcel[i];
+                    opcion.text = telcel[i];
+                    opciones.appendChild(opcion);
+                }
+                var montos = M.FormSelect.init(select);
+            case 'Movistar':
+                let movistar = [100, 150, 200];
+                for (i in movistar) {
+                    let opciones = document.getElementById("Monto");
+                    let opcion = document.createElement("option");
+                    opcion.value = movistar[i];
+                    opcion.text = movistar[i];
+                    opciones.appendChild(opcion);
+                }
+                var montos = M.FormSelect.init(select);
+                break;
+            case 'Unefon':
+                let unefon = [10, 20, 30, 50, 70, 100, 150, 200, 300];
+                for (i in unefon) {
+                    let opciones = document.getElementById("Monto");
+                    let opcion = document.createElement("option");
+                    opcion.value = unefon[i];
+                    opcion.text = unefon[i];
+                    opciones.appendChild(opcion);
+                }
+                var montos = M.FormSelect.init(select);
+                break;
+            case 'AT&T':
+                let at = [100, 150, 200, 300, 500];
+                break;
+            default:
+                break;
+        }
     }
 });

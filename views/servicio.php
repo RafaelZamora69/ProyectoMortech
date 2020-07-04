@@ -34,8 +34,9 @@
                 <div class="row">
                     <div class="col s12 m6">
                         <div class="input-field">
-                            <input type="text" id="Monto" name="Monto" required>
-                            <label for="Monto">Monto</label>
+                            <select name="Monto" id="Monto">
+                                <option>Monto</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col s12 m6">
