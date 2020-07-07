@@ -114,6 +114,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function cargarMonto(res) {
+        console.log(res);
+        let Montos = document.getElementById("Monto");
+        while (Montos.firstChild) {
+            Montos.removeChild(Montos.firstChild);
+        }
         switch (res) {
             case 'Telcel':
                 let telcel = [100, 150, 200, 300, 500];
@@ -121,20 +126,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     let opciones = document.getElementById("Monto");
                     let opcion = document.createElement("option");
                     opcion.value = telcel[i];
-                    opcion.text = telcel[i];
+                    opcion.text = '$ ' + telcel[i];
                     opciones.appendChild(opcion);
                 }
                 var montos = M.FormSelect.init(select);
+                break;
             case 'Movistar':
                 let movistar = [100, 150, 200];
                 for (i in movistar) {
                     let opciones = document.getElementById("Monto");
                     let opcion = document.createElement("option");
                     opcion.value = movistar[i];
-                    opcion.text = movistar[i];
+                    opcion.text = '$ ' + movistar[i];
                     opciones.appendChild(opcion);
                 }
-                var montos = M.FormSelect.init(select);
+                montos = M.FormSelect.init(select);
                 break;
             case 'Unefon':
                 let unefon = [10, 20, 30, 50, 70, 100, 150, 200, 300];
@@ -142,13 +148,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     let opciones = document.getElementById("Monto");
                     let opcion = document.createElement("option");
                     opcion.value = unefon[i];
-                    opcion.text = unefon[i];
+                    opcion.text = '$ ' + unefon[i];
                     opciones.appendChild(opcion);
                 }
-                var montos = M.FormSelect.init(select);
+                montos = M.FormSelect.init(select);
                 break;
             case 'AT&T':
                 let at = [100, 150, 200, 300, 500];
+                for (i in at) {
+                    let opciones = document.getElementById("Monto");
+                    let opcion = document.createElement("option");
+                    opcion.value = at[i];
+                    opcion.text = '$ ' + at[i];
+                    opciones.appendChild(opcion);
+                }
+                montos = M.FormSelect.init(select);
                 break;
             default:
                 break;

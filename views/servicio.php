@@ -35,7 +35,7 @@
                     <div class="col s12 m6">
                         <div class="input-field">
                             <select name="Monto" id="Monto">
-                                <option>Monto</option>
+                                <option>$ --</option>
                             </select>
                         </div>
                     </div>

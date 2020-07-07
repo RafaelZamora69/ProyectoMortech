@@ -65,12 +65,12 @@
             if($Nombre){
                 $verify = password_verify($Password, $UserPassword);
                 if($verify){
-                    header('Location: ' . base_url . 'principal/index');
+                    return $Nombre;
                 } else {
-                    echo 'Incorrect password';
+                    return false;
                 }
             } else {
-                echo 'No existe este usuario';
+                return false;
             }
         }
     }

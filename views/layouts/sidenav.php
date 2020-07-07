@@ -6,11 +6,11 @@
                 <img src="../images/background.png" alt="background image" class="responsive-img">
             </div>
             <a href="#user"><img src="../images/userProfile.jpg" alt="userProfile" class="circle"></a>
-            <a href="#name"><span class="white-text name">Nombre del vendedor</span></a>
+            <a href="#name"><span class="white-text name"><?=$_SESSION['identity']?></span></a>
             <a href="#mail"><span class="white-text email">example@domain.com</span></a>
         </div>
     </li>
-    <li><a class="waves-effect" href="index">Inicio</a></li>
+    <li><a class="waves-effect" href="<?=base_url?>servicios/index">Inicio</a></li>
     <li><div class="divider"></div></li>
     <li><a class="subheader">Operaciones</a></li>
     <li><a href="" class="waves-effect">Venta de servicio</a></li>
