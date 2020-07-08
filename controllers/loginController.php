@@ -12,6 +12,7 @@
                 $user = new user();
                 $identity = $user->loginUser($_POST['User'], $_POST['Password']);
                 if($identity){
+                    session_start();
                     $_SESSION['identity'] = $identity;
                     header('Location: ' . base_url . '/principal/index');
                 }
@@ -28,6 +29,11 @@
                 $user->setHerarchy('vendedor');
                 $user->registerUser();
             }
+        }
+
+        public function logout(){
+            $_SESSION['identity'] = null;
+            header('Location: ' . base_url . 'login/index');
         }
     }
 ?>

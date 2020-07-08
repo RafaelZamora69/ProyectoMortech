@@ -1,4 +1,8 @@
-<?php $api = new api() ?>
+<?php $api = new api(); 
+    if($_SESSION['identity'] == null){
+        header('Location: ' . base_url . 'login/index');
+    }
+?>
 <div class="centerDiv">
     <div class="row">
         <div class="col s12">
@@ -30,7 +34,7 @@
             <div class="card-panel">
                 <div class="row">
                     <div class="col s12">
-                        <h1>Ventas</h1>
+                        <?= var_dump($_SESSION)?>
                     </div>
                 </div>
             </div>
