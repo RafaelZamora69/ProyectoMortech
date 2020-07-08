@@ -121,6 +121,9 @@
             </div>
         </form>
     </div>
+    <div class="progress hide" id="progress">
+        <div class="indeterminate"></div>
+    </div>
     <div id="modal1" class="modal">
         <div class="modal-content">
             <h4 id="ModalHeader">Modal Header</h4>

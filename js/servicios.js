@@ -24,8 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
     //Monto a pagar
     var select = document.querySelectorAll('select');
     var montos = M.FormSelect.init(select);
-    //Formulario
-    let btnEnviar = document.getElementById('finalizarVenta');
     let formSaldo = document.getElementById('FormSaldo');
     let formServicio = document.getElementById('FormServicio');
 
@@ -49,28 +47,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function RecargaSaldo(e) {
         e.preventDefault();
+        let progress = document.getElementById("progress");
+        progress.classList.remove("hide");
         let pagado = document.getElementsByClassName('pagado');
         let form = document.getElementById('FormSaldo');
         var datos = new FormData(form);
+        let nombre = document.getElementById("Name");
         let numeros = document.getElementsByClassName('chips')[0].M_Chips.chipsData;
-        console.log(numeros);
         datos.append('numeros', JSON.stringify(numeros));
+        datos.append('Vendedor', nombre.innerText);
         pagado[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
-        //Eliminar la antigua tabla de resultados
-        var del = document.getElementById("table");
-        del.remove();
         fetch('servicios&action=recargaSaldo', {
             method: 'POST',
             body: datos
         })
             .then(res => res.json())
             .then(res => {
-                var table = document.getElementById("TablaMensajes");
-                var tbody = document.createElement("tbody");
-                tbody.id = "table";
-                //Añadir tbody a la tabla
-                table.appendChild(tbody);
-                console.log(res);
+                var table = document.getElementById("table");
+                while(table.firstChild){
+                    table.removeChild(table.firstChild);
+                }
                 for (var i in res) {
                     var tr = document.createElement("tr");
                     var Numero = document.createElement("td");
@@ -80,9 +76,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     Mensaje.innerText = res[i].Mensaje;
                     tr.appendChild(Numero);
                     tr.appendChild(Mensaje);
-                    var table = document.getElementById("table");
+                    table.appendChild(tr);
                 }
                 modalAviso.open();
+                form.reset();
             })
             .catch(function (e) {
                 var tbody = document.createElement("tbody");
@@ -90,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 table.appendChild(tbody);
                 console.log(e.message);
             });
+        progress.classList.add("hide");
     }
 
     function VentaServicio(e) {
@@ -111,10 +109,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     formServicio.reset();
                 }
             })
+        form.reset();
     }
 
     function cargarMonto(res) {
-        console.log(res);
         let Montos = document.getElementById("Monto");
         while (Montos.firstChild) {
             Montos.removeChild(Montos.firstChild);

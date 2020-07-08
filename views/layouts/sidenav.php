@@ -6,7 +6,7 @@
                 <img src="../images/background.png" alt="background image" class="responsive-img">
             </div>
             <a href="#user"><img src="../images/userProfile.jpg" alt="userProfile" class="circle"></a>
-            <a href="#name"><span class="white-text name"><?=$_SESSION['identity']?></span></a>
+            <a href="#name"><span class="white-text name" id="Name"><?=$_SESSION['identity']?></span></a>
             <a href="#mail"><span class="white-text email">example@domain.com</span></a>
         </div>
     </li>

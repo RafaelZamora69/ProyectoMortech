@@ -10,7 +10,7 @@
             if(isset($_POST)){
                 $venta = new venta();
                 echo $venta->InsertarRecarga($_POST['Name'],
-                                        'Prueba',
+                                        $_POST['Vendedor'],
                                         $_POST['numeros'],
                                         'Recarga de salgo',
                                         $_POST['Operadora'],
@@ -33,7 +33,7 @@
             if(isset($_POST)){
                 $venta = new venta();
                 echo $venta->VentaServicio($_POST['NombreCliente'],
-                                            'Prueba',
+                                            $_POST['Vendedor'],
                                             $_POST['Service'],
                                             $_POST['CobroServicio'],
                                             $_POST['Pagado'],
