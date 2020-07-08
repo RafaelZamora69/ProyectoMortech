@@ -13,7 +13,7 @@
                 $identity = $user->loginUser($_POST['User'], $_POST['Password']);
                 if($identity){
                     $_SESSION['identity'] = $identity;
-                    header('Location: ' . base_url . 'principal/index');
+                    header('Location: ' . base_url . '/principal/index');
                 }
             }
         }
