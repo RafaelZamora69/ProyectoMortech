@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 02-07-2020 a las 00:43:25
+-- Tiempo de generación: 08-07-2020 a las 14:37:59
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `venta` (
   PRIMARY KEY (`idVenta`),
   KEY `idCliente` (`idCliente`),
   KEY `idVendedor` (`idEmpleado`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `venta`
@@ -112,7 +112,11 @@ INSERT INTO `venta` (`idVenta`, `idCliente`, `idEmpleado`, `NombreServicio`, `Nu
 (9, 2, 14, 'Recarga de salgo', '2292141516', 'Telcel', 20, 40, 0, 'Prueba con la API', '2020-07-01 19:40:01', 0),
 (10, 2, 14, 'Recarga de salgo', '2292141687', 'Telcel', 20, 20, 1, 'Prueba 2', '2020-07-01 19:47:38', 0),
 (11, 2, 14, 'Recarga de salgo', '2299345267', 'Telcel', 20, 20, 1, 'Prueba 2', '2020-07-01 19:48:11', 0),
-(12, 2, 14, 'Recarga de salgo', '2292834353', 'Telcel', 20, 20, 1, 'Prueba 2', '2020-07-01 19:48:13', 0);
+(12, 2, 14, 'Recarga de salgo', '2292834353', 'Telcel', 20, 20, 1, 'Prueba 2', '2020-07-01 19:48:13', 0),
+(13, 2, 14, 'Recarga de salgo', '2299458623', 'Movistar', 50, 150, 0, 'c', '2020-07-04 14:37:37', 0),
+(14, 2, 14, 'Recarga de salgo', '2299346534', 'Movistar', 50, 150, 0, 'c', '2020-07-04 14:53:13', 0),
+(15, 2, 14, 'Servicio de prueba 4', NULL, NULL, NULL, 3000, 1, 'prueba ', '2020-07-04 14:53:37', 0),
+(16, 2, 14, 'Recarga de salgo', '2299346534', 'Movistar', 300, 350, 0, 'c', '2020-07-04 14:56:59', 0);
 
 --
 -- Restricciones para tablas volcadas
