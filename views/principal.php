@@ -34,7 +34,7 @@
             <div class="card-panel">
                 <div class="row">
                     <div class="col s12">
-                        <?= var_dump($_SESSION)?>
+                        <h2>Ventas</h2>
                     </div>
                 </div>
             </div>
