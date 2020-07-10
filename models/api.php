@@ -1,11 +1,16 @@
 <?php 
     class api {
-        private $User = 'demoLinntaews', $Password = '1234', $client;
+        private $User, $Password, $client;
 
-        function __construct($User, $Password){
-            $client = new SoapClient('https://demo.linntae.mx/services/ventasSoap?wsdl');
-            $this->client = $client;
+        function __construct(){
+            $this->client = new SoapClient('https://demo.linntae.mx/services/ventasSoap?wsdl');
+        }
+
+        public function setUser($User){
             $this->User = $User;
+        }
+
+        public function setPassword($Password){
             $this->Password = $Password;
         }
 

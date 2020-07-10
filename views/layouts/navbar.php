@@ -12,7 +12,7 @@
     <div class="container">
         <div class="nav-wrapper">
             <a href="#" data-target="menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <a href="#" class="brand-logo"><?= $_SESSION['identity']?></a>
+            <a href="#" class="brand-logo"><?= $_SESSION['identity']['Nombre']?></a>
             <ul class="right hide-on-med-and-down">
                 <li><a href="#" class="dropdown-trigger" data-target="dropdownMenu">Menu<i class="material-icons right">arrow_drop_down</i></a></li>
             </ul>

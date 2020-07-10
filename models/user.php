@@ -65,7 +65,12 @@
             if($Nombre){
                 $verify = password_verify($Password, $UserPassword);
                 if($verify){
-                    return $this;
+                    $this->setNombre = $Nombre;
+                    $this->setUser = $User;
+                    $this->setPassword = $Password;
+                    $this->setHerarchy = $Jerarquia;
+                    $datos = array('Nombre' => $Nombre, 'Usuario' => $User, 'Password' => $Password, 'Jerarquia' => $Jerarquia );
+                    return $datos;
                 } else {
                     return false;
                 }
