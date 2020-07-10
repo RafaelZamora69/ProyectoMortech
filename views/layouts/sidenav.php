@@ -10,7 +10,7 @@
             <a href="#mail"><span class="white-text email">example@domain.com</span></a>
         </div>
     </li>
-    <li><a class="waves-effect" href="<?=base_url?>servicios/index">Inicio</a></li>
+    <li><a class="waves-effect" href="<?=base_url?>principal/index">Inicio</a></li>
     <li><div class="divider"></div></li>
     <li><a class="subheader">Operaciones</a></li>
     <li><a href="<?=base_url?>servicios/index" class="waves-effect">Venta de servicio</a></li>
