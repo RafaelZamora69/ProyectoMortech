@@ -54,7 +54,7 @@
                 <div class="row">
                     <div class="col s9">
                         <div class="input-field">
-                            <textarea name="Nota" id="Nota" class="materialize-textarea" required></textarea>
+                            <textarea name="Nota" id="Nota" class="materialize-textarea"></textarea>
                             <label for="Nota">Observaciones</label>
                         </div>
                     </div>
@@ -95,7 +95,7 @@
                 <div class="row">
                     <div class="col s12 l9">
                         <div class="input-field">
-                            <textarea name="NotaServicio" id="NotaServicio" class="materialize-textarea" required></textarea>
+                            <textarea name="NotaServicio" id="NotaServicio" class="materialize-textarea"></textarea>
                             <label for="NotaServicio">Observaciones</label>
                         </div>
                     </div>
