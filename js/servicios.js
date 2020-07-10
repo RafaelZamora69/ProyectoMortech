@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 var table = document.getElementById("table");
-                while(table.firstChild){
+                while (table.firstChild) {
                     table.removeChild(table.firstChild);
                 }
                 for (var i in res) {
@@ -92,10 +92,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function VentaServicio(e) {
         e.preventDefault();
+        let nombre = document.getElementById("Name");
         let form = document.getElementById('FormServicio');
         let pagado = document.getElementsByClassName('servicioPagado');
         var datos = new FormData(form);
         pagado[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
+        datos.append('Vendedor', nombre.innerText);
         fetch('servicios&action=ventaServicio', {
             method: 'POST',
             body: datos
