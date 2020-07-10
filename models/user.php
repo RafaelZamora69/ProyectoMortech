@@ -57,15 +57,15 @@
         }
 
         function loginUser($User, $Password){
-            $login = $this->connection->prepare("select Nombre, Password from empleado where Usuario = ?");
+            $login = $this->connection->prepare("select Nombre, Usuario, Password, Jerarquia from empleado where Usuario = ?");
             $login->bind_param("s", $User);
             $login->execute();
-            $login->bind_result($Nombre, $UserPassword);
+            $login->bind_result($Nombre, $User, $UserPassword, $Jerarquia);
             $login->fetch();
             if($Nombre){
                 $verify = password_verify($Password, $UserPassword);
                 if($verify){
-                    return $Nombre;
+                    return $this;
                 } else {
                     return false;
                 }

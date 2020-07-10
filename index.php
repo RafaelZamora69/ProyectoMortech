@@ -19,7 +19,7 @@
     <title>Recargas</title>
 </head>
 <?php
-    session_start();
+session_start();
     if (isset($_GET['controller'])) {
         if (strcmp('loginController', $controllerName) != 0) {
             require_once 'views/layouts/navbar.php';

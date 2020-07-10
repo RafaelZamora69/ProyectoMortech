@@ -11,6 +11,7 @@
             if(isset($_POST)){
                 $user = new user();
                 $identity = $user->loginUser($_POST['User'], $_POST['Password']);
+                var_dump($identity);
                 if($identity){
                     session_start();
                     $_SESSION['identity'] = $identity;
