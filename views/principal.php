@@ -19,16 +19,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col s12">
-                        <div class="row">
-                            <div class="col s12">
-                                <h4>Comisión: $<?php $api->saldoComision() ?></h4>
-                                <p></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

@@ -19,7 +19,7 @@
             $ConsultaSaldo = $this->client->saldo($Params);
             $doc = new DOMDocument;
             $doc->loadXML($ConsultaSaldo->data);
-            echo $doc->getElementsByTagName('saldoPlataforma')->item(0)->nodeValue;
+            echo $doc->getElementsByTagName('mensaje')->item(0)->nodeValue;
         }
 
         public function saldoComision(){
