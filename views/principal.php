@@ -1,4 +1,7 @@
-<?php $api = new api(); 
+<?php 
+    $api = new api(); 
+    $api->setUser($_SESSION['identity']['Usuario']);
+    $api->setPassword($_SESSION['identity']['Password']);
     if($_SESSION['identity'] == null){
         header('Location: ' . base_url . 'login/index');
     }

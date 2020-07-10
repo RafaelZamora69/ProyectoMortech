@@ -1,10 +1,17 @@
 <?php 
     class api {
-        private $User = 'demoLinntaews', $Password = '1234', $client;
+        private $User, $Password, $client;
 
         function __construct(){
-            $client = new SoapClient('https://demo.linntae.mx/services/ventasSoap?wsdl');
-            $this->client = $client;
+            $this->client = new SoapClient('https://demo.linntae.mx/services/ventasSoap?wsdl');
+        }
+
+        public function setUser($User){
+            $this->User = $User;
+        }
+
+        public function setPassword($Password){
+            $this->Password = $Password;
         }
 
         public function saldoPlataforma(){

@@ -57,15 +57,20 @@
         }
 
         function loginUser($User, $Password){
-            $login = $this->connection->prepare("select Nombre, Password from empleado where Usuario = ?");
+            $login = $this->connection->prepare("select Nombre, Usuario, Password, Jerarquia from empleado where Usuario = ?");
             $login->bind_param("s", $User);
             $login->execute();
-            $login->bind_result($Nombre, $UserPassword);
+            $login->bind_result($Nombre, $User, $UserPassword, $Jerarquia);
             $login->fetch();
             if($Nombre){
                 $verify = password_verify($Password, $UserPassword);
                 if($verify){
-                    return $Nombre;
+                    $this->setNombre = $Nombre;
+                    $this->setUser = $User;
+                    $this->setPassword = $Password;
+                    $this->setHerarchy = $Jerarquia;
+                    $datos = array('Nombre' => $Nombre, 'Usuario' => $User, 'Password' => $Password, 'Jerarquia' => $Jerarquia );
+                    return $datos;
                 } else {
                     return false;
                 }

@@ -6,6 +6,8 @@
             $connect = new dbConnect();
             $this->connection = $connect->connect();
             $client = new api();
+            $client->setUser($_SESSION['identity']['Usuario']);
+            $client->setPassword($_SESSION['identity']['Password']);
             $this->api = $client;
         }
 

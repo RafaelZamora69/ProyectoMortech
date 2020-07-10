@@ -1,4 +1,5 @@
 <?php 
+    session_start();
     require_once 'config/parameters.php'; 
     require_once 'autoload.php';
     require_once 'config/conexion.php';
@@ -19,7 +20,7 @@
     <title>Recargas</title>
 </head>
 <?php
-    session_start();
+    
     if (isset($_GET['controller'])) {
         if (strcmp('loginController', $controllerName) != 0) {
             require_once 'views/layouts/navbar.php';
