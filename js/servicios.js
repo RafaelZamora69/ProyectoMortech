@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     formSaldo.addEventListener('submit', RecargaSaldo);
     formServicio.addEventListener('submit', VentaServicio);
-    chips.addEventListener('keyup', agregarNumero);
+    chips.addEventListener('input', agregarNumero);
 
     //funciones
     ObtenerClientes();
@@ -49,11 +49,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    function agregarNumero(e){
-        if(Number.isInteger(parseInt(e.key))){
+    function agregarNumero(e) {
+        if (Number.isInteger(parseInt(e.data))) {
             count++;
-            if(count == 10){
-                telefonos.addChip({tag: value[0].value});
+            if (count == 10) {
+                telefonos.addChip({ tag: value[0].value });
                 count = 0;
                 value[0].value = '';
             }
