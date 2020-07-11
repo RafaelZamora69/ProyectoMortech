@@ -14,7 +14,7 @@
                 if($identity){
                     session_start();
                     $_SESSION['identity'] = $identity;
-                    header('Location: ' . base_url . '/principal/index');
+                    header('Location: ' . base_url . '/servicios/index');
                 }
             }
         }
