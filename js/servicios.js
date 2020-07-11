@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    let count = 0;
     //Operadoras
     var autocom = document.querySelectorAll('.autocomplete');
     var operadora = M.Autocomplete.init(autocom, {
@@ -16,11 +17,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var modal = document.getElementById('modal1');
     var modalAviso = M.Modal.init(modal);
     //Números de teléfono
-    var chips = document.querySelectorAll('.chips');
+    var chips = document.getElementById('chips');
     var telefonos = M.Chips.init(chips, {
         placeholder: "Numeros",
         secondaryPlaceholder: "+Numero"
     });
+    var value = document.querySelectorAll('.input');
     //Monto a pagar
     var select = document.querySelectorAll('select');
     var montos = M.FormSelect.init(select);
@@ -29,7 +31,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     formSaldo.addEventListener('submit', RecargaSaldo);
     formServicio.addEventListener('submit', VentaServicio);
+    chips.addEventListener('keyup', agregarNumero);
 
+    //funciones
     ObtenerClientes();
     function ObtenerClientes() {
         fetch('servicios&action=nombresClientes')
@@ -43,6 +47,17 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(function (e) {
                 console.log(e.message);
             });
+    }
+
+    function agregarNumero(e){
+        if(Number.isInteger(parseInt(e.key))){
+            count++;
+            if(count == 10){
+                telefonos.addChip({tag: value[0].value});
+                count = 0;
+                value[0].value = '';
+            }
+        }
     }
 
     function RecargaSaldo(e) {

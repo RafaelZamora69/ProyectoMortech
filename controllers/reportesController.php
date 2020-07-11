@@ -2,6 +2,6 @@
     class reportesController  {
         
         public function index() {
-            echo 'Aqui se mostrarán los reportes';
+            require_once 'views/reportes.php';
         }
     }

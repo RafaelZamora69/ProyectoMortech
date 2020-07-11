@@ -24,14 +24,14 @@
                 </div>
                 <div class="row">
                     <div class="col s12">
-                        <div class="input-field chips">
+                        <div class="input-field chips" id="chips">
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12">
                         <div class="input-field">
-                            <input type="text" class="autocomplete" id="Operadora" name="Operadora" required>
+                            <input type="text" class="autocomplete" id="Operadora" name="Operadora" required value="unefon">
                             <label for="Operadora">Operadora</label>
                         </div>
                     </div>
@@ -40,7 +40,15 @@
                     <div class="col s12 m6">
                         <div class="input-field">
                             <select name="Monto" id="Monto">
-                                <option>$ --</option>
+                                <option>10</option>
+                                <option>20</option>
+                                <option>30</option>
+                                <option>50</option>
+                                <option>70</option>
+                                <option>100</option>
+                                <option>160</option>
+                                <option>200</option>
+                                <option>300</option>
                             </select>
                         </div>
                     </div>
