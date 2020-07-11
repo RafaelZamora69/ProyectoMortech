@@ -19,16 +19,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col s12">
-                        <div class="row">
-                            <div class="col s12">
-                                <h4>Comisión: $<?php $api->saldoComision() ?></h4>
-                                <p></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -37,7 +27,7 @@
             <div class="card-panel">
                 <div class="row">
                     <div class="col s12">
-                        <?= var_dump($_SESSION)?>
+                        <h2>Ventas</h2>
                     </div>
                 </div>
             </div>

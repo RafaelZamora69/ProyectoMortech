@@ -3,7 +3,7 @@
         private $User, $Password, $client;
 
         function __construct(){
-            $this->client = new SoapClient('https://demo.linntae.mx/services/ventasSoap?wsdl');
+            $this->client = new SoapClient('https://linntae.mx/services/ventasSoap?wsdl');
         }
 
         public function setUser($User){
@@ -19,7 +19,7 @@
             $ConsultaSaldo = $this->client->saldo($Params);
             $doc = new DOMDocument;
             $doc->loadXML($ConsultaSaldo->data);
-            echo $doc->getElementsByTagName('saldoPlataforma')->item(0)->nodeValue;
+            echo $doc->getElementsByTagName('mensaje')->item(0)->nodeValue;
         }
 
         public function saldoComision(){
