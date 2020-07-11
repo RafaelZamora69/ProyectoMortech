@@ -1,3 +1,8 @@
+<?php 
+    $api = new api(); 
+    $api->setUser($_SESSION['identity']['Usuario']);
+    $api->setPassword($_SESSION['identity']['Password']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,14 +14,14 @@
 </head>
 <body>
 <nav class="red">
-    <div class="container">
-        <div class="nav-wrapper">
-            <a href="#" data-target="menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <a href="#" class="brand-logo"><?= $_SESSION['identity']['Nombre']?></a>
-            <ul class="right hide-on-med-and-down">
-                <li><a href="#" class="dropdown-trigger" data-target="dropdownMenu">Menu<i class="material-icons right">arrow_drop_down</i></a></li>
-            </ul>
-        </div>
+    <div class="nav-wrapper">
+        <a href="#" data-target="menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <a href="#">Saldo: $<?=$api->saldoPlataforma()?></a>
+        <a href="#"><?= $_SESSION['identity']['Nombre']?></a>
+        <ul class="right hide-on-small-only">
+            <li></li>
+            <li><a href="#" class="dropdown-trigger" data-target="dropdownMenu">Menu<i class="material-icons right">arrow_drop_down</i></a></li>
+        </ul>
     </div>
 </nav>
 <!-- dropDown -->

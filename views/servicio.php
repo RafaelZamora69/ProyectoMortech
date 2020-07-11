@@ -3,7 +3,6 @@
         header('Location: ' . base_url . 'login/index');
     } 
 ?>
-<div class="centerDiv">
 <div class="row">
     <div class="col s12">
         <ul class="tabs">
@@ -29,47 +28,39 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s12">
+                    <div class="col s6">
                         <div class="input-field">
                             <input type="text" class="autocomplete" id="Operadora" name="Operadora" required value="unefon">
                             <label for="Operadora">Operadora</label>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col s12 m6">
+                    <div class="col s6 m6">
                         <div class="input-field">
                             <select name="Monto" id="Monto">
-                                <option>10</option>
-                                <option>20</option>
-                                <option>30</option>
-                                <option>50</option>
-                                <option>70</option>
-                                <option>100</option>
-                                <option>160</option>
-                                <option>200</option>
-                                <option>300</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                                <option value="70">70</option>
+                                <option value="100" selected>100</option>
+                                <option value="160">160</option>
+                                <option value="200">200</option>
+                                <option value="300">300</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col s12 m6">
+                </div>
+                <div class="row">
+                    <div class="col s6 m6">
                         <div class="input-field">
                             <input type="text" id="Pago" name="Pago" required>
                             <label for="Pago">A pagar</label>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col s9">
-                        <div class="input-field">
-                            <textarea name="Nota" id="Nota" class="materialize-textarea"></textarea>
-                            <label for="Nota">Observaciones</label>
-                        </div>
-                    </div>
                     <div class="col s3">
                         <p>
                             <label>
-                                <input type="checkbox" class="pagado">
+                                <input type="checkbox" class="pagado" checked="checked">
                                 <span>Pagado</span>
                             </label>
                         </p>
@@ -77,7 +68,20 @@
                 </div>
                 <div class="row">
                     <div class="col s12">
+                        <div class="input-field">
+                            <textarea name="Nota" id="Nota" class="materialize-textarea"></textarea>
+                            <label for="Nota">Observaciones</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s6">
                         <input type="submit" id="finalizarVenta" value="Enviar" class="btn-flat waves-effect waves-red">
+                    </div>
+                    <div class="col s6">
+                        <div class="progress" id="progress">
+                            <div class="indeterminate"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,16 +105,16 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s12 l9">
-                        <div class="input-field">
-                            <textarea name="NotaServicio" id="NotaServicio" class="materialize-textarea"></textarea>
-                            <label for="NotaServicio">Observaciones</label>
-                        </div>
-                    </div>
                     <div class="col s12 l3">
                         <div class="input-field">
                             <input name="CobroServicio" type="text">
                             <label for="CobroServicio">Cobro</label>
+                        </div>
+                    </div>
+                    <div class="col s12 l9">
+                        <div class="input-field">
+                            <textarea name="NotaServicio" id="NotaServicio" class="materialize-textarea"></textarea>
+                            <label for="NotaServicio">Observaciones</label>
                         </div>
                     </div>
                 </div>
@@ -124,7 +128,7 @@
                         <div class="input-field">
                             <p>
                                 <label>
-                                    <input type="checkbox" class="servicioPagado">
+                                    <input type="checkbox" class="servicioPagado" checked="checked">
                                     <span>Pagado</span>
                                 </label>
                             </p>
@@ -133,9 +137,6 @@
                 </div>
             </div>
         </form>
-    </div>
-    <div class="progress hide" id="progress">
-        <div class="indeterminate"></div>
     </div>
     <div id="modal1" class="modal">
         <div class="modal-content">
@@ -155,5 +156,4 @@
             <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
         </div>
     </div>
-</div>
 </div>

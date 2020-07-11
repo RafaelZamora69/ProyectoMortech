@@ -1,4 +1,6 @@
+
 document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById("progress").style.visibility = "hidden";
     let count = 0;
     //Operadoras
     var autocom = document.querySelectorAll('.autocomplete');
@@ -62,8 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function RecargaSaldo(e) {
         e.preventDefault();
-        let progress = document.getElementById("progress");
-        progress.classList.remove("hide");
+        document.getElementById("progress").style.visibility = "visible";
         let pagado = document.getElementsByClassName('pagado');
         let form = document.getElementById('FormSaldo');
         var datos = new FormData(form);
@@ -95,14 +96,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 modalAviso.open();
                 form.reset();
+                document.getElementById("progress").style.visibility = "hidden";
             })
             .catch(function (e) {
                 var tbody = document.createElement("tbody");
                 tbody.id = "table";
                 table.appendChild(tbody);
                 console.log(e.message);
+
+                document.getElementById("progress").style.visibility = "hidden";
             });
-        progress.classList.add("hide");
     }
 
     function VentaServicio(e) {
