@@ -113,24 +113,24 @@
             return $idEmpleado;
         }
 
-        private function recarga($Telefono, $Monto){
-            $respuesta = $this->api->recargaTae(1, $Telefono, $Monto);
+        private function recarga($Carrier, $Telefono, $Monto){
+            $respuesta = $this->api->recargaTae($Carrier, $Telefono, $Monto);
             $this->mensajes[] = array('Tel' => $Telefono, 'Codigo' => $respuesta[0], 'Mensaje' => $respuesta[1]);
             return strcmp($respuesta[0], '0') == 0 ? true : false;
         }
 
-        function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones){
+        function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Carrier, $Monto, $PrecioVenta, $Pagado, $Observaciones){
             $this->mensajes = [];
             $arr = json_decode($telefonos, true);
             try {
                 for ($i=0; $i < count($arr); $i++) {
                     $tel = $arr[$i]['tag'];
                     //Si se realiza la recarga
-                    if($this->recarga($tel, $Monto)){
+                    if($this->recarga($Carrier, strval($tel), $Monto)){
                         $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, PrecioVenta, Pagado, Observaciones, Fecha) values (?,?,?,?,?,?,?,?,?,now());");
                         $idCliente = $this->getIdCliente($NombreCliente);
                         $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
-                        $venta->bind_param("iisssddis", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones);
+                        $venta->bind_param("iisssddis", $idCliente, $idEmpleado, $NombreServicio, $tel, $Carrier, $Monto, $PrecioVenta, $Pagado, $Observaciones);
                         if(!$venta->execute()){
                             return json_encode('Error en la inserción ' . $venta->error);
                         }

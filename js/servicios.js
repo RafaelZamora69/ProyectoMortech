@@ -68,10 +68,12 @@ document.addEventListener('DOMContentLoaded', function () {
         let pagado = document.getElementsByClassName('pagado');
         let form = document.getElementById('FormSaldo');
         var datos = new FormData(form);
+        let carrier = getCarrierId(document.getElementById("Operadora").value);
         let nombre = document.getElementById("Name");
         let numeros = document.getElementsByClassName('chips')[0].M_Chips.chipsData;
         datos.append('numeros', JSON.stringify(numeros));
         datos.append('Vendedor', nombre.innerText);
+        datos.append('Carrier', carrier);
         pagado[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
         fetch('servicios&action=recargaSaldo', {
             method: 'POST',
@@ -103,7 +105,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 tbody.id = "table";
                 table.appendChild(tbody);
                 console.log(e.message);
-
                 document.getElementById("progress").style.visibility = "hidden";
             });
     }
@@ -130,6 +131,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
         form.reset();
+    }
+
+    function getCarrierId(carrier) {
+        switch (carrier) {
+            case "Telcel":
+                return 1;
+            case "Movistar":
+                return 2;
+            case "Unefon":
+                return 3;
+            case "AT&T":
+                return 4;
+        }
     }
 
     function cargarMonto(res) {

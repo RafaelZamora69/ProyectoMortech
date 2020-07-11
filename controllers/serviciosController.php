@@ -13,7 +13,7 @@
                                         $_POST['Vendedor'],
                                         $_POST['numeros'],
                                         'Recarga de salgo',
-                                        $_POST['Operadora'],
+                                        $_POST['Carrier'],
                                         $_POST['Monto'],
                                         $_POST['Pago'],
                                         $_POST['Pagado'],
