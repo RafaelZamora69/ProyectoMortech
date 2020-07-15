@@ -2,6 +2,9 @@
 if ($_SESSION['identity'] == null) {
     header('Location: ' . base_url . 'login/index');
 }
+require_once 'views/layouts/header.php';
+require_once 'views/layouts/navbar.php';
+require_once 'views/layouts/sidenav.php';
 ?>
 <div class="row">
     <div class="col s12">
@@ -158,3 +161,4 @@ if ($_SESSION['identity'] == null) {
     </div>
 </div>
 <script src="<?= base_url ?>js/servicios.js"></script>
+<?php include_once 'views/layouts/footer.php'; ?>

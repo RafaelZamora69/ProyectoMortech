@@ -2,6 +2,9 @@
 if ($_SESSION['identity'] == null) {
     header('Location: ' . base_url . 'login/index');
 }
+require_once 'views/layouts/header.php';
+require_once 'views/layouts/navbar.php';
+require_once 'views/layouts/sidenav.php';
 ?>
 <h4>Cortes</h4>
 <div class="row">
@@ -36,12 +39,10 @@ if ($_SESSION['identity'] == null) {
     </div>
 </div>
 <div class="row">
-    <form action="post">
+    <form action="post" id="FormCorte">
         <div class="col s12 m6 input-field">
             <select name="" id="CorteOption">
-                <option value="" disabled selected>Realizar corte</option>
-                <option value="1">Nombre del empleado $0.00</option>
-                <option value="2">Nombre del empleado $0.00</option>
+                <option value="" disabled selected>Seleccione usuario</option>
             </select>
         </div>
         <div class="col s6 m6">
@@ -50,3 +51,4 @@ if ($_SESSION['identity'] == null) {
     </form>
 </div>
 <script src="<?= base_url ?>js/corte.js"></script>
+<?php include_once 'views/layouts/footer.php'; ?>
