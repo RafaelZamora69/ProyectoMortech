@@ -19,7 +19,8 @@ class serviciosController
                 'Recarga de saldo',
                 $_POST['Operadora'],
                 $_POST['Monto'],
-                $_POST['Pago'],
+                $_POST['PagoMxn'],
+                $_POST['PagoUsd'],
                 $_POST['Pagado'],
                 $_POST['Nota']
             );
@@ -42,7 +43,8 @@ class serviciosController
                 $_POST['NombreCliente'],
                 $_POST['Vendedor'],
                 $_POST['Service'],
-                $_POST['CobroServicio'],
+                $_POST['UsdServicio'],
+                $_POST['MxnServicio'],
                 $_POST['Pagado'],
                 $_POST['NotaServicio']
             );

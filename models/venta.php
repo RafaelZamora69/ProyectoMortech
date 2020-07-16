@@ -142,7 +142,7 @@ class venta
         return strcmp($respuesta[0], '0') == 0 ? true : false;
     }
 
-    function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones)
+    function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones)
     {
         $this->mensajes = [];
         $arr = json_decode($telefonos, true);
@@ -151,10 +151,10 @@ class venta
                 $tel = $arr[$i]['tag'];
                 //Si se realiza la recarga
                 if ($this->recarga($tel, $Monto)) {
-                    $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, PrecioVenta, Pagado, Observaciones, Fecha) values (?,?,?,?,?,?,?,?,?,now());");
+                    $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Pagado, Observaciones, Fecha) values (?,?,?,?,?,?,?,?,?,?,now());");
                     $idCliente = $this->getIdCliente($NombreCliente);
                     $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
-                    $venta->bind_param("iisssddis", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones);
+                    $venta->bind_param("iisssdddis", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $Usd, $Mxn, $Pagado, $Observaciones);
                     if (!$venta->execute()) {
                         return json_encode('Error en la inserción ' . $venta->error);
                     }
@@ -166,14 +166,14 @@ class venta
         }
     }
 
-    function VentaServicio($NombreCliente, $NombreEmpleado, $NombreServicio, $PrecioVenta, $Pagado, $Observaciones)
+    function VentaServicio($NombreCliente, $NombreEmpleado, $NombreServicio, $Usd, $Mxn, $Pagado, $Observaciones)
     {
         try {
             $this->mensajes = [];
-            $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, PrecioVenta, Pagado, Observaciones) values (?,?,?,?,?,?)");
+            $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, Usd, Mxn, Pagado, Observaciones) values (?,?,?,?,?,?,?)");
             $idCliente = $this->getIdCliente($NombreCliente);
             $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
-            $venta->bind_param("iisdis", $idCliente, $idEmpleado, $NombreServicio, $PrecioVenta, $Pagado, $Observaciones);
+            $venta->bind_param("iisddis", $idCliente, $idEmpleado, $NombreServicio, $Usd, $Mxn, $Pagado, $Observaciones);
             !$venta->execute() ?
                 $this->mensajes[] = array('Mensaje' => $venta->error, 'Codigo' => 1) :
                 $this->mensajes[] = array('Mensaje' => 'Venta registrada', 'Codigo' => 0);
