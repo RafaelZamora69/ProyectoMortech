@@ -32,7 +32,7 @@
     <li><a href="cliente" class="waves-effect">Busqueda de cliente</a></li>
     <li class="divider"></li>
     <li><a href="<?=base_url?>reportes/index" class="waves-effect">Ventas</a></li>
-    <li><a href="corte" class="waves-effect">Corte</a></li>
+    <li><a href="<?=base_url?>corte/index" class="waves-effect">Corte</a></li>
     <li><a href="utilidad" class="waves-effect">Utilidades</a></li>
     <li class="divider"></li>
     <li><a href="<?=base_url?>login/logout" class="waves-effect">Cerrar sesión</a></li>

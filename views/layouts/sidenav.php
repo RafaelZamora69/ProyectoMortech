@@ -18,6 +18,6 @@
     <li><a class="subheader">Administración</a></li>
     <li><a href="<?=base_url?>reportes/index" class="waves-effect">Reportes</a></li>
     <li><a class="waves-effect">Ventas</a></li>
-    <li><a class="waves-effect">Corte</a></li>
+    <li><a href="<?=base_url?>corte/index" class="waves-effect">Corte</a></li>
     <li><a href="<?=base_url?>login/logout" class="waves-effect">Cerrar sesión</a></li>
 </ul>

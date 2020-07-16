@@ -1,11 +1,13 @@
-<?php 
-    utils::deleteSession('register');
+<?php
+include_once 'views/layouts/header.php';
+utils::deleteSession('register');
 ?>
+
 <body>
     <div class="container">
         <div class="centerDiv">
             <div id="Login" class="col s12">
-                <form action="<?=base_url?>login/login" method="POST">
+                <form action="<?= base_url ?>login/login" method="POST">
                     <div class="card-panel">
                         <h4 class="center-align">Inicie sesión para acceder</h4>
                         <div class="input-field col s12 l12 xl12">
@@ -22,7 +24,7 @@
             </div>
             <!-- Formulario de registro
             <div id="Registro" class="col s12">
-                <form action="<?=base_url?>login/register" method="POST">
+                <form action="<?= base_url ?>login/register" method="POST">
                     <div class="card-panel">
                         <h4 class="center-align">Registrese</h4>
                         <div class="row">
@@ -57,6 +59,7 @@
     </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script src="<?=base_url?>js/index.js"></script>
+<script src="<?= base_url ?>js/index.js"></script>
+<?php include_once 'views/layouts/footer.php'; ?>
 
 </html>
