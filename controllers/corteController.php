@@ -2,6 +2,12 @@
 require_once 'models/corte.php';
 class corteController
 {
+    private $corte;
+
+    function __construct()
+    {
+        $this->corte = new corte();
+    }
 
     public function index()
     {
@@ -10,14 +16,20 @@ class corteController
 
     public function getEmpleados()
     {
-        $corte = new corte();
-        echo json_encode($corte->getVendedores());
+        echo json_encode($this->corte->getVendedores());
     }
 
     public function DetallesCorte()
     {
         if (isset($_POST)) {
-            var_dump($_POST);
+            echo json_encode($this->corte->detalleCorte($_POST['IdVendedor']));
+        }
+    }
+
+    public function RegistrarCorte()
+    {
+        if (isset($_POST)) {
+            $this->corte->registrarCorte($_POST['Nombre'], $_POST['Usd'], $_POST['Mxn']);
         }
     }
 }
