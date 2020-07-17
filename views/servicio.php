@@ -56,14 +56,14 @@ require_once 'views/layouts/sidenav.php';
                 <div class="row">
                     <div class="col s4 m4">
                         <div class="input-field">
-                            <input type="text" id="PagoMxn" name="PagoMxn">
-                            <label for="Pago">Mxn</label>
+                            <input type="text" id="PagoUsd" name="PagoUsd">
+                            <label for="Pago">Usd</label>
                         </div>
                     </div>
                     <div class="col s4 m4">
                         <div class="input-field">
-                            <input type="text" id="PagoUsd" name="PagoUsd">
-                            <label for="Pago">Usd</label>
+                            <input type="text" id="PagoMxn" name="PagoMxn">
+                            <label for="Pago">Mxn</label>
                         </div>
                     </div>
                     <div class="col s4">

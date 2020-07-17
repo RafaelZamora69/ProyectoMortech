@@ -50,5 +50,31 @@ require_once 'views/layouts/sidenav.php';
         </div>
     </form>
 </div>
+<div id="modalCorte" class="modal">
+    <div class="modal-content">
+        <h4>Detalles</h4>
+        <table class="centered">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Saldo Vendido</th>
+                    <th>Usd por servicios</th>
+                    <th>Mxn por servicios</th>
+                    <th>Total de Usd</th>
+                    <th>Total de Mxn</th>
+                    <th>Dolares en crédito</th>
+                    <th>Mxn en crédito</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="Reporte">
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="CerrarCorte">Finalizar</a>
+    </div>
+</div>
 <script src="<?= base_url ?>js/corte.js"></script>
 <?php include_once 'views/layouts/footer.php'; ?>
