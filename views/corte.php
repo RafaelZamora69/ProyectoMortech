@@ -15,24 +15,10 @@ require_once 'views/layouts/sidenav.php';
                     <th>Empleado</th>
                     <th>Iniciado el</th>
                     <th>Realizado el</th>
-                    <th>SubTotal</th>
-                    <th>Ingreso del corte</th>
+                    <th>Usd</th>
+                    <th>Mxn</th>
                 </tr>
-            <tbody>
-                <tr>
-                    <td>Nombre del empleado</td>
-                    <td>Fecha de la primera venta</td>
-                    <td>Fecha del corte</td>
-                    <td>SubTotal (saldo + servicios)</td>
-                    <td>Total (Venta de saldo + servicios)</td>
-                </tr>
-                <tr>
-                    <td>Nombre del empleado</td>
-                    <td>Fecha de la primera venta</td>
-                    <td>Fecha del corte</td>
-                    <td>SubTotal (saldo + servicios)</td>
-                    <td>Total (Venta de saldo + servicios)</td>
-                </tr>
+            <tbody id="TablaCortes">
             </tbody>
             </thead>
         </table>

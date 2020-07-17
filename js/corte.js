@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let elems = document.getElementById('CorteOption');
     var instances;
     getEmpleados();
+    MostrarCortes();
     document.getElementById("CargarCorte").addEventListener('click', DetallesCorte);
     document.getElementById("CerrarCorte").addEventListener('click', GuardarCorte);
 
@@ -20,6 +21,32 @@ document.addEventListener('DOMContentLoaded', function () {
             }).catch(function (e) {
                 console.log(e.message);
             });
+    }
+
+    function MostrarCortes() {
+        fetch('MostrarCortes')
+            .then(res => res.json())
+            .then(res => {
+                for (i in res) {
+                    var tr = document.createElement("tr");
+                    document.getElementById("TablaCortes").appendChild(tr);
+                    var td = document.createElement("td");
+                    td.innerText = res[i].Nombre;
+                    tr.appendChild(td);
+                    var td = document.createElement("td");
+                    td.innerText = res[i].Inicio;
+                    tr.appendChild(td);
+                    var td = document.createElement("td");
+                    td.innerText = res[i].Fin;
+                    tr.appendChild(td);
+                    var td = document.createElement("td");
+                    td.innerText = res[i].Usd;
+                    tr.appendChild(td);
+                    var td = document.createElement("td");
+                    td.innerText = res[i].Mxn;
+                    tr.appendChild(td);
+                }
+            })
     }
 
     function DetallesCorte(e) {

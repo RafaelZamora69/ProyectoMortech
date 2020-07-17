@@ -23,6 +23,20 @@ class corte
         }
     }
 
+    public function getCortes()
+    {
+        try {
+            $cortes = $this->conexion->query('select * from reportecorte');
+            $result = [];
+            while ($row = $cortes->fetch_array(MYSQLI_NUM)) {
+                $result[] = array('Nombre' => $row[0], 'Inicio' => $row[1], 'Fin' => $row[2], 'Usd' => $row[3], 'Mxn' => $row[4]);
+            }
+            return $result;
+        } catch (Exception $e) {
+            return json_encode($e->getMessage());
+        }
+    }
+
     private function getVendedorId($Nombre)
     {
         $id = $this->conexion->prepare('select idEmpleado from empleado where Nombre = ?');
