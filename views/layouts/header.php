@@ -1,4 +1,3 @@
-<?= require_once './config/parameters.php' ?>
 <!DOCTYPE html>
 <html lang="en">
 

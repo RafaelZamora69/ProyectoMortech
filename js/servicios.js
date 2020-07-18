@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let carrier = getCarrierId(document.getElementById("Operadora").value);
         let nombre = document.getElementById("Name");
         let numeros = document.getElementsByClassName('chips')[0].M_Chips.chipsData;
-        let carrier = getCarrierId(document.getElementById("Operadora").value);
         datos.append('numeros', JSON.stringify(numeros));
         datos.append('Vendedor', nombre.innerText);
         datos.append('Carrier', carrier);
