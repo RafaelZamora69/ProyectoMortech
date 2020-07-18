@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 16-07-2020 a las 21:53:31
+-- Tiempo de generación: 17-07-2020 a las 21:28:28
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -36,12 +36,20 @@ DROP PROCEDURE IF EXISTS `DetalleCorte`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `DetalleCorte` (IN `idEmpleado` INT)  NO SQL
 select empleado.Nombre,
 COALESCE((select sum(Monto) from venta where venta.idEmpleado = idEmpleado and fecha between (select Fecha from venta where Corte = 0 and venta.idEmpleado = idEmpleado GROUP by Fecha asc limit 1) and CURRENT_TIMESTAMP()),0) As 'SaldoVendido',
+COALESCE((select sum(Usd) from venta where venta.idEmpleado = idEmpleado and NombreServicio = 'Recarga de saldo' and Pagado = 1 and fecha between (select Fecha from venta where Corte = 0 and venta.idEmpleado = idEmpleado GROUP by Fecha asc limit 1) and CURRENT_TIMESTAMP()),0) As 'UsdSaldo',
+COALESCE((select sum(Mxn) from venta where venta.idEmpleado = idEmpleado and NombreServicio = 'Recarga de saldo' and Pagado = 1 and fecha between (select Fecha from venta where Corte = 0 and venta.idEmpleado = idEmpleado GROUP by Fecha asc limit 1) and CURRENT_TIMESTAMP()),0) As 'MxnSaldo',
 COALESCE((select sum(Usd) from venta where venta.idEmpleado = idEmpleado and NombreServicio != 'Recarga de saldo' and Pagado = 1 and fecha between (select Fecha from venta where Corte = 0 and venta.idEmpleado = idEmpleado GROUP by Fecha asc limit 1) and CURRENT_TIMESTAMP()),0) As 'DolaresServicios',
 COALESCE((select sum(Mxn) from venta where venta.idEmpleado = idEmpleado and NombreServicio != 'Recarga de saldo' and Pagado = 1 and fecha between (select Fecha from venta where Corte = 0 and venta.idEmpleado = idEmpleado GROUP by Fecha asc limit 1) and CURRENT_TIMESTAMP()),0) As 'PesosServicios',
 COALESCE((select sum(Usd) from venta where venta.idEmpleado = idEmpleado and Pagado = 1 and Corte = 0 and fecha between (select Fecha from venta where Corte = 0 and venta.idEmpleado = idEmpleado GROUP by Fecha asc limit 1) and CURRENT_TIMESTAMP()),0) As 'Dolares',
 COALESCE((select sum(Mxn) from venta where venta.idEmpleado = idEmpleado and Pagado = 1 and Corte = 0 and fecha between (select Fecha from venta where Corte = 0 and venta.idEmpleado = idEmpleado GROUP by Fecha asc limit 1) and CURRENT_TIMESTAMP()),0) As 'Mxn',
+COALESCE((select sum(Usd) from venta where venta.idEmpleado = idEmpleado and Pagado = 0 and NombreServicio = 'Recarga de saldo'),0) As 'CreditoRecargasUsd',
+COALESCE((select sum(Mxn) from venta where venta.idEmpleado = idEmpleado and Pagado = 0 and NombreServicio = 'Recarga de saldo'),0) As 'CreditoRecargasMxn',
+COALESCE((select sum(Usd) from venta where venta.idEmpleado = idEmpleado and Pagado = 0 and NombreServicio != 'Recarga de saldo'),0) As 'CreditoServiciosUsd',
+COALESCE((select sum(Mxn) from venta where venta.idEmpleado = idEmpleado and Pagado = 0 and NombreServicio != 'Recarga de saldo'),0) As 'CreditoServiciosMxn',
 COALESCE((select sum(Usd) from venta where venta.idEmpleado = idEmpleado and Pagado = 0),0) As 'CreditoUsd',
-COALESCE((select sum(Mxn) from venta where venta.idEmpleado = idEmpleado and Pagado = 0),0) As 'CreditoMxn'
+COALESCE((select sum(Mxn) from venta where venta.idEmpleado = idEmpleado and Pagado = 0),0) As 'CreditoMxn',
+(select Fecha from venta where Corte = 0 and venta.idEmpleado = idEmpleado GROUP by Fecha asc limit 1) As 'Desde',
+(CURRENT_TIMESTAMP) As 'Hoy'
 from venta inner join empleado on empleado.idEmpleado = venta.idEmpleado where venta.idEmpleado = idEmpleado limit 1$$
 
 DROP PROCEDURE IF EXISTS `InsertarCorte`$$
@@ -65,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `idCliente` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(70) NOT NULL,
   PRIMARY KEY (`idCliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `cliente`
@@ -74,7 +82,8 @@ CREATE TABLE IF NOT EXISTS `cliente` (
 INSERT INTO `cliente` (`idCliente`, `Nombre`) VALUES
 (1, 'Cliente de prueba'),
 (2, 'caca'),
-(3, 'Aver');
+(3, 'Aver'),
+(4, 'cc');
 
 -- --------------------------------------------------------
 
@@ -92,17 +101,26 @@ CREATE TABLE IF NOT EXISTS `corte` (
   `Mxn` double DEFAULT NULL,
   PRIMARY KEY (`idCorte`),
   KEY `idEmpleado` (`idEmpleado`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `corte`
 --
 
 INSERT INTO `corte` (`idCorte`, `idEmpleado`, `IniciadoEl`, `RealizadoEl`, `Usd`, `Mxn`) VALUES
-(1, 14, '2020-07-16 16:03:09', '2020-07-16 20:27:34', 0, 0),
-(4, 14, '2020-07-16 16:03:09', '2020-07-16 20:39:40', 0, 0),
-(5, 14, '2020-07-16 16:03:09', '2020-07-16 21:11:18', 0, 0),
-(7, 14, '2020-07-16 16:03:09', '2020-07-16 21:29:29', 25, 500);
+(13, 14, '2020-07-16 16:03:09', '2020-07-17 20:50:09', 0, 0),
+(14, 17, '2020-07-16 16:03:09', '2020-07-17 20:51:25', 25, 0),
+(15, 17, '2020-07-16 16:03:09', '2020-07-17 21:01:30', 0, 0),
+(16, 17, '2020-07-16 16:03:09', '2020-07-17 21:12:46', 50, 3500);
+
+--
+-- Disparadores `corte`
+--
+DROP TRIGGER IF EXISTS `ActualizarVentas`;
+DELIMITER $$
+CREATE TRIGGER `ActualizarVentas` AFTER INSERT ON `corte` FOR EACH ROW update venta set corte = 1 where idEmpleado = new.idEmpleado and fecha between new.IniciadoEl and new.RealizadoEl and pagado = 1 and corte = 0
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -142,7 +160,9 @@ CREATE TABLE IF NOT EXISTS `total_corte` (
 `idEmpleado` int(11)
 ,`Nombre` varchar(70)
 ,`Mxn` double
+,`CreditoMxn` double
 ,`Usd` double
+,`CreditoUsd` double
 );
 
 -- --------------------------------------------------------
@@ -169,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `venta` (
   PRIMARY KEY (`idVenta`),
   KEY `idCliente` (`idCliente`),
   KEY `idVendedor` (`idEmpleado`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `venta`
@@ -183,10 +203,10 @@ INSERT INTO `venta` (`idVenta`, `idCliente`, `idEmpleado`, `NombreServicio`, `Nu
 (7, 2, 14, 'Recarga de saldo', '2292141516', 'Telcel', 20, 0, 40, 0, 'Prueba con la API', '2020-07-16 16:03:09', 0),
 (8, 2, 14, 'Recarga de saldo', '2292141516', 'Telcel', 20, 0, 40, 0, 'Prueba con la API', '2020-07-16 16:03:09', 0),
 (9, 2, 14, 'Recarga de saldo', '2292141516', 'Telcel', 20, 0, 40, 0, 'Prueba con la API', '2020-07-16 16:03:09', 0),
-(10, 2, 14, 'Recarga de saldo', '2292141687', 'Telcel', 20, 0, 20, 1, 'Prueba 2', '2020-07-16 16:03:09', 0),
-(11, 2, 14, 'Recarga de saldo', '2299345267', 'Telcel', 20, 0, 20, 1, 'Prueba 2', '2020-07-16 16:03:09', 0),
-(12, 2, 14, 'Recarga de saldo', '2292834353', 'Telcel', 20, 0, 20, 1, 'Prueba 2', '2020-07-16 16:03:09', 0),
-(13, 2, 14, 'Recarga de saldo', '2299245167', 'Telcel', 20, 0, 40, 1, 'Prueba je', '2020-07-16 16:03:09', 0),
+(10, 2, 14, 'Recarga de saldo', '2292141687', 'Telcel', 20, 0, 20, 1, 'Prueba 2', '2020-07-16 16:03:09', 1),
+(11, 2, 14, 'Recarga de saldo', '2299345267', 'Telcel', 20, 0, 20, 1, 'Prueba 2', '2020-07-16 16:03:09', 1),
+(12, 2, 14, 'Recarga de saldo', '2292834353', 'Telcel', 20, 0, 20, 1, 'Prueba 2', '2020-07-16 16:03:09', 1),
+(13, 2, 14, 'Recarga de saldo', '2299245167', 'Telcel', 20, 0, 40, 1, 'Prueba je', '2020-07-16 16:03:09', 1),
 (14, 2, 14, 'Recarga de saldo', '2291456578', 'Telcel', 20, 0, 30, 0, 'Prueba modal', '2020-07-16 16:03:09', 0),
 (15, 2, 14, 'Recarga de saldo', '2292567423', 'Telcel', 20, 0, 20, 0, 'c', '2020-07-16 16:03:09', 0),
 (16, 2, 14, 'Recarga de saldo', '2292567423', 'Telcel', 20, 0, 20, 0, 'c', '2020-07-16 16:03:09', 0),
@@ -196,7 +216,7 @@ INSERT INTO `venta` (`idVenta`, `idCliente`, `idEmpleado`, `NombreServicio`, `Nu
 (20, 2, 14, 'Recarga de saldo', '2299457214', 'Telcel', 20, 0, 20, 0, 'c', '2020-07-16 16:03:09', 0),
 (21, 2, 14, 'Recarga de saldo', '2292436789', 'Telcel', 20, 0, 20, 0, 'pene', '2020-07-16 16:03:09', 0),
 (29, 2, 14, 'Servicio de prueba', NULL, NULL, NULL, 0, 1500, 0, 'Prueba', '2020-07-16 16:03:09', 0),
-(30, 2, 14, 'Servicio de prueba 2', NULL, NULL, NULL, 0, 200, 1, 'Prueba 2', '2020-07-16 16:03:09', 0),
+(30, 2, 14, 'Servicio de prueba 2', NULL, NULL, NULL, 0, 200, 1, 'Prueba 2', '2020-07-16 16:03:09', 1),
 (31, 2, 14, 'Servicio de prueba 2', NULL, NULL, NULL, 0, 200, 0, 'Prueba 2', '2020-07-16 16:03:09', 0),
 (32, 2, 14, 'Recarga de saldo', '2292456523', 'Telcel', 20, 0, 20, 0, 'Aver', '2020-07-16 16:03:09', 0),
 (33, 2, 14, 'Recarga de saldo', '2299456423', 'Telcel', 20, 0, 20, 0, 'Aver', '2020-07-16 16:03:09', 0),
@@ -204,7 +224,7 @@ INSERT INTO `venta` (`idVenta`, `idCliente`, `idEmpleado`, `NombreServicio`, `Nu
 (35, 2, 14, 'Recarga de saldo', '2299456423', 'Telcel', 20, 0, 20, 0, 'Aver', '2020-07-16 16:03:09', 0),
 (36, 2, 14, 'Recarga de saldo', '2299567823', 'Telcel', 20, 0, 20, 0, 'cc', '2020-07-16 16:03:09', 0),
 (37, 2, 14, 'Servicio de prueba 3', NULL, NULL, NULL, 0, 3000, 0, 'Prueba 3', '2020-07-16 16:03:09', 0),
-(38, 2, 14, 'Recarga de saldo', '2292456728', 'Telcel', 20, 0, 30, 1, 'c', '2020-07-16 16:03:09', 0),
+(38, 2, 14, 'Recarga de saldo', '2292456728', 'Telcel', 20, 0, 30, 1, 'c', '2020-07-16 16:03:09', 1),
 (39, 2, 14, 'Recarga de saldo', '2299254678', 'Telcel', 100, 0, 150, 0, 'Falta por pagar', '2020-07-16 16:03:09', 0),
 (40, 2, 16, 'Recarga de saldo', '2299346589', 'Telcel', 100, 0, 150, 0, 'c', '2020-07-16 16:03:09', 0),
 (41, 2, 16, 'Recarga de saldo', '2299457894', 'Telcel', 100, 0, 120, 0, 'c', '2020-07-16 16:03:09', 0),
@@ -213,7 +233,10 @@ INSERT INTO `venta` (`idVenta`, `idCliente`, `idEmpleado`, `NombreServicio`, `Nu
 (44, 2, 16, 'Recarga de saldo', '2299564876', 'Telcel', 100, 0, 30, 0, 'c', '2020-07-16 16:03:09', 0),
 (45, 2, 16, 'Recarga de saldo', '2299113546', 'Telcel', 100, 0, 150, 0, 'c', '2020-07-16 16:03:09', 0),
 (46, 2, 17, 'Recarga de saldo', '2299135676', 'Telcel', 100, 0, 200, 0, 'c', '2020-07-16 16:03:09', 0),
-(47, 3, 17, 'Prueba servicio xd', NULL, NULL, NULL, 0, 0, 1, '', '2020-07-16 19:55:04', 0);
+(47, 3, 17, 'Prueba servicio xd', NULL, NULL, NULL, 0, 0, 1, '', '2020-07-16 19:55:04', 1),
+(48, 4, 17, 'Recarga de saldo', '2229123412', 'Unefon', 100, 25, 0, 1, '', '2020-07-17 20:51:05', 1),
+(49, 4, 17, 'Recarga de saldo', '2223145623', 'Unefon', 100, 50, 0, 1, '', '2020-07-17 21:12:00', 1),
+(50, 3, 17, 'Servicio de prueba', NULL, NULL, NULL, 0, 3500, 1, '', '2020-07-17 21:12:16', 1);
 
 -- --------------------------------------------------------
 
@@ -222,7 +245,7 @@ INSERT INTO `venta` (`idVenta`, `idCliente`, `idEmpleado`, `NombreServicio`, `Nu
 --
 DROP TABLE IF EXISTS `total_corte`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `total_corte`  AS  select distinct `venta`.`idEmpleado` AS `idEmpleado`,`empleado`.`Nombre` AS `Nombre`,(select sum(`venta`.`Mxn`) from `venta` where `venta`.`idEmpleado` = `empleado`.`idEmpleado`) AS `Mxn`,(select sum(`venta`.`Usd`) from `venta` where `venta`.`idEmpleado` = `empleado`.`idEmpleado`) AS `Usd` from (`venta` join `empleado` on(`empleado`.`idEmpleado` = `venta`.`idEmpleado`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `total_corte`  AS  select distinct `empleado`.`idEmpleado` AS `idEmpleado`,`empleado`.`Nombre` AS `Nombre`,coalesce((select sum(`venta`.`Mxn`) from `venta` where `venta`.`idEmpleado` = `empleado`.`idEmpleado` and `venta`.`Pagado` = 1 and `venta`.`Corte` = 0 and `venta`.`fecha` between (select `venta`.`fecha` from `venta` where `venta`.`Corte` = 0 group by `venta`.`fecha` limit 1) and current_timestamp()),0) AS `Mxn`,coalesce((select sum(`venta`.`Mxn`) from `venta` where `venta`.`idEmpleado` = `empleado`.`idEmpleado` and `venta`.`fecha` between (select `venta`.`fecha` from `venta` where `venta`.`Corte` = 0 group by `venta`.`fecha` limit 1) and current_timestamp() and `venta`.`Pagado` = 0),0) AS `CreditoMxn`,coalesce((select sum(`venta`.`Usd`) from `venta` where `venta`.`idEmpleado` = `empleado`.`idEmpleado` and `venta`.`fecha` between (select `venta`.`fecha` from `venta` where `venta`.`Corte` = 0 group by `venta`.`fecha` limit 1) and current_timestamp() and `venta`.`Pagado` = 1 and `venta`.`Corte` = 0),0) AS `Usd`,coalesce((select sum(`venta`.`Usd`) from `venta` where `venta`.`idEmpleado` = `empleado`.`idEmpleado` and `venta`.`fecha` between (select `venta`.`fecha` from `venta` where `venta`.`Corte` = 0 group by `venta`.`fecha` limit 1) and current_timestamp() and `venta`.`Pagado` = 0),0) AS `CreditoUsd` from (`venta` join `empleado`) where `venta`.`idEmpleado` = `empleado`.`idEmpleado` ;
 
 --
 -- Restricciones para tablas volcadas

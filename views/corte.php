@@ -15,24 +15,10 @@ require_once 'views/layouts/sidenav.php';
                     <th>Empleado</th>
                     <th>Iniciado el</th>
                     <th>Realizado el</th>
-                    <th>SubTotal</th>
-                    <th>Ingreso del corte</th>
+                    <th>Usd</th>
+                    <th>Mxn</th>
                 </tr>
-            <tbody>
-                <tr>
-                    <td>Nombre del empleado</td>
-                    <td>Fecha de la primera venta</td>
-                    <td>Fecha del corte</td>
-                    <td>SubTotal (saldo + servicios)</td>
-                    <td>Total (Venta de saldo + servicios)</td>
-                </tr>
-                <tr>
-                    <td>Nombre del empleado</td>
-                    <td>Fecha de la primera venta</td>
-                    <td>Fecha del corte</td>
-                    <td>SubTotal (saldo + servicios)</td>
-                    <td>Total (Venta de saldo + servicios)</td>
-                </tr>
+            <tbody id="TablaCortes">
             </tbody>
             </thead>
         </table>
@@ -52,23 +38,17 @@ require_once 'views/layouts/sidenav.php';
 </div>
 <div id="modalCorte" class="modal">
     <div class="modal-content">
-        <h4>Detalles</h4>
-        <table class="centered">
+        <h4 id="Nombre"></h4>
+        <h6 id="Fecha"></h6>
+        <table class="highlight">
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Saldo Vendido</th>
-                    <th>Usd por servicios</th>
-                    <th>Mxn por servicios</th>
-                    <th>Total de Usd</th>
-                    <th>Total de Mxn</th>
-                    <th>Dolares en crédito</th>
-                    <th>Mxn en crédito</th>
+                    <th></th>
+                    <th>Usd</th>
+                    <th>Mxn</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr id="Reporte">
-                </tr>
+            <tbody id="tabla">
             </tbody>
         </table>
     </div>

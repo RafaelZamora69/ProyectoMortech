@@ -26,10 +26,15 @@ class corteController
         }
     }
 
+    public function MostrarCortes()
+    {
+        echo json_encode($this->corte->getCortes());
+    }
+
     public function RegistrarCorte()
     {
         if (isset($_POST)) {
-            $this->corte->registrarCorte($_POST['Nombre'], $_POST['Usd'], $_POST['Mxn']);
+            echo $this->corte->registrarCorte($_POST['Nombre'], $_POST['Usd'], $_POST['Mxn']);
         }
     }
 }
