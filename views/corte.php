@@ -9,7 +9,7 @@ require_once 'views/layouts/sidenav.php';
 <h4>Cortes</h4>
 <div class="row">
     <div class="col s12">
-        <table class="striped centered highlight">
+        <table class="striped centered highlight responsive-table">
             <thead>
                 <tr>
                     <th>Empleado</th>
