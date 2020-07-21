@@ -30,10 +30,12 @@
     <li class="divider"></li>
     <li><a class="waves-effect" href="<?=base_url?>servicios/index">Venta de servicio</a></li>
     <li><a href="cliente" class="waves-effect">Busqueda de cliente</a></li>
+    <?php if($_SESSION['identity']['Jerarquia'] == 'Administrador'): ?>
     <li class="divider"></li>
     <li><a href="<?=base_url?>reportes/index" class="waves-effect">Ventas</a></li>
     <li><a href="<?=base_url?>corte/index" class="waves-effect">Corte</a></li>
     <li><a href="utilidad" class="waves-effect">Utilidades</a></li>
+    <?php endif ?>
     <li class="divider"></li>
     <li><a href="<?=base_url?>login/logout" class="waves-effect">Cerrar sesión</a></li>
 </ul>

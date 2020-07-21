@@ -15,9 +15,12 @@
     <li><a class="subheader">Operaciones</a></li>
     <li><a href="<?=base_url?>servicios/index" class="waves-effect">Venta de servicio</a></li>
     <li><a href="" class="waves-effect">Busqueda de cliente</a></li>
+    <?php if($_SESSION['identity']['Jerarquia'] == 'Administrador'): ?>
     <li><a class="subheader">Administración</a></li>
     <li><a href="<?=base_url?>reportes/index" class="waves-effect">Reportes</a></li>
     <li><a class="waves-effect">Ventas</a></li>
     <li><a href="<?=base_url?>corte/index" class="waves-effect">Corte</a></li>
+    <?php endif ?>
+    <li><div class="divider"></div></li>
     <li><a href="<?=base_url?>login/logout" class="waves-effect">Cerrar sesión</a></li>
 </ul>
