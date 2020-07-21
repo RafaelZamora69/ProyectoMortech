@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //Dropdown nav
     var dropDown = document.querySelectorAll('.dropdown-trigger');
     var instances = M.Dropdown.init(dropDown, {
-        hover: true
+        hover: false
     });
     //Tabs formulario login o registro 
     var tabs = document.querySelectorAll('.tabs');

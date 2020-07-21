@@ -2,7 +2,7 @@
 if ($_SESSION['identity'] == null) {
     header('Location: ' . base_url . 'login/index');
 }
-if($_SESSION['identity']['Jerarquia'] == 'Vendedor'){
+if ($_SESSION['identity']['Jerarquia'] == 'Vendedor') {
     header('Location: ' . base_url . 'servicios/index');
 }
 require_once 'views/layouts/header.php';

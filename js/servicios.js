@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         onAutocomplete: function (res) {
             cargarMonto(res);
+        },
+        dropdownOptions: {
+            "hover": false
         }
     });
     //Modal de aviso
