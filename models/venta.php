@@ -135,9 +135,9 @@ class venta
         return $idEmpleado;
     }
 
-    private function recarga($Telefono, $Monto)
+    private function recarga($Operadora, $Telefono, $Monto)
     {
-        $respuesta = $this->api->recargaTae(1, $Telefono, $Monto);
+        $respuesta = $this->api->recargaTae($Operadora, $Telefono, $Monto);
         $this->mensajes[] = array('Tel' => $Telefono, 'Codigo' => $respuesta[0], 'Mensaje' => $respuesta[1]);
         return strcmp($respuesta[0], '0') == 0 ? true : false;
     }
@@ -150,7 +150,7 @@ class venta
             for ($i = 0; $i < count($arr); $i++) {
                 $tel = $arr[$i]['tag'];
                 //Si se realiza la recarga
-                if ($this->recarga($tel, $Monto)) {
+                if ($this->recarga($Operadora, $tel, $Monto)) {
                     $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Pagado, Observaciones, Fecha) values (?,?,?,?,?,?,?,?,?,?,now());");
                     $idCliente = $this->getIdCliente($NombreCliente);
                     $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
