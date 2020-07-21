@@ -5,7 +5,7 @@ class api
 
     function __construct()
     {
-        $this->client = new SoapClient('https://demo.linntae.mx/services/ventasSoap?wsdl');
+        $this->client = new SoapClient('https://linntae.mx/services/ventasSoap?wsdl');
     }
 
     public function setUser($User)
