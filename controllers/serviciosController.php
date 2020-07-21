@@ -16,7 +16,7 @@ class serviciosController
                 $_POST['Vendedor'],
                 $_POST['numeros'],
                 'Recarga de saldo',
-                $_POST['Operadora'],
+                $_POST['Carrier'],
                 $_POST['Monto'],
                 $_POST['PagoMxn'],
                 $_POST['PagoUsd'],
