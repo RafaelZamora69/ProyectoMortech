@@ -2,11 +2,26 @@
 if ($_SESSION['identity'] == null) {
     header('Location: ' . base_url . 'login/index');
 }
+if ($_SESSION['identity']['Jerarquia'] == 'Vendedor') {
+    header('Location: ' . base_url . 'servicios/index');
+}
 require_once 'views/layouts/header.php';
 require_once 'views/layouts/navbar.php';
 require_once 'views/layouts/sidenav.php';
 ?>
 <h4>Cortes</h4>
+<div class="row">
+    <form action="post" id="FormCorte">
+        <div class="col s12 m6 input-field">
+            <select name="" id="CorteOption">
+                <option value="" disabled selected>Seleccione usuario</option>
+            </select>
+        </div>
+        <div class="col s6 m6">
+            <input type="submit" id="CargarCorte" class="btn-flat waves-effect waves-red">
+        </div>
+    </form>
+</div>
 <div class="row">
     <div class="col s12">
         <table class="striped centered highlight responsive-table">
@@ -23,18 +38,6 @@ require_once 'views/layouts/sidenav.php';
             </thead>
         </table>
     </div>
-</div>
-<div class="row">
-    <form action="post" id="FormCorte">
-        <div class="col s12 m6 input-field">
-            <select name="" id="CorteOption">
-                <option value="" disabled selected>Seleccione usuario</option>
-            </select>
-        </div>
-        <div class="col s6 m6">
-            <input type="submit" id="CargarCorte" class="btn-flat waves-effect waves-red">
-        </div>
-    </form>
 </div>
 <div id="modalCorte" class="modal">
     <div class="modal-content">

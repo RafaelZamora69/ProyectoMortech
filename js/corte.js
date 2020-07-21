@@ -63,6 +63,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 inicializarTabla();
                 var modal = document.getElementById('modalCorte');
                 var modalReporte = M.Modal.init(modal);
+                document.getElementById("CerrarCorte").classList.remove("disabled");
+                document.getElementById("CerrarCorte").textContent = "Registrar corte";
+                if (res.Dolares <= 0 && res.Mxn <= 0) {
+                    document.getElementById("CerrarCorte").classList.add("disabled");
+                    document.getElementById("CerrarCorte").textContent = "No se puede registrar un corte sin ingresos";
+                }
                 cargarTabla(res);
                 modalReporte.open();
             }).catch(function (e) {
@@ -84,13 +90,13 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                res[0].Codigo == 0 ?
-                    M.toast({ html: res[0].Mensaje, classes: 'green white-text' }) :
-                    M.toast({ html: 'Error ' + res[0].Mensaje, classes: 'red white-text' })
+                res.Codigo == 0 ?
+                    M.toast({ html: res.Mensaje, classes: 'green white-text' }) :
+                    M.toast({ html: 'Error ' + res.Mensaje, classes: 'red white-text' })
                 limpiarOption();
                 getEmpleados();
             }).catch(function (e) {
-                console.log(e.message);
+                M.toast({ html: e.message, classes: 'red white-text' });
             })
     }
 

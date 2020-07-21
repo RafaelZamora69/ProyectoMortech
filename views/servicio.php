@@ -33,7 +33,7 @@ require_once 'views/layouts/sidenav.php';
                 <div class="row">
                     <div class="col s6">
                         <div class="input-field">
-                            <input type="text" class="autocomplete" id="Operadora" name="Operadora" required value="Unefon">
+                            <input type="text" class="autocomplete" id="Operadora" name="Operadora" required value="Unefon" placeholder="Operadora">
                             <label for="Operadora">Operadora</label>
                         </div>
                     </div>

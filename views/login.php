@@ -1,13 +1,13 @@
 <?php
 include_once 'views/layouts/header.php';
-utils::deleteSession('register');
+session_destroy();
 ?>
 
 <body>
     <div class="container">
         <div class="centerDiv">
             <div id="Login" class="col s12">
-                <form action="<?= base_url ?>login/login" method="POST">
+                <form action="" method="POST" id="FormLogin">
                     <div class="card-panel">
                         <h4 class="center-align">Inicie sesión para acceder</h4>
                         <div class="input-field col s12 l12 xl12">
@@ -60,6 +60,7 @@ utils::deleteSession('register');
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="<?= base_url ?>js/index.js"></script>
+<script src="<?= base_url ?>js/login.js"></script>
 <?php include_once 'views/layouts/footer.php'; ?>
 
 </html>

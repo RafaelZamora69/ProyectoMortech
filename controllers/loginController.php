@@ -8,15 +8,21 @@
         }
 
         public function login() {
+
             if(isset($_POST)){
                 $user = new user();
                 $identity = $user->loginUser($_POST['User'], $_POST['Password']);
                 if($identity){
-                    session_start();
                     $_SESSION['identity'] = $identity;
-                    header('Location: ' . base_url . 'servicios/index');
+                    echo json_encode("Logeado");
+                } else {
+                    echo json_encode("No logeado");
                 }
             }
+        }
+
+        public function Servicios(){
+            header('Location: ' . base_url . 'servicios/index');
         }
 
         public function register() {
