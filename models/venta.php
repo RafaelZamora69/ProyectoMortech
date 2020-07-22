@@ -135,14 +135,14 @@ class venta
         return $idEmpleado;
     }
 
-    private function recarga($Operadora, $Telefono, $Monto)
+    private function recarga($Carrier, $Telefono, $Monto)
     {
-        $respuesta = $this->api->recargaTae($Operadora, $Telefono, $Monto);
+        $respuesta = $this->api->recargaTae($Carrier, $Telefono, $Monto);
         $this->mensajes[] = array('Tel' => $Telefono, 'Codigo' => $respuesta[0], 'Mensaje' => $respuesta[1]);
         return strcmp($respuesta[0], '0') == 0 ? true : false;
     }
 
-    function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones)
+    function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones, $Carrier)
     {
         $this->mensajes = [];
         $arr = json_decode($telefonos, true);
@@ -150,7 +150,7 @@ class venta
             for ($i = 0; $i < count($arr); $i++) {
                 $tel = $arr[$i]['tag'];
                 //Si se realiza la recarga
-                if ($this->recarga($Operadora, $tel, $Monto)) {
+                if ($this->recarga($Carrier, $tel, $Monto)) {
                     $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Pagado, Observaciones, Fecha) values (?,?,?,?,?,?,?,?,?,?,now());");
                     $idCliente = $this->getIdCliente($NombreCliente);
                     $idEmpleado = $this->getIdEmpleado($NombreEmpleado);

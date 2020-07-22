@@ -55,7 +55,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function agregarNumero(e) {
-        if (Number.isInteger(parseInt(e.data))) {
+        if (e.inputType == 'deleteContentBackward') {
+            count--;
+        } else if (Number.isInteger(parseInt(e.data))) {
             count++;
             if (count == 10) {
                 telefonos.addChip({ tag: value[0].value });
