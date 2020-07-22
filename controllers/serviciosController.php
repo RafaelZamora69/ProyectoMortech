@@ -16,12 +16,13 @@ class serviciosController
                 $_POST['Vendedor'],
                 $_POST['numeros'],
                 'Recarga de saldo',
-                $_POST['Carrier'],
+                $_POST['Operadora'],
                 $_POST['Monto'],
                 $_POST['PagoMxn'],
                 $_POST['PagoUsd'],
                 $_POST['Pagado'],
-                $_POST['Nota']
+                $_POST['Nota'],
+                $_POST['Carrier']
             );
         } else {
             echo json_encode('Datos no recibidos');
