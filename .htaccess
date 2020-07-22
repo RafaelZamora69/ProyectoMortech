@@ -1,3 +1,5 @@
+#Php 7
+AddHandler application/x-httpd-php71 .php
 <IfModule mod_rewrite.c>
     #Activar rewrite
     RewriteEngine on
