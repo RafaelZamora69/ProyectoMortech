@@ -144,6 +144,7 @@ class venta
 
     function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones, $Carrier)
     {
+        var_dump($Monto);
         $this->mensajes = [];
         $arr = json_decode($telefonos, true);
         try {

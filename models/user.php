@@ -92,4 +92,24 @@ class user
             return false;
         }
     }
+
+    function obtenerEmpleados()
+    {
+        $empleados = [];
+        $query = $this->connection->query("select Nombre from empleado;");
+        while ($row = $query->fetch_assoc()) {
+            $empleados[] = $row["Nombre"];
+        }
+        return json_encode($empleados);
+    }
+
+    function obtenerClientes()
+    {
+        $clientes = [];
+        $query = $this->connection->query("select distinct Nombre from cliente;");
+        while ($row = $query->fetch_assoc()) {
+            $clientes[] = $row["Nombre"];
+        }
+        return json_encode($clientes);
+    }
 }

@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+    var elems = document.getElementById('autoCompleteClientes');
+    var clientes = M.Autocomplete.init(elems);
+    var elems = document.getElementById('autoCompleteEmpleados');
+    var empleados = M.Autocomplete.init(elems);
     var elems = document.querySelectorAll('.datepicker');
     var today = new Date();
     var fechas = M.Datepicker.init(elems, {
@@ -6,6 +12,32 @@ document.addEventListener('DOMContentLoaded', function () {
         maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
     });
     radioButtons();
+    obtenerEmpleados();
+    obtenerClientes();
+
+    function obtenerEmpleados() {
+        fetch('obtenerEmpleados')
+            .then(res => res.json())
+            .then(res => {
+                let data = {};
+                for (i in res) {
+                    data[res[i]] = null;
+                }
+                empleados.updateData(data);
+            })
+    }
+
+    function obtenerClientes() {
+        fetch('obtenerClientes')
+            .then(res => res.json())
+            .then(res => {
+                let data = {};
+                for (i in res) {
+                    data[res[i]] = null;
+                }
+                clientes.updateData(data);
+            })
+    }
 
     function consulta(servicio) {
         var array = Array.from(document.getElementsByName("Filtro"));

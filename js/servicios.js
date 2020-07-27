@@ -81,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
         datos.append('Carrier', carrier);
         pagado[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
         datos.append('Carrier', carrier);
+        console.log(datos.get('Monto'));
         fetch('servicios&action=recargaSaldo', {
             method: 'POST',
             body: datos
