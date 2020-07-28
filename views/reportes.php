@@ -14,6 +14,7 @@ require_once 'views/layouts/sidenav.php';
     <li>
         <div class="collapsible-header"><i class="material-icons">filter_list</i>Filtros</div>
         <div class="collapsible-body">
+        <form action="" id="FormFiltro">
             <div class="row">
                 <div class="col s6 input-field">
                     <input type="text" class="datepicker" name="From">
@@ -41,7 +42,11 @@ require_once 'views/layouts/sidenav.php';
             <div class="row">
                 <p>
                     <label>
-                        <input name="Servicio" type="radio" id="Saldo" checked />
+                        <input name="Servicio" type="radio" id="TodosServicios" checked />
+                        <span>Todo</span>
+                    </label>
+                    <label>
+                        <input name="Servicio" type="radio" id="Saldo" />
                         <span>Recarga de saldo</span>
                     </label>
                     <label>
@@ -51,15 +56,15 @@ require_once 'views/layouts/sidenav.php';
                 </p>
                 <p>
                     <label>
-                        <input name="Filtro" type="radio" id="All" checked />
+                        <input name="Estado" type="radio" id="Todos" checked value="3"/>
                         <span>Todo</span>
                     </label>
                     <label>
-                        <input name="Filtro" type="radio" id="Pagado" />
+                        <input name="Estado" type="radio" id="Pagado" value="1"/>
                         <span>Pagado</span>
                     </label>
                     <label>
-                        <input name="Filtro" type="radio" id="Credito" />
+                        <input name="Estado" type="radio" id="Credito" value="0"/>
                         <span>Crédito</span>
                     </label>
                 </p>
@@ -75,8 +80,9 @@ require_once 'views/layouts/sidenav.php';
                 </p>
             </div>
             <div class="row">
-                <input type="submit" value="Filtrar" class="btn-flat waves-effect waves-red ">
+                <input type="submit" value="Filtrar" class="btn-flat waves-effect waves-red" id="Filtrar">
             </div>
+        </form>
         </div>
     </li>
 </ul>

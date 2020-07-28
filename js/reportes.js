@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    //Inicializar componentes
     var elems = document.querySelectorAll('.collapsible');
     var instances = M.Collapsible.init(elems);
     var elems = document.getElementById('autoCompleteClientes');
@@ -11,9 +12,54 @@ document.addEventListener('DOMContentLoaded', function () {
         format: 'yyyy-mm-dd',
         maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
     });
+
+    //Datos para el filtro
+    let Tipo = 'Ventas';
+    let Servicio = 'TodosServicios';
+    let Estado = 3;
+    let data;
+    //Carga de métodos
+    document.getElementById("Filtrar").addEventListener('click', filtrar);
     radioButtons();
     obtenerEmpleados();
     obtenerClientes();
+
+    function filtrar(e){
+        e.preventDefault();
+        var form = new FormData(document.getElementById('FormFiltro'));
+        form.append('Estado', Estado);
+        form.append('Servicio', Servicio);
+        form.append('Tipo', Tipo);
+        fetch('filtro', {
+            body: form,
+            method: 'POSt'
+        })
+            .then(res => res.json())
+            .then(res => {
+                data = res;
+                console.log(data.filter(function(entry){
+                    return entry.Vendedor === 'Daniel Moreno Rodriguez';
+                }));
+            })
+    }
+
+    function radioButtons() {
+        document.getElementById("Saldo").addEventListener('click', function () {
+            servicio();
+        });
+        document.getElementById("Servicios").addEventListener('click', function () {
+            servicio();
+        });
+        document.getElementById("Ventas").addEventListener('click', function () {
+            tipo('Ventas');
+        });
+        document.getElementById("Cortes").addEventListener('click', function () {
+            tipo('Cortes');
+        });
+        document.getElementById("Todos").addEventListener('click', estado);
+        document.getElementById("Pagado").addEventListener('click', estado);
+        document.getElementById("Credito").addEventListener('click', estado);
+    }
 
     function obtenerEmpleados() {
         fetch('obtenerEmpleados')
@@ -39,58 +85,24 @@ document.addEventListener('DOMContentLoaded', function () {
             })
     }
 
-    function consulta(servicio) {
-        var array = Array.from(document.getElementsByName("Filtro"));
+    function tipo(tipo) {
+        Tipo = tipo;
+    }
+
+    function estado(){
+        let array = Array.from(document.getElementsByName("Estado"));
         for (i in array) {
-            if (array[i].checked) {
-                document.getElementsByName("Tipo")[0].checked ?
-                    reporteVentas(servicio, array[i].id) :
-                    reporteCorte();
+            if (array[i].checked == true) {
+                Estado = array[i].value;
             }
         }
     }
 
-    function reporteVentas(servicio, filtro) {
-        let datos = new FormData();
-        datos.append('servicio', servicio);
-        datos.append('filtro', filtro);
-        fetch('reporteVentas', {
-            method: 'POST',
-            body: datos
-        })
-            .then(res => res.json())
-            .then(res => {
-                console.log(res);
-            })
-    }
-
-    function cargar(tipo) {
-        console.log(tipo);
-    }
-
-    function radioButtons() {
-        document.getElementById("Saldo").addEventListener('click', function () {
-            consulta('Saldo');
-        });
-        document.getElementById("Servicios").addEventListener('click', function () {
-            consulta('Servicios');
-        });
-        document.getElementById("Ventas").addEventListener('click', function () {
-            cargar('Ventas');
-        });
-        document.getElementById("Cortes").addEventListener('click', function () {
-            cargar('Cortes');
-        });
-        document.getElementById("All").addEventListener('click', getFilter);
-        document.getElementById("Pagado").addEventListener('click', getFilter);
-        document.getElementById("Credito").addEventListener('click', getFilter);
-    }
-
-    function getFilter() {
+    function servicio() {
         let array = Array.from(document.getElementsByName("Servicio"));
         for (i in array) {
             if (array[i].checked == true) {
-                consulta(array[i].id);
+                Servicio = array[i].id;
             }
         }
     }
