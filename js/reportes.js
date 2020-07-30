@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let Servicio = 'TodosServicios';
     let Estado = 3;
     let originalData;
+    let idVenta;
     //Carga de métodos
     document.getElementById("Filtrar").addEventListener('click', filtrar);
     radioButtons();
@@ -51,6 +52,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     return entry.Vendedor === 'Daniel Moreno Rodriguez';
                 }));*/
             })
+    }
+
+    function obtenerDatos(id){
+        console.log(id);
     }
 
     function TablaCorte(data) {
@@ -125,6 +130,10 @@ document.addEventListener('DOMContentLoaded', function () {
             var td = document.createElement("td");
             td.innerText = data[i].fecha;
             tr.appendChild(td);
+            var editar = document.createElement("a");
+            editar.textContent = 'Editar';
+            editar.classList.add('waves-effect', 'waves-light', 'yellow', 'btn');
+            tr.appendChild(editar);
             document.getElementById("TableBody").appendChild(tr);
         }
     }
@@ -156,11 +165,14 @@ document.addEventListener('DOMContentLoaded', function () {
         var th = document.createElement("th");
         th.textContent = 'Fecha';
         tr.appendChild(th);
+        var th = document.createElement("th");
+        th.textContent = 'Editar';
+        tr.appendChild(th);
     }
 
     function TablaGeneral(data) {
         CargarTablaGeneral();
-        for (var i = 1; i < data.length; i++) {
+        for (let i = 1; i < data.length; i++) {
             var tr = document.createElement("tr");
             var td = document.createElement("td");
             td.innerText = data[i].Vendedor;
@@ -180,6 +192,13 @@ document.addEventListener('DOMContentLoaded', function () {
             var td = document.createElement("td");
             td.innerText = data[i].fecha;
             tr.appendChild(td);
+            var editar = document.createElement("a");
+            editar.textContent = 'Editar';
+            editar.classList.add('waves-effect', 'waves-light', 'yellow', 'btn', 'black-text');
+            editar.onclick = function() {
+                console.log(data[i].idVenta);
+            }
+            tr.appendChild(editar);
             document.getElementById("TableBody").appendChild(tr);
         }
     }
@@ -204,6 +223,9 @@ document.addEventListener('DOMContentLoaded', function () {
         tr.appendChild(th);
         var th = document.createElement("th");
         th.textContent = 'Fecha';
+        tr.appendChild(th);
+        var th = document.createElement("th");
+        th.textContent = 'Editar';
         tr.appendChild(th);
     }
 
