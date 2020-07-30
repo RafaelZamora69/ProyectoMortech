@@ -99,5 +99,45 @@ require_once 'views/layouts/sidenav.php';
         </table>
     </div>
 </div>
+<div id="modalEditar" class="modal">
+    <div class="modal-content">
+        <h4>Editar venta</h4>
+        <p id="NombreEmpleado">Empleado: </p>
+        <p id="NombreCliente">Cliente: </p>
+        <form action="">
+            <div class="row">
+                <div class="col s6">
+                    <div class="input-field">
+                        <input type="text" id="Mxn" name="Mxn" placeholder="Mxn">
+                        <label for="Mxn">Mxn</label>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="input-field">
+                        <input type="text" id="Usd" name="Usd" placeholder="Usd">
+                        <label for="Usd">Usd</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    <label>
+                        <input type="checkbox" id="EstaPagado">
+                        <span>Pagado</span>
+                    </label>
+                </div>
+                <div class="col s6">
+                    <div class="input-field">
+                        <textarea name="Observaciones" id="Observaciones" class="materialize-textarea" placeholder="Observaciones"></textarea>
+                        <label for="Observaciones">Observaciones</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+</div>
 <script src="<?= base_url ?>js/reportes.js"></script>
 <?php include_once 'views/layouts/footer.php'; ?>

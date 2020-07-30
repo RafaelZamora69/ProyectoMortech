@@ -1,6 +1,7 @@
 <?php
 require_once 'models/user.php';
 require_once 'models/reportes.php';
+require_once 'models/venta.php';
 class reportesController
 {
 
@@ -28,9 +29,15 @@ class reportesController
         echo $clientes->obtenerClientes();
     }
 
-    public function filtro(){
+    public function filtro()
+    {
         $reporte = new reportes();
         echo $reporte->consulta($_POST);
-        
+    }
+
+    public function obtenerDetalles()
+    {
+        $reporte = new venta();
+        echo $reporte->detalleVenta($_POST['idVenta']);
     }
 }

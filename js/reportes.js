@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
         format: 'yyyy-mm-dd',
         maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
     });
+    var elems = document.getElementById('modalEditar');
+    var modal = M.Modal.init(elems);
     //Datos para el filtro
     let Tipo = 'Ventas';
     let Servicio = 'TodosServicios';
@@ -54,8 +56,25 @@ document.addEventListener('DOMContentLoaded', function () {
             })
     }
 
-    function obtenerDatos(id){
-        console.log(id);
+    function obtenerDatos(id) {
+        idVenta = id;
+        var data = new FormData();
+        data.append('idVenta', id);
+        fetch('obtenerDetalles', {
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res => {
+                document.getElementById("NombreEmpleado").textContent += res[0].Empleado;
+                document.getElementById("NombreCliente").textContent += res[0].Cliente;
+                document.getElementById("Mxn").value = res[0].Mxn;
+                document.getElementById("Usd").value = res[0].Usd;
+                document.getElementById("Observaciones").value = res[0].Observaciones;
+                res[0].Pagado === 0 ? document.getElementById("EstaPagado").checked = false : document.getElementById("EstaPagado").checked = true;
+                console.log(res[0]);
+                modal.open();
+            });
     }
 
     function TablaCorte(data) {
@@ -193,10 +212,10 @@ document.addEventListener('DOMContentLoaded', function () {
             td.innerText = data[i].fecha;
             tr.appendChild(td);
             var editar = document.createElement("a");
-            editar.textContent = 'Editar';
+            editar.textContent = 'Detalles';
             editar.classList.add('waves-effect', 'waves-light', 'yellow', 'btn', 'black-text');
-            editar.onclick = function() {
-                console.log(data[i].idVenta);
+            editar.onclick = function () {
+                obtenerDatos(data[i].idVenta);
             }
             tr.appendChild(editar);
             document.getElementById("TableBody").appendChild(tr);
@@ -225,7 +244,6 @@ document.addEventListener('DOMContentLoaded', function () {
         th.textContent = 'Fecha';
         tr.appendChild(th);
         var th = document.createElement("th");
-        th.textContent = 'Editar';
         tr.appendChild(th);
     }
 
