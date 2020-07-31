@@ -44,6 +44,6 @@ class reportesController
     public function actualizarVenta()
     {
         $reporte = new reportes();
-        echo $reporte->actualizar($_POST['idVenta'], $_POST['Mxn'], $_POST['Usd'], $_POST['Observaciones']);
+        echo $reporte->actualizar($_POST['idVenta'], $_POST['Mxn'], $_POST['Usd'], $_POST['pagado'], $_POST['Observaciones']);
     }
 }
