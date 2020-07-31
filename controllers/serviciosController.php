@@ -1,5 +1,6 @@
 <?php
 require_once 'models/venta.php';
+require_once 'models/user.php';
 class serviciosController
 {
 
@@ -31,8 +32,8 @@ class serviciosController
 
     public function nombresClientes()
     {
-        $venta = new venta();
-        echo json_encode($venta->obtenerClientes());
+        $clientes = new user();
+        echo $clientes->obtenerClientes();
     }
 
     public function ventaServicio()
