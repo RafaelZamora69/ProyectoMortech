@@ -10,67 +10,133 @@ require_once 'views/layouts/navbar.php';
 require_once 'views/layouts/sidenav.php';
 ?>
 <h3>Reportes</h3>
-<div class="row">
-    <div class="col s6 input-field">
-        <input type="text" class="datepicker" name="From">
-        <label for="From">Desde</label>
-    </div>
-    <div class="col s6 input-field">
-        <input type="text" class="datepicker" name="To">
-        <label for="To">Hasta</label>
-    </div>
-</div>
-<div class="row">
-    <p>
-        <label>
-            <input name="Servicio" type="radio" id="Saldo" checked />
-            <span>Recarga de saldo</span>
-        </label>
-        <label>
-            <input name="Servicio" type="radio" id="Servicios" />
-            <span>Servicios</span>
-        </label>
-    </p>
-    <p>
-        <label>
-            <input name="Filtro" type="radio" id="All" checked />
-            <span>Todo</span>
-        </label>
-        <label>
-            <input name="Filtro" type="radio" id="Pagado" />
-            <span>Pagado</span>
-        </label>
-        <label>
-            <input name="Filtro" type="radio" id="Credito" />
-            <span>Crédito</span>
-        </label>
-    </p>
-    <p>
-        <label>
-            <input name="Tipo" type="radio" id="Ventas" checked />
-            <span>Ventas</span>
-        </label>
-        <label>
-            <input name="Tipo" type="radio" id="Cortes" />
-            <span>Cortes</span>
-        </label>
-    </p>
-</div>
+<ul class="collapsible">
+    <li>
+        <div class="collapsible-header"><i class="material-icons">filter_list</i>Filtros</div>
+        <div class="collapsible-body">
+            <form action="" id="FormFiltro">
+                <div class="row">
+                    <div class="col s6 input-field">
+                        <input type="text" class="datepicker" name="From">
+                        <label for="From">Desde</label>
+                    </div>
+                    <div class="col s6 input-field">
+                        <input type="text" class="datepicker" name="To">
+                        <label for="To">Hasta</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m6">
+                        <div class="input-field">
+                            <input type="text" name="Empleado" class="autocomplete" id="autoCompleteEmpleados">
+                            <label for="Empleado">Empleado</label>
+                        </div>
+                    </div>
+                    <div class="col s12 m6">
+                        <div class="input-field">
+                            <input type="text" name="Cliente" class="autocomplete" id="autoCompleteClientes">
+                            <label for="Cliente">Cliente</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <p>
+                        <label>
+                            <input name="Servicio" type="radio" id="TodosServicios" checked />
+                            <span>Todo</span>
+                        </label>
+                        <label>
+                            <input name="Servicio" type="radio" id="Saldo" />
+                            <span>Recarga de saldo</span>
+                        </label>
+                        <label>
+                            <input name="Servicio" type="radio" id="Servicios" />
+                            <span>Servicios</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input name="Estado" type="radio" id="Todos" checked value="3" />
+                            <span>Todo</span>
+                        </label>
+                        <label>
+                            <input name="Estado" type="radio" id="Pagado" value="1" />
+                            <span>Pagado</span>
+                        </label>
+                        <label>
+                            <input name="Estado" type="radio" id="Credito" value="0" />
+                            <span>Crédito</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input name="Tipo" type="radio" id="Ventas" checked />
+                            <span>Ventas</span>
+                        </label>
+                        <label>
+                            <input name="Tipo" type="radio" id="Cortes" />
+                            <span>Cortes</span>
+                        </label>
+                    </p>
+                </div>
+                <div class="row">
+                    <input type="submit" value="Filtrar" class="btn-flat waves-effect waves-red" id="Filtrar">
+                </div>
+            </form>
+        </div>
+    </li>
+</ul>
 <div class="row">
     <div class="col s12">
-        <table class="striped highlight responsive-table">
+        <table class="highlight responsive-table">
             <thead>
-                <tr>
-                    <th>Vendedor</th>
-                    <th>Cliente</th>
-                    <th>Teléfono</th>
-                    <th>Operadora</th>
-                    <th>Monto</th>
-                    <th>$ de venta</th>
-                    <th>Pagado</th>
+                <tr id="Headers">
                 </tr>
             </thead>
+            <tbody id="TableBody">
+
+            </tbody>
         </table>
+    </div>
+</div>
+<div id="modalEditar" class="modal">
+    <div class="modal-content">
+        <h4>Editar venta</h4>
+        <p id="NombreEmpleado">Empleado: </p>
+        <p id="NombreCliente">Cliente: </p>
+        <form action="" id="dataActualizar">
+            <div class="row">
+                <div class="col s6">
+                    <div class="input-field">
+                        <input type="text" id="Mxn" name="Mxn" placeholder="Mxn">
+                        <label for="Mxn">Mxn</label>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="input-field">
+                        <input type="text" id="Usd" name="Usd" placeholder="Usd">
+                        <label for="Usd">Usd</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    <label>
+                        <input type="checkbox" id="EstaPagado">
+                        <span>Pagado</span>
+                    </label>
+                </div>
+                <div class="col s6">
+                    <div class="input-field">
+                        <textarea name="Observaciones" id="Observaciones" class="materialize-textarea" placeholder="Observaciones"></textarea>
+                        <label for="Observaciones">Observaciones</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a id="Actualizar" class="modal-close waves-effect waves-green btn-flat">Actualizar</a>
     </div>
 </div>
 <script src="<?= base_url ?>js/reportes.js"></script>

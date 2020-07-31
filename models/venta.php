@@ -182,4 +182,21 @@ class venta
             return json_encode($e->getMessage());
         }
     }
+
+    function detalleVenta($idVenta)
+    {
+        try {
+            $detalle = $this->connection->prepare("select cliente.Nombre As 'Cliente', empleado.Nombre As 'Empleado', Usd, Mxn, Pagado, Observaciones from venta inner join cliente on venta.idCliente = cliente.idCliente inner join empleado on venta.idEmpleado = empleado.idEmpleado where idVenta = ?");
+            $detalle->bind_param("i", $idVenta);
+            $detalle->execute();
+            $result = $detalle->get_result();
+            $arr = [];
+            while ($row = $result->fetch_assoc()) {
+                $arr[] = array('Cliente' => $row['Cliente'], 'Empleado' => $row['Empleado'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Pagado' => $row['Pagado'], 'Observaciones' => $row['Observaciones']);
+            }
+            return json_encode($arr);
+        } catch (Exception $e) {
+            return json_encode($e->getMessage());
+        }
+    }
 }

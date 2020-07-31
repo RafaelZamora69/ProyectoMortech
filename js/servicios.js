@@ -2,6 +2,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("progress").style.visibility = "hidden";
     let count = 0;
+    var autocom = document.getElementById('autocompleteName');
+    var clientes = M.Autocomplete.init(autocom);
     //Operadoras
     var autocom = document.querySelectorAll('.autocomplete');
     var operadora = M.Autocomplete.init(autocom, {
@@ -18,15 +20,17 @@ document.addEventListener('DOMContentLoaded', function () {
             "hover": false
         }
     });
+    var chips = document.getElementById('chips');
+    var telefonos = M.Chips.init(chips, {
+            placeholder: "Numeros",
+            secondaryPlaceholder: "+Numero"
+        });
+    var autocom = document.getElementById('autocompleteName');
+    var clientes = M.Autocomplete.init(autocom);
     //Modal de aviso
     var modal = document.getElementById('modal1');
     var modalAviso = M.Modal.init(modal);
     //Números de teléfono
-    var chips = document.getElementById('chips');
-    var telefonos = M.Chips.init(chips, {
-        placeholder: "Numeros",
-        secondaryPlaceholder: "+Numero"
-    });
     var value = document.querySelectorAll('.input');
     //Monto a pagar
     var select = document.querySelectorAll('select');
@@ -37,17 +41,19 @@ document.addEventListener('DOMContentLoaded', function () {
     formSaldo.addEventListener('submit', RecargaSaldo);
     formServicio.addEventListener('submit', VentaServicio);
     chips.addEventListener('input', agregarNumero);
+    cargarChips();
 
     //funciones
     ObtenerClientes();
     function ObtenerClientes() {
-        fetch('servicios&action=nombresClientes')
+        fetch('nombresClientes')
             .then(res => res.json())
             .then(res => {
-                var autocomName = document.querySelectorAll('.autocompleteName');
-                var instances = M.Autocomplete.init(autocomName, {
-                    data: res
-                });
+                var data = {};
+                for(i in res){
+                    data[res[i]] = null;
+                }
+                clientes.updateData(data);
             })
             .catch(function (e) {
                 console.log(e.message);
@@ -104,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 modalAviso.open();
                 form.reset();
+                borrarNumeros();
                 document.getElementById("progress").style.visibility = "hidden";
             })
             .catch(function (e) {
@@ -113,6 +120,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log(e.message);
                 document.getElementById("progress").style.visibility = "hidden";
             });
+    }
+
+    function borrarNumeros(){
+        telefonos = M.Chips.init(chips, {
+            placeholder: "Numeros",
+            secondaryPlaceholder: "+Numero"
+        });
+    }
+
+    function cargarChips(){
+        telefonos = M.Chips.init(chips, {
+            placeholder: "Numeros",
+            secondaryPlaceholder: "+Numero"
+        });
     }
 
     function VentaServicio(e) {
@@ -181,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 montos = M.FormSelect.init(select);
                 break;
             case 'Unefon':
-                let unefon = [10, 20, 30, 50, 70, 100, 150, 200, 300];
+                let unefon = [100, 10, 20, 30, 50, 70, 150, 200, 300];
                 for (i in unefon) {
                     let opciones = document.getElementById("Monto");
                     let opcion = document.createElement("option");

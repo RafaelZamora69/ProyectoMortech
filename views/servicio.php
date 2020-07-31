@@ -19,7 +19,7 @@ require_once 'views/layouts/sidenav.php';
                 <div class="row">
                     <div class="col s12">
                         <div class="input-field">
-                            <input name="Name" type="text" class="autocompleteName" id="autocompleteName" required>
+                            <input name="Name" type="text" class="autocomplete" id="autocompleteName" required>
                             <label for="Name">Cliente</label>
                         </div>
                     </div>
@@ -46,7 +46,7 @@ require_once 'views/layouts/sidenav.php';
                                 <option value="50">$ 50</option>
                                 <option value="70">$ 70</option>
                                 <option value="100" selected>$ 100</option>
-                                <option value="160">$ 150</option>
+                                <option value="150">$ 150</option>
                                 <option value="200">$ 200</option>
                                 <option value="300">$ 300</option>
                             </select>
