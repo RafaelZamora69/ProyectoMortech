@@ -104,7 +104,7 @@ require_once 'views/layouts/sidenav.php';
         <h4>Editar venta</h4>
         <p id="NombreEmpleado">Empleado: </p>
         <p id="NombreCliente">Cliente: </p>
-        <form action="">
+        <form action="" id="dataActualizar">
             <div class="row">
                 <div class="col s6">
                     <div class="input-field">
@@ -136,7 +136,7 @@ require_once 'views/layouts/sidenav.php';
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+        <a id="Actualizar" class="modal-close waves-effect waves-green btn-flat">Actualizar</a>
     </div>
 </div>
 <script src="<?= base_url ?>js/reportes.js"></script>

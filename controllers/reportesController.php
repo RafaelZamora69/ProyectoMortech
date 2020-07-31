@@ -40,4 +40,10 @@ class reportesController
         $reporte = new venta();
         echo $reporte->detalleVenta($_POST['idVenta']);
     }
+
+    public function actualizarVenta()
+    {
+        $reporte = new reportes();
+        echo $reporte->actualizar($_POST['idVenta'], $_POST['Mxn'], $_POST['Usd'], $_POST['Observaciones']);
+    }
 }

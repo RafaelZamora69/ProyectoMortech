@@ -56,4 +56,17 @@ class reportes
             return json_encode($e->getMessage());
         }
     }
+
+    function actualizar($idVenta, $Mxn, $Usd, $Observaciones)
+    {
+        try {
+            $actualizar = $this->connection->prepare("update venta set Mxn = ?, Usd = ?, Observaciones = ? where idVenta = ?");
+            $actualizar->bind_param("ddsi", $Mxn, $Usd, $Observaciones, $idVenta);
+            if ($actualizar->execute()) {
+                return json_encode(array('Codigo' => 1, 'Mensaje' => 'Actualizado correctamente'));
+            }
+        } catch (Exception $e) {
+            return json_encode(array('Codigo' => 0, 'Mensaje' => $e->getMessage()));
+        }
+    }
 }

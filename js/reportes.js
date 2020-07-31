@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     var elems = document.getElementById('modalEditar');
     var modal = M.Modal.init(elems);
+    document.getElementById('Actualizar').onclick = actualizar;
     //Datos para el filtro
     let Tipo = 'Ventas';
     let Servicio = 'TodosServicios';
@@ -56,6 +57,22 @@ document.addEventListener('DOMContentLoaded', function () {
             })
     }
 
+    function actualizar() {
+        var data = new FormData(document.getElementById('dataActualizar'));
+        data.append('idVenta', idVenta);
+        fetch('actualizarVenta', {
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+                res.Codigo == 1 ?
+                    M.toast({ html: res.Mensaje, classes: 'green white-text' }) :
+                    M.toast({ html: 'Error ' + res.Mensaje, classes: 'red white-text' })
+            })
+    }
+
     function obtenerDatos(id) {
         idVenta = id;
         var data = new FormData();
@@ -72,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById("Usd").value = res[0].Usd;
                 document.getElementById("Observaciones").value = res[0].Observaciones;
                 res[0].Pagado === 0 ? document.getElementById("EstaPagado").checked = false : document.getElementById("EstaPagado").checked = true;
-                console.log(res[0]);
                 modal.open();
             });
     }
@@ -152,6 +168,9 @@ document.addEventListener('DOMContentLoaded', function () {
             var editar = document.createElement("a");
             editar.textContent = 'Editar';
             editar.classList.add('waves-effect', 'waves-light', 'yellow', 'btn');
+            editar.onclick = function () {
+                obtenerDatos(data[i].idVenta);
+            }
             tr.appendChild(editar);
             document.getElementById("TableBody").appendChild(tr);
         }
