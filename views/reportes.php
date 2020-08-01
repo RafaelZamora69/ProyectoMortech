@@ -80,7 +80,8 @@ require_once 'views/layouts/sidenav.php';
                     </p>
                 </div>
                 <div class="row">
-                    <input type="submit" value="Filtrar" class="btn-flat waves-effect waves-red" id="Filtrar">
+                    <a value="Consultar" class="btn-flat waves-effect waves-red" id="Consultar"><i class="material-icons left">get_app</i>Consultar</a>
+                    <a value="Filtrar" class="btn-flat waves-effect waves-red" id="Filtrar"><i class="material-icons left">filter_alt</i>Filtrar</a>
                 </div>
             </form>
         </div>
@@ -102,8 +103,8 @@ require_once 'views/layouts/sidenav.php';
 <div id="modalEditar" class="modal">
     <div class="modal-content">
         <h4>Editar venta</h4>
-        <p id="NombreEmpleado">Empleado: </p>
-        <p id="NombreCliente">Cliente: </p>
+        <p>Empleado: <span id="NombreEmpleado"></span></p>
+        <p>Cliente: <span id="NombreCliente"></span></p>
         <form action="" id="dataActualizar">
             <div class="row">
                 <div class="col s6">

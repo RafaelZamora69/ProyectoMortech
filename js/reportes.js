@@ -18,17 +18,44 @@ document.addEventListener('DOMContentLoaded', function () {
     //Datos para el filtro
     let Tipo = 'Ventas';
     let Servicio = 'TodosServicios';
+    let Mostrar;
     let Estado = 3;
     let originalData;
+    let filterData;
     let idVenta;
     //Carga de métodos
+    document.getElementById("Consultar").addEventListener('click', Consultar);
     document.getElementById("Filtrar").addEventListener('click', filtrar);
     radioButtons();
     obtenerEmpleados();
     obtenerClientes();
 
-    function filtrar(e) {
-        e.preventDefault();
+    function filtrar() {
+        filterData = originalData;
+        if (!document.getElementById('autoCompleteEmpleados').value == "") {
+            filterData = filterData.filter(function (entry) {
+                return entry.Empleado === document.getElementById('autoCompleteEmpleados').value;
+            });
+        }
+        if (!document.getElementById('autoCompleteClientes').value == "") {
+            filterData = filterData.filter(function (entry) {
+                return entry.Cliente === document.getElementById('autoCompleteClientes').value;
+            });
+        }
+        switch (Mostrar) {
+            case 'General':
+                TablaGeneral(filterData);
+                break;
+            case 'Saldo':
+                TablaSaldo(filterData);
+                break;
+            case 'Corte':
+                TablaCorte(filterData);
+                break;
+        }
+    }
+
+    function Consultar(e) {
         var form = new FormData(document.getElementById('FormFiltro'));
         form.append('Estado', Estado);
         form.append('Servicio', Servicio);
@@ -42,23 +69,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 originalData = res;
                 switch (originalData[0].Tipo) {
                     case 'General':
+                        Mostrar = 'General';
                         TablaGeneral(originalData);
                         break;
                     case 'Saldo':
+                        Mostrar = 'Saldo'
                         TablaSaldo(originalData);
                         break;
                     case 'Corte':
+                        Mostrar = 'Corte'
                         TablaCorte(originalData);
                         break;
                 }
-                /*console.log(data.filter(function (entry) {
-                    return entry.Vendedor === 'Daniel Moreno Rodriguez';
-                }));*/
             })
     }
 
     function actualizar() {
         var data = new FormData(document.getElementById('dataActualizar'));
+        var pagado = document.getElementById('EstaPagado').checked ? 1 : 0;
+        data.append('pagado', pagado);
         data.append('idVenta', idVenta);
         fetch('actualizarVenta', {
             method: 'POST',
@@ -66,7 +95,6 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res);
                 res.Codigo == 1 ?
                     M.toast({ html: res.Mensaje, classes: 'green white-text' }) :
                     M.toast({ html: 'Error ' + res.Mensaje, classes: 'red white-text' })
@@ -83,12 +111,13 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                document.getElementById("NombreEmpleado").textContent += res[0].Empleado;
-                document.getElementById("NombreCliente").textContent += res[0].Cliente;
+                document.getElementById("NombreEmpleado").textContent = res[0].Empleado;
+                document.getElementById("NombreCliente").textContent = res[0].Cliente;
                 document.getElementById("Mxn").value = res[0].Mxn;
                 document.getElementById("Usd").value = res[0].Usd;
                 document.getElementById("Observaciones").value = res[0].Observaciones;
                 res[0].Pagado === 0 ? document.getElementById("EstaPagado").checked = false : document.getElementById("EstaPagado").checked = true;
+                res[0].Corte == 0 ? document.getElementById("Actualizar").classList.remove("disabled") : document.getElementById("Actualizar").classList.add("disabled")
                 modal.open();
             });
     }
@@ -98,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (var i = 1; i < data.length; i++) {
             var tr = document.createElement("tr");
             var td = document.createElement("td");
-            td.innerText = data[i].Nombre;
+            td.innerText = data[i].Empleado;
             tr.appendChild(td);
             var td = document.createElement("td");
             td.innerText = data[i].Inicio;
@@ -142,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (var i = 1; i < data.length; i++) {
             var tr = document.createElement("tr");
             var td = document.createElement("td");
-            td.innerText = data[i].Vendedor;
+            td.innerText = data[i].Empleado;
             tr.appendChild(td);
             var td = document.createElement("td");
             td.innerText = data[i].Cliente;
@@ -180,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
         LimpiarTablas();
         var tr = document.getElementById("Headers");
         var th = document.createElement("th");
-        th.textContent = 'Vendedor';
+        th.textContent = 'Empleado';
         tr.appendChild(th);
         var th = document.createElement("th");
         th.textContent = 'Cliente';
@@ -213,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (let i = 1; i < data.length; i++) {
             var tr = document.createElement("tr");
             var td = document.createElement("td");
-            td.innerText = data[i].Vendedor;
+            td.innerText = data[i].Empleado;
             tr.appendChild(td);
             var td = document.createElement("td");
             td.innerText = data[i].Servicio;
@@ -245,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function () {
         LimpiarTablas();
         var tr = document.getElementById("Headers");
         var th = document.createElement("th");
-        th.textContent = 'Vendedor';
+        th.textContent = 'Empleado';
         tr.appendChild(th);
         var th = document.createElement("th");
         th.textContent = 'Servicio';
