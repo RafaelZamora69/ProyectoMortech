@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var clientes = M.Autocomplete.init(elems);
     var elems = document.getElementById('autoCompleteEmpleados');
     var empleados = M.Autocomplete.init(elems);
+    var elems = document.getElementById('NombreCliente');
+    var clientesModal = M.Autocomplete.init(elems);
     var elems = document.querySelectorAll('.datepicker');
     var today = new Date();
     var fechas = M.Datepicker.init(elems, {
@@ -23,12 +25,66 @@ document.addEventListener('DOMContentLoaded', function () {
     let originalData;
     let filterData;
     let idVenta;
+    let Usd = 0;
+    let Mxn = 0;
     //Carga de métodos
     document.getElementById("Consultar").addEventListener('click', Consultar);
     document.getElementById("Filtrar").addEventListener('click', filtrar);
     radioButtons();
     obtenerEmpleados();
     obtenerClientes();
+
+    function mostrarDetalles(data) {
+        let container = document.getElementById('Detalles');
+        container.innerHTML = `<p>Registros: ${data.length}</p>
+        <p>Usd: $${Usd = obtenerDolares(data, 'Si')} Usd</p>
+        <p>Credito Usd: $${Usd = obtenerDolares(data, 'No')} Usd</p>
+        <p>Mxn: $${Mxn = obtenerPesos(data, 'Si')} Mxn</p>
+        <p>Credito Mxn: $${Mxn = obtenerPesos(data, 'No')} Mxn</p>
+        `;
+        if (Servicio == 'Saldo') {
+            //Detalles en formato de saldo
+            container.innerHTML += `
+                <p>Saldo utilizado: $${saldoUtilizado(data)}</p>
+            `
+        }
+    }
+
+    function saldoUtilizado(data) {
+        let saldo = 0;
+        data.filter(function (entry) {
+            if (entry['Venta'] !== undefined) {
+                saldo += parseInt(entry['Monto']);
+            }
+        });
+        return saldo;
+    }
+
+    function obtenerDolares(data, Pagado) {
+        Usd = 0;
+        data.filter(function (entry) {
+            if (entry['Venta'] !== undefined) {
+                if (entry['Venta'].includes(' Usd') && entry['Pagado'] === Pagado) {
+                    var aux = entry['Venta'].replace(' Usd', '');
+                    Usd += parseInt(aux);
+                }
+            }
+        });
+        return Usd;
+    }
+
+    function obtenerPesos(data, Pagado) {
+        Mxn = 0;
+        data.filter(function (entry) {
+            if (entry['Venta'] !== undefined) {
+                if (entry['Venta'].includes(' Mxn') && entry['Pagado'] === Pagado) {
+                    var aux = entry['Venta'].replace(' Mxn', '');
+                    Mxn += parseInt(aux);
+                }
+            }
+        });
+        return Mxn;
+    }
 
     function filtrar() {
         filterData = originalData;
@@ -81,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         TablaCorte(originalData);
                         break;
                 }
+                mostrarDetalles(originalData);
             })
     }
 
@@ -112,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 document.getElementById("NombreEmpleado").textContent = res[0].Empleado;
-                document.getElementById("NombreCliente").textContent = res[0].Cliente;
+                document.getElementById("NombreCliente").value = res[0].Cliente;
                 document.getElementById("Mxn").value = res[0].Mxn;
                 document.getElementById("Usd").value = res[0].Usd;
                 document.getElementById("Observaciones").value = res[0].Observaciones;
@@ -168,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function TablaSaldo(data) {
         CargarTablaSaldo();
-        for (var i = 1; i < data.length; i++) {
+        for (let i = 1; i < data.length; i++) {
             var tr = document.createElement("tr");
             var td = document.createElement("td");
             td.innerText = data[i].Empleado;
@@ -196,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function () {
             tr.appendChild(td);
             var editar = document.createElement("a");
             editar.textContent = 'Editar';
-            editar.classList.add('waves-effect', 'waves-light', 'yellow', 'btn');
+            editar.classList.add('waves-effect', 'waves-light', 'yellow', 'btn', 'black-text');
             editar.onclick = function () {
                 obtenerDatos(data[i].idVenta);
             }
@@ -344,6 +401,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     data[res[i]] = null;
                 }
                 clientes.updateData(data);
+                clientesModal.updateData(data);
             })
     }
 
@@ -364,6 +422,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let array = Array.from(document.getElementsByName("Servicio"));
         for (i in array) {
             if (array[i].checked == true) {
+                console.log(array[i].id);
                 Servicio = array[i].id;
             }
         }

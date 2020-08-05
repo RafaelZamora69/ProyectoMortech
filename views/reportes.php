@@ -88,6 +88,8 @@ require_once 'views/layouts/sidenav.php';
     </li>
 </ul>
 <div class="row">
+    <div class="col s12" id="Detalles">
+    </div>
     <div class="col s12">
         <table class="highlight responsive-table">
             <thead>
@@ -103,9 +105,18 @@ require_once 'views/layouts/sidenav.php';
 <div id="modalEditar" class="modal">
     <div class="modal-content">
         <h4>Editar venta</h4>
-        <p>Empleado: <span id="NombreEmpleado"></span></p>
-        <p>Cliente: <span id="NombreCliente"></span></p>
+        <div class="row">
+            <div class="col s12">
+                <p>Empleado: <span id="NombreEmpleado"></span></p>
+            </div>
+        </div>
         <form action="" id="dataActualizar">
+            <div class="row">
+                <div class="input-field col s12 m6">
+                    <input type="text" name="Cliente" id="NombreCliente" placeholder="Cliente" class="autocomplete">
+                    <label for="Cliente">Cliente</label>
+                </div>
+            </div>
             <div class="row">
                 <div class="col s6">
                     <div class="input-field">
