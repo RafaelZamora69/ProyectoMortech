@@ -88,6 +88,8 @@ require_once 'views/layouts/sidenav.php';
     </li>
 </ul>
 <div class="row">
+    <div class="col s12" id="Detalles">
+    </div>
     <div class="col s12">
         <table class="highlight responsive-table">
             <thead>

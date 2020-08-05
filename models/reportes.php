@@ -1,4 +1,5 @@
 <?php
+require_once 'venta.php';
 class reportes
 {
     private $connection;
@@ -57,11 +58,15 @@ class reportes
         }
     }
 
-    function actualizar($idVenta, $Mxn, $Usd, $Pagado, $Observaciones)
+    function actualizar($Cliente, $idVenta, $Mxn, $Usd, $Pagado, $Observaciones)
     {
         try {
-            $actualizar = $this->connection->prepare("update venta set Pagado = ?, Mxn = ?, Usd = ?, Observaciones = ? where idVenta = ?");
-            $actualizar->bind_param("iddsi", $Pagado, $Mxn, $Usd, $Observaciones, $idVenta);
+            $actualizar = $this->connection->prepare("update venta set idCliente = ?, Pagado = ?, Mxn = ?, Usd = ?, Observaciones = ? where idVenta = ?");
+            //Conseguir el idCliente o crear uno nuevo
+            $cliente = new venta();
+            $idCliente = $cliente->getIdCliente($Cliente);
+            var_dump($idCliente);
+            $actualizar->bind_param("iiddsi", $idCliente, $Pagado, $Mxn, $Usd, $Observaciones, $idVenta);
             if ($actualizar->execute()) {
                 return json_encode(array('Codigo' => 1, 'Mensaje' => 'Actualizado correctamente'));
             }

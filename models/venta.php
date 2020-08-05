@@ -111,7 +111,7 @@ class venta
         return $this->getIdCliente($NombreCliente);
     }
 
-    private function getIdCliente($NombreCliente)
+    public function getIdCliente($NombreCliente)
     {
         $id = $this->connection->prepare("select idCliente from cliente where Nombre = ?");
         $id->bind_param("s", $NombreCliente);
