@@ -363,6 +363,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function radioButtons() {
+        document.getElementById("TodosServicios").addEventListener('click', function () {
+            servicio();
+        });
         document.getElementById("Saldo").addEventListener('click', function () {
             servicio();
         });
@@ -422,7 +425,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let array = Array.from(document.getElementsByName("Servicio"));
         for (i in array) {
             if (array[i].checked == true) {
-                console.log(array[i].id);
                 Servicio = array[i].id;
             }
         }
