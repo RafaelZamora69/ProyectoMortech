@@ -20,8 +20,12 @@ class reportes
                 } elseif (strcmp('Saldo', $Params['Servicio']) == 0) {
                     //Mostrar solo saldo, es una tabla distinta
                     $reporte = $this->connection->prepare('call ReporteSaldo(?,?,?);');
-                    strcmp(' ', $Params['From']) == 0 ? $reporte->bind_param('iss', $Params['Estado'], 'null', 'null') :
+                    if (strcmp(' ', $Params['From']) == 0) {
+                        $reporte->bind_param('iss', $Params['Estado'], 'null', 'null');
+                    } else {
+                        $Params['To'] = $Params['To'] . ' 23:59:59';
                         $reporte->bind_param('iss', $Params['Estado'], $Params['From'], $Params['To']);
+                    }
                     $reporte->execute();
                     $result = $reporte->get_result();
                     $arr = [array('Tipo' => 'Saldo')];
@@ -36,8 +40,12 @@ class reportes
                     //Mostrar cualquier servicio
                     $reporte = $this->connection->prepare('call ReporteServicio(?,?,?);');
                 }
-                strcmp(' ', $Params['From']) == 0 ? $reporte->bind_param('iss', $Params['Estado'], 'null', 'null') :
+                if (strcmp(' ', $Params['From']) == 0) {
+                    $reporte->bind_param('iss', $Params['Estado'], 'null', 'null');
+                } else {
+                    $Params['To'] = $Params['To'] . ' 23:59:59';
                     $reporte->bind_param('iss', $Params['Estado'], $Params['From'], $Params['To']);
+                }
                 $reporte->execute();
                 $result = $reporte->get_result();
                 $arr = [array('Tipo' => 'General')];
