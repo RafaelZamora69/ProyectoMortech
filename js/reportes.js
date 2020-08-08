@@ -249,6 +249,9 @@ document.addEventListener('DOMContentLoaded', function () {
             td.innerText = data[i].Pagado;
             tr.appendChild(td);
             var td = document.createElement("td");
+            td.innerText = data[i].Corte;
+            tr.appendChild(td);
+            var td = document.createElement("td");
             td.innerText = data[i].fecha;
             tr.appendChild(td);
             var editar = document.createElement("a");
@@ -287,6 +290,9 @@ document.addEventListener('DOMContentLoaded', function () {
         th.textContent = 'Pagado';
         tr.appendChild(th);
         var th = document.createElement("th");
+        th.textContent = 'Corte';
+        tr.appendChild(th);
+        var th = document.createElement("th");
         th.textContent = 'Fecha';
         tr.appendChild(th);
         var th = document.createElement("th");
@@ -312,6 +318,9 @@ document.addEventListener('DOMContentLoaded', function () {
             tr.appendChild(td);
             var td = document.createElement("td");
             td.innerText = data[i].Pagado;
+            tr.appendChild(td);
+            var td = document.createElement("td");
+            td.innerText = data[i].Corte;
             tr.appendChild(td);
             var td = document.createElement("td");
             td.innerText = data[i].fecha;
@@ -344,6 +353,9 @@ document.addEventListener('DOMContentLoaded', function () {
         tr.appendChild(th);
         var th = document.createElement("th");
         th.textContent = 'Pagado';
+        tr.appendChild(th);
+        var th = document.createElement("th");
+        th.textContent = 'Corte';
         tr.appendChild(th);
         var th = document.createElement("th");
         th.textContent = 'Fecha';

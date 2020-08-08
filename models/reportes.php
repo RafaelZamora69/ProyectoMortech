@@ -32,7 +32,7 @@ class reportes
                     while ($row = $result->fetch_assoc()) {
                         $arr[] = array(
                             'idVenta' => $row['idVenta'], 'Empleado' => $row['Vendedor'], 'Cliente' => $row['Cliente'], 'Telefono' => $row['NumeroTelefono'], 'Operadora' => $row['Operadora'], 'Monto' => $row['Monto'], 'Venta' => $row['Venta'],
-                            'Pagado' => $row['Pagado'], 'fecha' => $row['fecha']
+                            'Pagado' => $row['Pagado'], 'Corte' => $row['Corte'],  'fecha' => $row['fecha']
                         );
                     }
                     return json_encode($arr);
@@ -50,7 +50,7 @@ class reportes
                 $result = $reporte->get_result();
                 $arr = [array('Tipo' => 'General')];
                 while ($row = $result->fetch_assoc()) {
-                    $arr[] = array('idVenta' => $row['idVenta'], 'Empleado' => $row['Vendedor'], 'Servicio' => $row['NombreServicio'], 'Cliente' => $row['Cliente'], 'Venta' => $row['Venta'], 'Pagado' => $row['Pagado'], 'fecha' => $row['fecha']);
+                    $arr[] = array('idVenta' => $row['idVenta'], 'Empleado' => $row['Vendedor'], 'Servicio' => $row['NombreServicio'], 'Cliente' => $row['Cliente'], 'Venta' => $row['Venta'], 'Pagado' => $row['Pagado'], 'Corte' => $row['Corte'], 'fecha' => $row['fecha']);
                 }
             } else {
                 $cortes = $this->connection->query('select * from reportecorte');
