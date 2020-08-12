@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    var today = new Date();
     //Inicializar componentes
     var elems = document.querySelectorAll('.collapsible');
     var instances = M.Collapsible.init(elems);
@@ -8,9 +9,17 @@ document.addEventListener('DOMContentLoaded', function () {
     var empleados = M.Autocomplete.init(elems);
     var elems = document.getElementById('NombreCliente');
     var clientesModal = M.Autocomplete.init(elems);
-    var elems = document.querySelectorAll('.datepicker');
-    var today = new Date();
-    var fechas = M.Datepicker.init(elems, {
+    var elems = document.getElementById('Desde');
+    var Desde = M.Datepicker.init(elems, {
+        defaultDate: new Date(today.getFullYear(), today.getMonth(), 1),
+        setDefaultDate: true,
+        format: 'yyyy-mm-dd',
+        maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
+    });
+    var elems = document.getElementById('Hasta');
+    var Hasta = M.Datepicker.init(elems, {
+        defaultDate: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+        setDefaultDate: true,
         format: 'yyyy-mm-dd',
         maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
     });
@@ -36,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function mostrarDetalles(data) {
         let container = document.getElementById('Detalles');
-        container.innerHTML = `<p>Registros: ${data.length}</p>
+        container.innerHTML = `<p>Registros: ${data.length - 1}</p>
         <p>Usd: $${Usd = obtenerDolares(data, 'Si')} Usd</p>
         <p>Credito Usd: $${Usd = obtenerDolares(data, 'No')} Usd</p>
         <p>Mxn: $${Mxn = obtenerPesos(data, 'Si')} Mxn</p>
@@ -98,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return entry.Cliente === document.getElementById('autoCompleteClientes').value;
             });
         }
+        mostrarDetalles(filterData);
         switch (Mostrar) {
             case 'General':
                 TablaGeneral(filterData);
@@ -249,6 +259,9 @@ document.addEventListener('DOMContentLoaded', function () {
             td.innerText = data[i].Pagado;
             tr.appendChild(td);
             var td = document.createElement("td");
+            td.innerText = data[i].Corte;
+            tr.appendChild(td);
+            var td = document.createElement("td");
             td.innerText = data[i].fecha;
             tr.appendChild(td);
             var editar = document.createElement("a");
@@ -287,6 +300,9 @@ document.addEventListener('DOMContentLoaded', function () {
         th.textContent = 'Pagado';
         tr.appendChild(th);
         var th = document.createElement("th");
+        th.textContent = 'Corte';
+        tr.appendChild(th);
+        var th = document.createElement("th");
         th.textContent = 'Fecha';
         tr.appendChild(th);
         var th = document.createElement("th");
@@ -312,6 +328,9 @@ document.addEventListener('DOMContentLoaded', function () {
             tr.appendChild(td);
             var td = document.createElement("td");
             td.innerText = data[i].Pagado;
+            tr.appendChild(td);
+            var td = document.createElement("td");
+            td.innerText = data[i].Corte;
             tr.appendChild(td);
             var td = document.createElement("td");
             td.innerText = data[i].fecha;
@@ -344,6 +363,9 @@ document.addEventListener('DOMContentLoaded', function () {
         tr.appendChild(th);
         var th = document.createElement("th");
         th.textContent = 'Pagado';
+        tr.appendChild(th);
+        var th = document.createElement("th");
+        th.textContent = 'Corte';
         tr.appendChild(th);
         var th = document.createElement("th");
         th.textContent = 'Fecha';

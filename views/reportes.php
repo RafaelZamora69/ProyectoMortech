@@ -17,11 +17,11 @@ require_once 'views/layouts/sidenav.php';
             <form action="" id="FormFiltro">
                 <div class="row">
                     <div class="col s6 input-field">
-                        <input type="text" class="datepicker" name="From">
+                        <input type="text" class="datepicker" name="From" id="Desde">
                         <label for="From">Desde</label>
                     </div>
                     <div class="col s6 input-field">
-                        <input type="text" class="datepicker" name="To">
+                        <input type="text" class="datepicker" name="To" id="Hasta">
                         <label for="To">Hasta</label>
                     </div>
                 </div>

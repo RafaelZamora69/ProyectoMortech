@@ -1,8 +1,9 @@
-<?php 
-    class clienteController {
+<?php
+class clienteController
+{
 
-        public function index()
-        {
-            echo 'Aqui se ve una lista de clientes';
-        }
+    public function index()
+    {
+        echo 'Aqui se ve una lista de clientes';
     }
+}
