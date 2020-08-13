@@ -25,9 +25,10 @@ require_once 'views/layouts/sidenav.php';
                     </tr>
                 </thead>
                 <tbody id="TablaDeudas">
-
                 </tbody>
             </table>
         </div>
     </div>
 </form>
+<script src="<?= base_url ?>js/clientes.js"></script>
+<?php include_once 'views/layouts/footer.php'; ?>
