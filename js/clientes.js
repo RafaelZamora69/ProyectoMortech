@@ -58,6 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td><a class="waves-effect waves-light yellow btn black-text infoCliente" id="${res[i].idCliente}" name="${res[i].Nombre}">Editar</a></td>
                 </tr>
             `;
+            if (res[i].Deudas == 0) {
+                document.getElementById(res[i].idCliente).classList.add('disabled');
+            }
         }
     }
 
