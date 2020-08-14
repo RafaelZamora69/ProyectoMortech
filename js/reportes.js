@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function mostrarDetalles(data) {
         let container = document.getElementById('Detalles');
-        container.innerHTML = `<p>Registros: ${data.length - 1}</p>
+        container.innerHTML = `<p>Registros: ${data.length}</p>
         <p>Usd: $${Usd = obtenerDolares(data, 'Si')} Usd</p>
         <p>Credito Usd: $${Usd = obtenerDolares(data, 'No')} Usd</p>
         <p>Mxn: $${Mxn = obtenerPesos(data, 'Si')} Mxn</p>
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function Consultar(e) {
+    function Consultar() {
         var form = new FormData(document.getElementById('FormFiltro'));
         form.append('Estado', Estado);
         form.append('Servicio', Servicio);
@@ -191,24 +191,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function TablaCorte(data) {
         CargarTablaCorte();
-        for (var i = 1; i < data.length; i++) {
-            var tr = document.createElement("tr");
-            var td = document.createElement("td");
-            td.innerText = data[i].Empleado;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Inicio;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Fin;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Usd;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Mxn;
-            tr.appendChild(td);
-            document.getElementById("TableBody").appendChild(tr);
+        for (i in data) {
+            if (data[i].Empleado != undefined) {
+                var tr = document.createElement("tr");
+                var td = document.createElement("td");
+                td.innerText = data[i].Empleado;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Inicio;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Fin;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Usd;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Mxn;
+                tr.appendChild(td);
+                document.getElementById("TableBody").appendChild(tr);
+            }
         }
     }
 
@@ -235,43 +237,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function TablaSaldo(data) {
         CargarTablaSaldo();
-        for (let i = 1; i < data.length; i++) {
-            var tr = document.createElement("tr");
-            var td = document.createElement("td");
-            td.innerText = data[i].Empleado;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Cliente;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Telefono;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Operadora;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Monto;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Venta;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Pagado;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Corte;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].fecha;
-            tr.appendChild(td);
-            var editar = document.createElement("a");
-            editar.textContent = 'Editar';
-            editar.classList.add('waves-effect', 'waves-light', 'yellow', 'btn', 'black-text');
-            editar.onclick = function () {
-                obtenerDatos(data[i].idVenta);
+        for (i in data) {
+            if (data[i].Empleado != undefined) {
+                var tr = document.createElement("tr");
+                var td = document.createElement("td");
+                td.innerText = data[i].Empleado;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Cliente;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Telefono;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Operadora;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Monto;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Venta;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Pagado;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Corte;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].fecha;
+                tr.appendChild(td);
+                var editar = document.createElement("a");
+                editar.textContent = 'Editar';
+                editar.classList.add('waves-effect', 'waves-light', 'yellow', 'btn', 'black-text');
+                editar.onclick = function () {
+                    obtenerDatos(data[i].idVenta);
+                }
+                tr.appendChild(editar);
+                document.getElementById("TableBody").appendChild(tr);
             }
-            tr.appendChild(editar);
-            document.getElementById("TableBody").appendChild(tr);
         }
     }
 
@@ -312,37 +316,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function TablaGeneral(data) {
         CargarTablaGeneral();
-        for (let i = 1; i < data.length; i++) {
-            var tr = document.createElement("tr");
-            var td = document.createElement("td");
-            td.innerText = data[i].Empleado;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Servicio;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Cliente;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Venta;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Pagado;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].Corte;
-            tr.appendChild(td);
-            var td = document.createElement("td");
-            td.innerText = data[i].fecha;
-            tr.appendChild(td);
-            var editar = document.createElement("a");
-            editar.textContent = 'Detalles';
-            editar.classList.add('waves-effect', 'waves-light', 'yellow', 'btn', 'black-text');
-            editar.onclick = function () {
-                obtenerDatos(data[i].idVenta);
+        for (i in data) {
+            if (data[i].Empleado != undefined) {
+                var tr = document.createElement("tr");
+                var td = document.createElement("td");
+                td.innerText = data[i].Empleado;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Servicio;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Cliente;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Venta;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Pagado;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].Corte;
+                tr.appendChild(td);
+                var td = document.createElement("td");
+                td.innerText = data[i].fecha;
+                tr.appendChild(td);
+                var editar = document.createElement("a");
+                editar.textContent = 'Detalles';
+                editar.classList.add('waves-effect', 'waves-light', 'yellow', 'btn', 'black-text');
+                editar.onclick = function () {
+                    obtenerDatos(data[i].idVenta);
+                }
+                tr.appendChild(editar);
+                document.getElementById("TableBody").appendChild(tr);
             }
-            tr.appendChild(editar);
-            document.getElementById("TableBody").appendChild(tr);
         }
     }
 

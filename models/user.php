@@ -112,4 +112,19 @@ class user
         }
         return json_encode($clientes);
     }
+
+    function getIdCliente($nombre)
+    {
+        try {
+            $query = $this->connection->prepare("select idCliente from cliente where nombre = ?");
+            $query->bind_param("s", $nombre);
+            $query->execute();
+            $result = $query->get_result();
+            while ($row = $result->fetch_assoc()) {
+                return $row['idCliente'];
+            }
+        } catch (Exception $e) {
+            return json_encode($e->getMessage());
+        }
+    }
 }
