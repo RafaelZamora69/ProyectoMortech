@@ -37,6 +37,11 @@ document.addEventListener('DOMContentLoaded', function () {
     let Usd = 0;
     let Mxn = 0;
     //Carga de métodos
+    document.body.addEventListener('click', function (e) {
+        if (e.target.classList.contains('infoCliente')) {
+            obtenerDatos(e.srcElement.id);
+        }
+    });
     document.getElementById("Consultar").addEventListener('click', Consultar);
     document.getElementById("Filtrar").addEventListener('click', filtrar);
     radioButtons();
@@ -193,191 +198,100 @@ document.addEventListener('DOMContentLoaded', function () {
         CargarTablaCorte();
         for (i in data) {
             if (data[i].Empleado != undefined) {
-                var tr = document.createElement("tr");
-                var td = document.createElement("td");
-                td.innerText = data[i].Empleado;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Inicio;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Fin;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Usd;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Mxn;
-                tr.appendChild(td);
-                document.getElementById("TableBody").appendChild(tr);
+                document.getElementById('TableBody').innerHTML += `
+                    </tr>
+                        <td>${data[i].Empleado}</td>
+                        <td>${data[i].Inicio}</td>
+                        <td>${data[i].Fin}</td>
+                        <td>${data[i].Usd}</td>
+                        <td>${data[i].Mxn}</td>
+                    </tr>
+                `;
             }
         }
     }
 
     function CargarTablaCorte() {
         LimpiarTablas();
-        var tr = document.getElementById("Headers");
-        var th = document.getElementById("Headers");
-        var th = document.createElement("th");
-        th.textContent = 'Empleado';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Iniciado';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Realizado';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Usd';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Mxn';
-        tr.appendChild(th);
+        document.getElementById('Headers').innerHTML += `
+            <th>Empleado</th>
+            <th>Iniciado</th>
+            <th>Realizado</th>
+            <th>Usd</th>
+            <th>Mxn</th>
+        `;
     }
 
     function TablaSaldo(data) {
         CargarTablaSaldo();
         for (i in data) {
             if (data[i].Empleado != undefined) {
-                var tr = document.createElement("tr");
-                var td = document.createElement("td");
-                td.innerText = data[i].Empleado;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Cliente;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Telefono;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Operadora;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Monto;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Venta;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Pagado;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Corte;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].fecha;
-                tr.appendChild(td);
-                var editar = document.createElement("a");
-                editar.textContent = 'Editar';
-                editar.classList.add('waves-effect', 'waves-light', 'yellow', 'btn', 'black-text');
-                editar.onclick = function () {
-                    obtenerDatos(data[i].idVenta);
-                }
-                tr.appendChild(editar);
-                document.getElementById("TableBody").appendChild(tr);
+                document.getElementById('TableBody').innerHTML += `
+                    <tr>
+                        <td>${data[i].Empleado}</td>
+                        <td>${data[i].Cliente}</td>
+                        <td>${data[i].Telefono}</td>
+                        <td>${data[i].Operadora}</td>
+                        <td>${data[i].Monto}</td>
+                        <td>${data[i].Venta}</td>
+                        <td>${data[i].Pagado}</td>
+                        <td>${data[i].Corte}</td>
+                        <td>${data[i].fecha}</td>
+                        <td><a class="waves-effect waves-light yellow btn black-text infoCliente" id="${data[i].idVenta}">Editar</a></td>
+                    </tr>
+                `;
             }
         }
     }
 
     function CargarTablaSaldo() {
         LimpiarTablas();
-        var tr = document.getElementById("Headers");
-        var th = document.createElement("th");
-        th.textContent = 'Empleado';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Cliente';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Teléfono';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Operadora';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Saldo';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Ingreso';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Pagado';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Corte';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Fecha';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Editar';
-        tr.appendChild(th);
+        document.getElementById('Headers').innerHTML += `
+            <th>Empleado</th>
+            <th>Cliente</th>
+            <th>Teléfono</th>
+            <th>Operadora</th>
+            <th>Saldo</th>
+            <th>Ingreso</th>
+            <th>Pagado</th>
+            <th>Corte</th>
+            <th>Fecha</th>
+            <th></th>
+        `;
     }
 
     function TablaGeneral(data) {
         CargarTablaGeneral();
         for (i in data) {
             if (data[i].Empleado != undefined) {
-                var tr = document.createElement("tr");
-                var td = document.createElement("td");
-                td.innerText = data[i].Empleado;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Servicio;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Cliente;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Venta;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Pagado;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].Corte;
-                tr.appendChild(td);
-                var td = document.createElement("td");
-                td.innerText = data[i].fecha;
-                tr.appendChild(td);
-                var editar = document.createElement("a");
-                editar.textContent = 'Detalles';
-                editar.classList.add('waves-effect', 'waves-light', 'yellow', 'btn', 'black-text');
-                editar.onclick = function () {
-                    obtenerDatos(data[i].idVenta);
-                }
-                tr.appendChild(editar);
-                document.getElementById("TableBody").appendChild(tr);
+                document.getElementById('TableBody').innerHTML += `
+                    <tr>
+                        <td>${data[i].Empleado}</td>
+                        <td>${data[i].Servicio}</td>
+                        <td>${data[i].Cliente}</td>
+                        <td>${data[i].Venta}</td>
+                        <td>${data[i].Pagado}</td>
+                        <td>${data[i].Corte}</td>
+                        <td>${data[i].fecha}</td>
+                        <td><a class="waves-effect waves-light yellow btn black-text infoCliente" id="${data[i].idVenta}">Editar</a></td>
+                    </tr>
+                `;
             }
         }
     }
 
     function CargarTablaGeneral() {
         LimpiarTablas();
-        var tr = document.getElementById("Headers");
-        var th = document.createElement("th");
-        th.textContent = 'Empleado';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Servicio';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Cliente';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Ingreso';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Pagado';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Corte';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        th.textContent = 'Fecha';
-        tr.appendChild(th);
-        var th = document.createElement("th");
-        tr.appendChild(th);
+        document.getElementById('Headers').innerHTML += `
+            <th>Empleado</th>
+            <th>Servicio</th>
+            <th>Cliente</th>
+            <th>Ingreso</th>
+            <th>Pagado</th>
+            <th>Corte</th>
+            <th>Fecha</th>
+            <th></th>
+        `;
     }
 
     function LimpiarTablas() {
