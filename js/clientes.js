@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     document.body.addEventListener('click', function (e) {
         if (e.target.classList.contains('infoCliente')) {
-            console.table(e.srcElement.id, e.srcElement.name);
             obtenerInfo(e.srcElement.id, e.srcElement.name);
         }
     });
@@ -55,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td>${res[i].Nombre}</td>
                     <td>${res[i].Deudas}</td>
                     <td>$${res[i].Usd} Usd, $${res[i].Mxn} Mxn</td>
-                    <td><a class="waves-effect waves-light yellow btn black-text infoCliente" id="${res[i].idCliente}" name="${res[i].Nombre}">Editar</a></td>
+                    <td><a class="waves-effect waves-light yellow btn black-text infoCliente" id="${res[i].idCliente}" name="${res[i].Nombre}">Detalles</a></td>
                 </tr>
             `;
             if (res[i].Deudas == 0) {
