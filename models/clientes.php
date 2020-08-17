@@ -1,4 +1,5 @@
 <?php
+
 class clientes
 {
     private $connection;
@@ -15,7 +16,7 @@ class clientes
             $query = $this->connection->query("select * from clientescredito;");
             $clientes = [];
             while ($row = $query->fetch_assoc()) {
-                $clientes[] = array('idCliente' => $row['idCliente'], 'Nombre' => $row['Nombre'], 'Deudas' => $row['Deudas'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn']);
+                $clientes[] = array('Nombre' => $row['Nombre'], 'Servicio' => $row['NombreServicio'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha'], 'Observaciones' => $row['Observaciones']);
             }
             return json_encode($clientes);
         } catch (Exception $e) {
@@ -23,14 +24,13 @@ class clientes
         }
     }
 
-    public function infoCliente($idCliente)
+    public function infoCliente($idCliente, $tipo)
     {
         try {
-            $query = $this->connection->prepare("call DetalleCliente(?)");
-            $query->bind_param("i", $idCliente);
+            $query = $this->connection->prepare("call DetalleCliente(?,?)");
+            $query->bind_param("is", $idCliente, $tipo);
             $query->execute();
             $result = $query->get_result();
-            $info = [];
             while ($row = $result->fetch_assoc()) {
                 $info[] = array('idVenta' => $row['idVenta'], 'Servicio' => $row['NombreServicio'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'fecha' => $row['fecha']);
             }

@@ -106,22 +106,39 @@ class user
     function obtenerClientes()
     {
         $clientes = [];
-        $query = $this->connection->query("select distinct Nombre from cliente;");
+        $query = $this->connection->query("select Nombre from cliente;");
         while ($row = $query->fetch_assoc()) {
-            $clientes[] = $row["Nombre"];
+            $clientes[] = $row['Nombre'];
         }
         return json_encode($clientes);
     }
 
-    function getIdCliente($nombre)
-    {
+    public function obtenerNumeros(){
+        $query = $this->connection->query("select NumeroTelefono from venta where Pagado = 0");
+        while($row = $query->fetch_assoc()){
+            $numeros[] = $row['NumeroTelefono'];
+        }
+        return json_encode($numeros);
+    }
+
+    function getIdCliente($value, $tipo) {
         try {
-            $query = $this->connection->prepare("select idCliente from cliente where nombre = ?");
-            $query->bind_param("s", $nombre);
+            if(strcmp('id', $tipo) == 0) {
+                $query = $this->connection->prepare("select idCliente from cliente where nombre = ?");
+            } else {
+                $query = $this->connection->prepare("select venta.idCliente, cliente.Nombre from venta inner join cliente on venta.idCliente = cliente.idCliente where NumeroTelefono = ?");
+            }
+            $query->bind_param("s", $value);
             $query->execute();
             $result = $query->get_result();
-            while ($row = $result->fetch_assoc()) {
-                return $row['idCliente'];
+            if(strcmp('id', $tipo) == 0) {
+                while ($row = $result->fetch_assoc()) {
+                    return $row['idCliente'];
+                }
+            } else {
+                while ($row = $result->fetch_assoc()) {
+                    return json_encode(array('idCliente' => $row['idCliente'], 'Nombre' => $row['Nombre']));
+                }
             }
         } catch (Exception $e) {
             return json_encode($e->getMessage());
