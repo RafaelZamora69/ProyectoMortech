@@ -18,7 +18,7 @@ class clienteController
     public function infoCliente()
     {
         $clientes = new clientes();
-        echo $clientes->infoCliente($_POST['idCliente']);
+        echo $clientes->infoCliente($_POST['idCliente'], $_POST['tipo']);
     }
 
     public function obtenerClientes()
@@ -27,9 +27,19 @@ class clienteController
         echo $clientes->obtenerClientes();
     }
 
+    public function obtenerNumeros(){
+        $clientes = new user();
+        echo $clientes->obtenerNumeros();
+    }
+
     public function idCliente()
     {
         $cliente = new user();
-        echo $cliente->getIdCliente($_POST['Nombre']);
+        echo $cliente->getIdCliente($_POST['Nombre'], 'id');
+    }
+
+    public function buscarNumero(){
+        $cliente = new user();
+        echo $cliente->getIdCliente($_POST['Nombre'], 'tel');
     }
 }
