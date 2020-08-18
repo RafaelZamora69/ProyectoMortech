@@ -40,8 +40,8 @@ require_once 'views/layouts/sidenav.php';
             <table class="responsive-table">
                 <thead>
                 <tr>
-                    <th>N° Venta</th>
-                    <th>Servicio</th>
+                    <th>Teléfono</th>
+                    <th>Monto</th>
                     <th>Ingreso</th>
                     <th>Fecha</th>
                 </tr>
@@ -55,7 +55,8 @@ require_once 'views/layouts/sidenav.php';
                 <thead>
                 <tr>
                     <th>N° Venta</th>
-                    <th>Servicio</th>
+                    <th>Teléfono</th>
+                    <th>Monto</th>
                     <th>Crédito</th>
                     <th>Fecha</th>
                 </tr>

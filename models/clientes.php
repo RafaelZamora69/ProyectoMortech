@@ -32,7 +32,7 @@ class clientes
             $query->execute();
             $result = $query->get_result();
             while ($row = $result->fetch_assoc()) {
-                $info[] = array('idVenta' => $row['idVenta'], 'Servicio' => $row['NombreServicio'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'fecha' => $row['fecha']);
+                $info[] = array('idVenta' => $row['idVenta'], 'Numero' => $row['NumeroTelefono'], 'Saldo' => $row['Monto'] ,'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'fecha' => $row['fecha']);
             }
             return json_encode($info);
         } catch (Exception $e) {
