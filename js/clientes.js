@@ -95,11 +95,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('nombreCliente').textContent = nombre;
                 limpiarTablaDetalleCliente();
                 for (i in res) {
+                    var ingreso = "";
+                    res[i].Mxn === 0 ? ingreso = ingreso.concat(res[i].Usd, ' Usd') : ingreso = ingreso.concat(res[i].Mxn, ' Mxn');
                     document.getElementById('ventasCliente').innerHTML += `
                         <tr>
-                            <td>${res[i].idVenta}</td>
-                            <td>${res[i].Servicio}</td>
-                            <td>$${res[i].Usd} Usd, $${res[i].Mxn} Mxn</td>
+                            <td>${res[i].Numero}</td>
+                            <td>${res[i].Saldo}</td>
+                            <td>$${ingreso}</td>
                             <td>${res[i].fecha}</td>
                         </tr>
                     `;
@@ -116,11 +118,14 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 for (i in res) {
+                    var ingreso = "";
+                    res[i].Mxn == 0 ? ingreso = ingreso.concat(res[i].Usd, ' Usd') : ingreso = ingreso.concat(res[i].Mxn, ' Mxn');
                     document.getElementById('creditoCliente').innerHTML += `
                         <tr>
                             <td>${res[i].idVenta}</td>
-                            <td>${res[i].Servicio}</td>
-                            <td>$${res[i].Usd} Usd, $${res[i].Mxn} Mxn</td>
+                            <td>${res[i].Numero}</td>
+                            <td>${res[i].Saldo}</td>
+                            <td>$${ingreso}</td>
                             <td>${res[i].fecha}</td>
                         </tr>
                     `;
