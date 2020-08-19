@@ -33,6 +33,23 @@ document.addEventListener('DOMContentLoaded', function () {
             obtenerInfo(Event.srcElement.id, Event.srcElement.name);
         }
     });
+    document.getElementById('consultaCliente').addEventListener('submit', function(e){
+        e.preventDefault();
+        if(Number.isInteger(Number.parseInt(document.getElementById('Cliente').value)) && document.getElementById('Cliente').value.length == 10){
+            const data = new FormData();
+            data.append('Nombre', document.getElementById('Cliente').value);
+            fetch('buscarNumero',{
+                method: 'POST',
+                body: data
+            })
+                .then(res => res.json())
+                .then(res => {
+                    obtenerInfo(res.idCliente, res.Nombre);
+                });
+        } else {
+            M.toast({ html: 'Ingrese un número valido', classes: 'red white-text' });
+        }
+    });
     obtenerClientes();
 
     function obtenerClientes() {
