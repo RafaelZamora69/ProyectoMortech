@@ -66,15 +66,14 @@ class reportes
         }
     }
 
-    function actualizar($Cliente, $idVenta, $Mxn, $Usd, $Pagado, $Observaciones)
-    {
+    function actualizar($Empleado, $Cliente, $idVenta, $Mxn, $Usd, $Pagado, $Observaciones) {
         try {
-            $actualizar = $this->connection->prepare("update venta set idCliente = ?, Pagado = ?, Mxn = ?, Usd = ?, Observaciones = ? where idVenta = ?");
+            $actualizar = $this->connection->prepare("update venta set idEmpleado = ?, idCliente = ?, Pagado = ?, Mxn = ?, Usd = ?, Observaciones = ? where idVenta = ?");
             //Conseguir el idCliente o crear uno nuevo
             $cliente = new venta();
             $idCliente = $cliente->getIdCliente($Cliente);
-            var_dump($idCliente);
-            $actualizar->bind_param("iiddsi", $idCliente, $Pagado, $Mxn, $Usd, $Observaciones, $idVenta);
+            $idEmpleado = $cliente->getIdEmpleado($Empleado);
+            $actualizar->bind_param("iiiddsi",$idEmpleado, $idCliente, $Pagado, $Mxn, $Usd, $Observaciones, $idVenta);
             if ($actualizar->execute()) {
                 return json_encode(array('Codigo' => 1, 'Mensaje' => 'Actualizado correctamente'));
             }

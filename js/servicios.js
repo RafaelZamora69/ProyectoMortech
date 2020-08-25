@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 montos = M.FormSelect.init(select);
                 break;
             case 'AT&T':
-                let at = [100, 150, 200, 300, 500];
+                let at = [100, 150, 200, 300, 500, 1000];
                 for (i in at) {
                     let opciones = document.getElementById("Monto");
                     let opcion = document.createElement("option");

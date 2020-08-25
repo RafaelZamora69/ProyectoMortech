@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 for (i in res) {
+                    document.getElementById('TablaCortes').innerHTML += `
+                        <tr></tr>
+                    `;
                     var tr = document.createElement("tr");
                     document.getElementById("TablaCortes").appendChild(tr);
                     var td = document.createElement("td");
@@ -60,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 borrarTabla();
-                inicializarTabla();
+                inicializarTabla(res);
                 var modal = document.getElementById('modalCorte');
                 var modalReporte = M.Modal.init(modal);
                 document.getElementById("CerrarCorte").classList.remove("disabled");
@@ -69,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById("CerrarCorte").classList.add("disabled");
                     document.getElementById("CerrarCorte").textContent = "No se puede registrar un corte sin ingresos";
                 }
-                cargarTabla(res);
                 modalReporte.open();
             }).catch(function (e) {
                 console.log(e.message);
@@ -106,103 +108,51 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function inicializarTabla() {
-        var tr = document.createElement("tr");
-        tr.id = 'saldoUsado';
-        var td = document.createElement("td");
-        td.innerText = 'Saldo utilizado';
-        tr.appendChild(td);
-        document.getElementById("tabla").appendChild(tr);
-        var tr = document.createElement("tr");
-        tr.id = 'ventaSaldo';
-        var td = document.createElement("td");
-        td.innerText = 'Saldo vendido';
-        tr.appendChild(td);
-        document.getElementById("tabla").appendChild(tr);
-        var tr = document.createElement("tr");
-        tr.id = 'saldoCredito';
-        var td = document.createElement("td");
-        td.innerText = 'Venta de saldo en crédito';
-        tr.appendChild(td);
-        document.getElementById("tabla").appendChild(tr);
-        var tr = document.createElement("tr");
-        tr.id = 'ventaServicios';
-        var td = document.createElement("td");
-        td.innerText = 'Venta de servicios';
-        tr.appendChild(td);
-        document.getElementById("tabla").appendChild(tr);
-        var tr = document.createElement("tr");
-        tr.id = 'ventasCredito';
-        var td = document.createElement("td");
-        td.innerText = 'Venta de servicios en crédito';
-        tr.appendChild(td);
-        document.getElementById("tabla").appendChild(tr);
-        var tr = document.createElement("tr");
-        tr.id = 'pagosCredito';
-        var td = document.createElement("td");
-        td.innerText = 'Total en crédito';
-        tr.appendChild(td);
-        document.getElementById("tabla").appendChild(tr);
-        var tr = document.createElement("tr");
-        tr.id = 'totalEfectivo';
-        var td = document.createElement("td");
-        td.innerText = 'Total en efectivo';
-        tr.appendChild(td);
-        document.getElementById("tabla").appendChild(tr);
+    function inicializarTabla(res) {
+        document.getElementById("Nombre").innerText = res.Nombre;
+        document.getElementById("Fecha").innerText = res.Desde + ' - ' + res.Hoy;
+        document.getElementById("tabla").innerHTML += `
+            <tr id="saldoUsado">
+                <td>Saldo Utilizado</td>
+                <td>$ 0</td>
+                <td>$ ${res.SaldoVendido}</td>
+            </tr>
+            <tr id="ventaSaldo">
+                <td>Saldo vendido</td>
+                <td>$ ${res.UsdSaldo}</td>
+                <td>$ ${res.MxnSaldo}</td>
+            </tr>
+            <tr id="saldoCredito">
+                <td>Venta de saldo en crédito</td>
+                <td>$ ${res.CreditoRecargasUsd}</td>
+                <td>$ ${res.CreditoRecargasMxn}</td>
+            </tr>
+            <tr id="ventaServicios">
+                <td>Venta de servicios</td>
+                <td>$ ${res.DolaresServicios}</td>
+                <td>$ ${res.PesosServicios}</td>
+            </tr>
+            <tr id="ventasCredito">
+                <td>Venta de servicios en crédito</td>
+                <td>$ ${res.CreditoServiciosUsd}</td>
+                <td>$ ${res.CreditoServiciosMxn}</td>
+            </tr>
+            <tr id="pagosCredito">
+                <td>Total en crédito</td>
+                <td>$ ${res.CreditoUsd}</td>
+                <td>$ ${res.CreditoMxn}</td>
+            </tr>
+            <tr id="totalEfectivo">
+                <td>Total en efectivo</td>
+                <td>$ ${res.Dolares}</td>
+                <td>$ ${res.Mxn}</td>
+            </tr>  
+        `;
     }
 
     function borrarTabla() {
         while (document.getElementById("tabla").firstChild) {
             document.getElementById("tabla").removeChild(document.getElementById("tabla").firstChild);
         }
-    }
-
-    function cargarTabla(res) {
-        document.getElementById("Nombre").innerText = res.Nombre;
-        document.getElementById("Fecha").innerText = res.Desde + ' - ' + res.Hoy;
-        var Usd = document.createElement("td");
-        var Mxn = document.createElement("td");
-        Usd.innerText = '$ ' + 0;
-        Mxn.innerText = '$ ' + res.SaldoVendido;
-        document.getElementById("saldoUsado").appendChild(Usd);
-        document.getElementById("saldoUsado").appendChild(Mxn);
-        var Usd = document.createElement("td");
-        var Mxn = document.createElement("td");
-        Usd.innerText = '$ ' + res.UsdSaldo;
-        Mxn.innerText = '$ ' + res.MxnSaldo;
-        document.getElementById("ventaSaldo").appendChild(Usd);
-        document.getElementById("ventaSaldo").appendChild(Mxn);
-        var Usd = document.createElement("td");
-        var Mxn = document.createElement("td");
-        Usd.innerText = '$ ' + res.CreditoRecargasUsd;
-        Mxn.innerText = '$ ' + res.CreditoRecargasMxn;
-        document.getElementById("saldoCredito").appendChild(Usd);
-        document.getElementById("saldoCredito").appendChild(Mxn);
-        var Usd = document.createElement("td");
-        var Mxn = document.createElement("td");
-        Usd.innerText = '$ ' + res.DolaresServicios
-        Mxn.innerText = '$ ' + res.PesosServicios;
-        document.getElementById("ventaServicios").appendChild(Usd);
-        document.getElementById("ventaServicios").appendChild(Mxn);
-        var Usd = document.createElement("td");
-        var Mxn = document.createElement("td");
-        Usd.innerText = '$ ' + res.CreditoServiciosUsd;
-        Mxn.innerText = '$ ' + res.CreditoServiciosMxn;
-        document.getElementById("ventasCredito").appendChild(Usd);
-        document.getElementById("ventasCredito").appendChild(Mxn);
-        var Usd = document.createElement("td");
-        var Mxn = document.createElement("td");
-        Usd.innerText = '$ ' + res.CreditoUsd;
-        Mxn.innerText = '$ ' + res.CreditoMxn;
-        document.getElementById("pagosCredito").appendChild(Usd);
-        document.getElementById("pagosCredito").appendChild(Mxn);
-        var Usd = document.createElement("td");
-        var Mxn = document.createElement("td");
-        Usd.innerText = '$ ' + res.Dolares;
-        Usd.id = 'Usd';
-        Mxn.innerText = '$ ' + res.Mxn;
-        Mxn.id = 'Mxn';
-        document.getElementById("totalEfectivo").appendChild(Usd);
-        document.getElementById("totalEfectivo").appendChild(Mxn);
     }
 });
