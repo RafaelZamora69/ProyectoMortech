@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var empleados = M.Autocomplete.init(elems);
     var elems = document.getElementById('NombreCliente');
     var clientesModal = M.Autocomplete.init(elems);
+    var elems = document.getElementById('NombreEmpleado');
+    var empleadoModal = M.Autocomplete.init(elems);
     var elems = document.getElementById('Desde');
     var Desde = M.Datepicker.init(elems, {
         defaultDate: new Date(today.getFullYear(), today.getMonth(), 1),
@@ -44,6 +46,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     document.getElementById("Consultar").addEventListener('click', Consultar);
     document.getElementById("Filtrar").addEventListener('click', filtrar);
+    document.getElementById('buscarVenta').addEventListener('keypress', function(e){
+       if(e.key == 'Enter'){
+           obtenerDatos(document.getElementById('buscarVenta').value);
+       }
+    });
     radioButtons();
     obtenerEmpleados();
     obtenerClientes();
@@ -183,15 +190,18 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                document.getElementById("NombreEmpleado").textContent = res[0].Empleado;
+                document.getElementById('idVenta').innerText = '# ' + res[0].idVenta;
+                document.getElementById("NombreEmpleado").value = res[0].Empleado;
                 document.getElementById("NombreCliente").value = res[0].Cliente;
                 document.getElementById("Mxn").value = res[0].Mxn;
                 document.getElementById("Usd").value = res[0].Usd;
                 document.getElementById("Observaciones").value = res[0].Observaciones;
-                res[0].Pagado === 0 ? document.getElementById("EstaPagado").checked = false : document.getElementById("EstaPagado").checked = true;
+                res[0].Pagado == 0 ? document.getElementById("EstaPagado").checked = false : document.getElementById("EstaPagado").checked = true;
                 res[0].Corte == 0 ? document.getElementById("Actualizar").classList.remove("disabled") : document.getElementById("Actualizar").classList.add("disabled")
                 modal.open();
-            });
+            }).catch(function (){
+            M.toast({ html: 'Venta no encontrada', classes: 'red white-text'})
+        });
     }
 
     function TablaCorte(data) {
@@ -334,6 +344,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     data[res[i]] = null;
                 }
                 empleados.updateData(data);
+                empleadoModal.updateData(data);
             })
     }
 

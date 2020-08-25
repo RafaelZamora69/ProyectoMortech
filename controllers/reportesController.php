@@ -35,15 +35,13 @@ class reportesController
         echo $reporte->consulta($_POST);
     }
 
-    public function obtenerDetalles()
-    {
+    public function obtenerDetalles() {
         $reporte = new venta();
         echo $reporte->detalleVenta($_POST['idVenta']);
     }
 
-    public function actualizarVenta()
-    {
+    public function actualizarVenta() {
         $reporte = new reportes();
-        echo $reporte->actualizar($_POST['Cliente'], $_POST['idVenta'], $_POST['Mxn'], $_POST['Usd'], $_POST['pagado'], $_POST['Observaciones']);
+        echo $reporte->actualizar($_POST['Empleado'], $_POST['Cliente'], $_POST['idVenta'], $_POST['Mxn'], $_POST['Usd'], $_POST['pagado'], $_POST['Observaciones']);
     }
 }
