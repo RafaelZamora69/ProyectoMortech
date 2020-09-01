@@ -144,8 +144,8 @@ document.addEventListener('DOMContentLoaded', function () {
             </tr>
             <tr id="totalEfectivo">
                 <td>Total en efectivo</td>
-                <td>$ ${res.Dolares}</td>
-                <td>$ ${res.Mxn}</td>
+                <td id="Usd">$ ${res.Dolares}</td>
+                <td id="Mxn">$ ${res.Mxn}</td>
             </tr>  
         `;
     }

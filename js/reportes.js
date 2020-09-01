@@ -111,12 +111,12 @@ document.addEventListener('DOMContentLoaded', function () {
         filterData = originalData;
         if (!document.getElementById('autoCompleteEmpleados').value == "") {
             filterData = filterData.filter(function (entry) {
-                return entry.Empleado === document.getElementById('autoCompleteEmpleados').value;
+                return entry.Empleado == document.getElementById('autoCompleteEmpleados').value;
             });
         }
         if (!document.getElementById('autoCompleteClientes').value == "") {
             filterData = filterData.filter(function (entry) {
-                return entry.Cliente === document.getElementById('autoCompleteClientes').value;
+                return entry.Cliente == document.getElementById('autoCompleteClientes').value;
             });
         }
         mostrarDetalles(filterData);
