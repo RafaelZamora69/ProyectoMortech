@@ -26,7 +26,11 @@ require_once 'views/layouts/sidenav.php';
                 </div>
                 <div class="row">
                     <div class="col s12">
-                        <div class="input-field chips" id="chips">
+                        <div class="input-field" id="chips">
+                            <input type="number">
+                        </div>
+                        <div class="input-field">
+                            <a class="btn waves-effect green white-text" id="Agregar">Agregar</a>
                         </div>
                     </div>
                 </div>

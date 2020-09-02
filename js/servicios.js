@@ -42,7 +42,11 @@ document.addEventListener('DOMContentLoaded', function () {
     formServicio.addEventListener('submit', VentaServicio);
     chips.addEventListener('input', agregarNumero);
     cargarChips();
-
+    document.getElementById('Agregar').addEventListener('click', () => {
+        telefonos.addChip({ tag: value[0].value });
+        count = 0;
+        value[0].value = '';
+    });
     //funciones
     ObtenerClientes();
     function ObtenerClientes() {
@@ -61,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function agregarNumero(e) {
-        if (e.inputType == 'deleteContentBackward') {
+        if (e.inputType == 'deleteContentBackward' && count >= 0) {
             count--;
         } else if (Number.isInteger(parseInt(e.data))) {
             count++;
@@ -87,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         datos.append('Carrier', carrier);
         pagado[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
         datos.append('Carrier', carrier);
-        fetch('servicios&action=recargaSaldo', {
+        fetch('recargaSaldo', {
             method: 'POST',
             body: datos
         })

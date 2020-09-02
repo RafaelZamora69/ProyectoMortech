@@ -63,7 +63,7 @@ class corte
                     json_encode(array('Mensaje' => 'Corte registrado', 'Codigo' => 0)) :
                     json_encode(array('Mensaje' => $corte->error, 'Codigo' => 1));
             } else {
-                return json_encode(array('Mensaje' => 'Error al registrar', 'Codigo' => 1));
+                return json_encode(array('Mensaje' => 'Error al registrar', 'Codigo' => 1)); 
             }
         } catch (Exception $e) {
             return json_encode(array('Mensaje' => $e->getMessage(), 'Codigo' => 1));
