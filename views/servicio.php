@@ -26,7 +26,11 @@ require_once 'views/layouts/sidenav.php';
                 </div>
                 <div class="row">
                     <div class="col s12">
-                        <div class="input-field chips" id="chips">
+                        <div class="input-field" id="chips">
+                            <input type="number">
+                        </div>
+                        <div class="input-field">
+                            <a class="btn waves-effect green white-text" id="Agregar">Agregar</a>
                         </div>
                     </div>
                 </div>
@@ -56,13 +60,13 @@ require_once 'views/layouts/sidenav.php';
                 <div class="row">
                     <div class="col s4 m4">
                         <div class="input-field">
-                            <input type="text" id="PagoUsd" name="PagoUsd">
+                            <input type="number" id="PagoUsd" name="PagoUsd">
                             <label for="Pago">Usd</label>
                         </div>
                     </div>
                     <div class="col s4 m4">
                         <div class="input-field">
-                            <input type="text" id="PagoMxn" name="PagoMxn">
+                            <input type="number" id="PagoMxn" name="PagoMxn">
                             <label for="Pago">Mxn</label>
                         </div>
                     </div>

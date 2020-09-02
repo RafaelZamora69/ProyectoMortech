@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (i in res) {
             document.getElementById('TablaDeudas').innerHTML += `
                 <tr>
+                    <td>${res[i].Empleado}</td>
                     <td>${res[i].Nombre}</td>
                     <td>${res[i].Servicio}</td>
                     <td>$${res[i].Usd} Usd, $${res[i].Mxn} Mxn</td>

@@ -50,14 +50,21 @@ class corte
     public function registrarCorte($Nombre, $Usd, $Mxn)
     {
         try {
-            $corte = $this->conexion->prepare('call InsertarCorte(?,?,?)');
-            $Usd = str_replace('$ ', '', $Usd);
-            $Mxn = str_replace('$ ', '', $Mxn);
+            $corte = $this->conexion->prepare('call ActualizarCorte(?);');
             $id = $this->getVendedorId($Nombre);
-            $corte->bind_param('idd', $id, $Usd, $Mxn);
-            return $corte->execute() ?
-                json_encode(array('Mensaje' => 'Corte registrado', 'Codigo' => 0)) :
-                json_encode(array('Mensaje' => $corte->error, 'Codigo' => 1));
+            $corte->bind_param('i', $id);
+            if ($corte->execute()) {
+                $corte = $this->conexion->prepare('call InsertarCorte(?,?,?)');
+                $Usd = str_replace('$ ', '', $Usd);
+                $Mxn = str_replace('$ ', '', $Mxn);
+                $id = $this->getVendedorId($Nombre);
+                $corte->bind_param('idd', $id, $Usd, $Mxn);
+                return $corte->execute() ?
+                    json_encode(array('Mensaje' => 'Corte registrado', 'Codigo' => 0)) :
+                    json_encode(array('Mensaje' => $corte->error, 'Codigo' => 1));
+            } else {
+                return json_encode(array('Mensaje' => 'Error al registrar', 'Codigo' => 1)); 
+            }
         } catch (Exception $e) {
             return json_encode(array('Mensaje' => $e->getMessage(), 'Codigo' => 1));
         }

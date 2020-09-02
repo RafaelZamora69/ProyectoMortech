@@ -18,7 +18,8 @@ require_once 'views/layouts/sidenav.php';
             <table class="responsive-table striped">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
+                        <th>Vendedor</th>
+                        <th>Cliente</th>
                         <th>Servicio</th>
                         <th>Crédito</th>
                         <th>Fecha</th>

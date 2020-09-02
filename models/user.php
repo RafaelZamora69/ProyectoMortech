@@ -103,6 +103,15 @@ class user
         return json_encode($empleados);
     }
 
+    function obtenerEmpleadosVista(){
+        $empleados = [];
+        $query = $this->connection->query("select idEmpleado, Nombre, Jerarquia from empleado;");
+        while($row = $query->fetch_assoc()){
+            $empleados[] = array("id" => $row["idEmpleado"], "Nombre" => $row["Nombre"], "Jerarquia" => $row["Jerarquia"]);
+        }
+        return json_encode($empleados);
+    }
+
     function obtenerClientes()
     {
         $clientes = [];
