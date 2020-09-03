@@ -71,19 +71,19 @@ class user
 
     function loginUser($User, $Password)
     {
-        $login = $this->connection->prepare("select Nombre, Usuario, Password, Jerarquia from empleado where Usuario = ?");
+        $login = $this->connection->prepare("select * from empleado where UsuarioPlataforma = ?");
         $login->bind_param("s", $User);
         $login->execute();
-        $login->bind_result($Nombre, $User, $UserPassword, $Jerarquia);
+        $login->bind_result($idEmpleado, $Nombre, $UsuarioPlataforma, $UsuarioLinntae, $UserPassword, $PasswordPlataforma, $Jerarquia);
         $login->fetch();
-        if ($Nombre) {
+        if ($idEmpleado) {
             $verify = password_verify($Password, $UserPassword);
             if ($verify) {
                 $this->setNombre = $Nombre;
-                $this->setUser = $User;
-                $this->setPassword = $Password;
+                $this->setUser = $UsuarioLinntae;
+                $this->setPassword = $PasswordPlataforma;
                 $this->setHerarchy = $Jerarquia;
-                $datos = array('Nombre' => $Nombre, 'Usuario' => $User, 'Password' => $Password, 'Jerarquia' => $Jerarquia);
+                $datos = array('Nombre' => $Nombre, 'Usuario' => $UsuarioLinntae, 'Password' => $PasswordPlataforma, 'Jerarquia' => $Jerarquia);
                 return $datos;
             } else {
                 return false;
