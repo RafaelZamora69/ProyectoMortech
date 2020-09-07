@@ -87,11 +87,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (entry['Venta'] !== undefined) {
                 if (entry['Venta'].includes(' Usd') && entry['Pagado'] === Pagado) {
                     var aux = entry['Venta'].replace(' Usd', '');
-                    Usd += parseInt(aux);
+                    Usd += parseFloat(aux);
                 }
             }
         });
-        return Usd;
+        return new Intl.NumberFormat().format(Usd);
     }
 
     function obtenerPesos(data, Pagado) {
@@ -100,11 +100,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (entry['Venta'] !== undefined) {
                 if (entry['Venta'].includes(' Mxn') && entry['Pagado'] === Pagado) {
                     var aux = entry['Venta'].replace(' Mxn', '');
-                    Mxn += parseInt(aux);
+                    Mxn += parseFloat(aux);
                 }
             }
         });
-        return Mxn;
+        return new Intl.NumberFormat().format(Mxn);
     }
 
     function filtrar() {
