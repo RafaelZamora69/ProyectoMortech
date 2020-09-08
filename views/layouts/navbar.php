@@ -36,7 +36,7 @@ $api->setPassword($_SESSION['identity']['Password']);
             <li class="divider"></li>
             <li><a href="<?= base_url ?>reportes/index" class="waves-effect">Reportes</a></li>
             <li><a href="<?= base_url ?>corte/index" class="waves-effect">Corte</a></li>
-            <li><a href="" class="waves-effect">Utilidades</a></li>
+            <li><a href="<?= base_url ?>utilidad/index" class="waves-effect">Utilidades</a></li>
             <li><a href="<?= base_url ?>usuario/index" class="waves-effect">Usuarios</a></li>
         <?php endif ?>
         <li class="divider"></li>

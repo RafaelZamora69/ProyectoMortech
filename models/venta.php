@@ -13,96 +13,6 @@ class venta
         $this->api = $client;
     }
 
-    function setNombreCliente($NombreCliente)
-    {
-        $this->NombreCliente = $this->connection->real_escape_string($NombreCliente);
-    }
-
-    function getNombreCliente()
-    {
-        return $this->NombreCliente;
-    }
-
-    function setNombreEmpleado($NombreEmpleado)
-    {
-        $this->NombreEmpleado = $this->connection->real_escape_string($NombreEmpleado);
-    }
-
-    function getNombreEmpleado()
-    {
-        return $this->NombreEmpleado;
-    }
-
-    function setNumTel($NumTel)
-    {
-        $this->NumTel = $this->connection->real_escape_string($NumTel);
-    }
-
-    function getNumTel()
-    {
-        return $this->NumTel;
-    }
-
-    function setOperadora($Operadora)
-    {
-        $this->Operadora = $this->connection->real_escape_string($Operadora);
-    }
-
-    function getOperadora()
-    {
-        return $this->Operadora;
-    }
-
-    function setMonto($Monto)
-    {
-        $this->Monto = $this->connection->real_escape_string($Monto);
-    }
-
-    function getMonto()
-    {
-        return $this->Monto;
-    }
-
-    function setPrecioVenta($PrecioVenta)
-    {
-        $this->PrecioVenta = $this->connection->real_escape_string($PrecioVenta);
-    }
-
-    function getPrecioVenta()
-    {
-        return $this->PrecioVenta;
-    }
-
-    function setPagado($Pagado)
-    {
-        $this->Pagado = $this->connection->real_escape_string($Pagado);
-    }
-
-    function getPagado()
-    {
-        return $this->Pagado;
-    }
-
-    function setObservaciones($Observaciones)
-    {
-        $this->Observaciones = $this->connection->real_escape_string($Observaciones);
-    }
-
-    function getObservaciones()
-    {
-        return $this->Observaciones;
-    }
-
-    public function obtenerClientes()
-    {
-        $clientes = [];
-        $query = $this->connection->query("select Nombre from cliente;");
-        while ($row = $query->fetch_assoc()) {
-            $clientes[] = array("Nombre" => $row["Nombre"], "Img" => null);
-        }
-        return $clientes;
-    }
-
     private function registrarCliente($NombreCliente)
     {
         $registro = $this->connection->prepare("insert into cliente (nombre) values (?)");
@@ -142,6 +52,10 @@ class venta
         return strcmp($respuesta[0], '0') == 0 ? true : false;
     }
 
+    private function getUtilidad($Monto, $Usd, $Mxn) {
+        return (($Usd * 20) + $Mxn) - $Monto;
+    }
+
     function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones, $Carrier)
     {
         $this->mensajes = [];
@@ -151,10 +65,11 @@ class venta
                 $tel = $arr[$i]['tag'];
                 //Si se realiza la recarga
                 if ($this->recarga($Carrier, $tel, $Monto)) {
-                    $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Pagado, Observaciones, Fecha) values (?,?,?,?,?,?,?,?,?,?,now());");
+                    $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha) values (?,?,?,?,?,?,?,?,?,?,?,now());");
                     $idCliente = $this->getIdCliente($NombreCliente);
                     $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
-                    $venta->bind_param("iisssdddis", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $Usd, $Mxn, $Pagado, $Observaciones);
+                    $Utilidad = $this->getUtilidad($Monto, $Usd, $Mxn);
+                    $venta->bind_param("iisssddddis", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones);
                     if (!$venta->execute()) {
                         return json_encode('Error en la inserción ' . $venta->error);
                     }

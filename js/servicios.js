@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var autocom = document.getElementById('autocompleteName');
     var clientes = M.Autocomplete.init(autocom);
     //Operadoras
-    var autocom = document.querySelectorAll('.autocomplete');
+    var autocom = document.getElementById('Operadora');
     var operadora = M.Autocomplete.init(autocom, {
         data: {
             "Telcel": null,

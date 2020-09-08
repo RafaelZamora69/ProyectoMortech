@@ -1,6 +1,12 @@
 document.addEventListener('DOMContentLoaded', function(){
+    const elems = document.getElementById('modalRegistro');
+    const modalRegistro = M.Modal.init(elems);
 
-    document.body.addEventListener('click', function (){
+    document.getElementById('Nuevo').addEventListener('click', () => {
+        modalRegistro.open();
+    });
+
+    document.body.addEventListener('click',  (e) =>{
         if(e.target.classList.contains('Editar')){
             EditarEmpleado();
         } else if(e.target.classList.contains('Eliminar')){
@@ -19,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function(){
     }
     //TODO falta agregar opción de agregar un nuevo empleado
 
+    function nuevoUsuario(){
+
+    }
+
     function cargarUsuarios(){
         fetch('obtenerUsuarios')
             .then(res => res.json())
@@ -31,8 +41,8 @@ document.addEventListener('DOMContentLoaded', function(){
                             <span class="title">${res[i].Nombre}</span>
                             <p>${res[i].Jerarquia}</p>
                             <div class="secondary-content">
-                                <a class="waves-effect waves-light yellow black-text btn Editar" id="${res[i].idVenta}"><i class="material-icons">edit</i></a>
-                                <a class="waves-effect waves-light red btn Eliminar" id="${res[i].idVenta}"><i class="material-icons">delete</i></a>
+                                <a class="waves-effect waves-light yellow black-text btn Editar" id="${res[i].id}"><i class="material-icons">edit</i></a>
+                                <a class="waves-effect waves-light red btn Eliminar" id="${res[i].id}"><i class="material-icons">delete</i></a>
                             </div>
                         </li>
                     `;

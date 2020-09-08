@@ -8,7 +8,6 @@
         }
 
         public function login() {
-
             if(isset($_POST)){
                 $user = new user();
                 $identity = $user->loginUser($_POST['User'], $_POST['Password']);

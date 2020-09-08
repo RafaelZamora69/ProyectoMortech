@@ -4,7 +4,8 @@ document.getElementById("Login").addEventListener('submit', Logear);
 function Logear(e){
     e.preventDefault();
     var datos = new FormData(document.getElementById("FormLogin"));
-    fetch('login', {
+    const Recordar = document.getElementById('Recordar').checked ? datos.append('Recordar', true) : datos.append('Recordar', false);
+        fetch('login', {
         method: 'POST',
         body: datos
     })
