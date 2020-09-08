@@ -8,7 +8,6 @@
         }
 
         public function login() {
-            #TODO Pasar UsuarioLinntae => UsuarioPlataforma
             if(isset($_POST)){
                 $user = new user();
                 $identity = $user->loginUser($_POST['User'], $_POST['Password']);

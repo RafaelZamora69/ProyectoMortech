@@ -2,6 +2,6 @@
     class utilidadController  {
         
         public function index() {
-            echo 'Aqui se verá la utilidad por equipos ';
+            require_once 'views/utilidad.php';
         }
     }

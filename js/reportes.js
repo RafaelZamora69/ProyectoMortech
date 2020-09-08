@@ -244,6 +244,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         <td>${data[i].Operadora}</td>
                         <td>${data[i].Monto}</td>
                         <td>${data[i].Venta}</td>
+                        <td class="${parseFloat(data[i].Utilidad) < 0 ? 'red-text' : 'green-text'}">${data[i].Utilidad}</td>
+                        <td>${data[i].Verificada}</td>
                         <td>${data[i].Pagado}</td>
                         <td>${data[i].Corte}</td>
                         <td>${data[i].fecha}</td>
@@ -263,6 +265,8 @@ document.addEventListener('DOMContentLoaded', function () {
             <th>Operadora</th>
             <th>Saldo</th>
             <th>Ingreso</th>
+            <th>Utilidad</th>
+            <th>Verificado</th>
             <th>Pagado</th>
             <th>Corte</th>
             <th>Fecha</th>

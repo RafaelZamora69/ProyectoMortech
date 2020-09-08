@@ -18,43 +18,11 @@ session_destroy();
                             <input type="Password" name="Password" id="Password" required>
                             <label for="Password">Contraseña</label>
                         </div>
+                        <p><label><input type="checkbox" class="pagado" checked="checked" id="Recordar"><span>Mantener sesión</span></label></p>
                         <button class="btn" type="submit" name="Enviar">Enviar</button>
                     </div>
                 </form>
             </div>
-            <!-- Formulario de registro
-            <div id="Registro" class="col s12">
-                <form action="<?= base_url ?>login/register" method="POST">
-                    <div class="card-panel">
-                        <h4 class="center-align">Registrese</h4>
-                        <div class="row">
-                            <div class="input-field col s12 l6 xl6">
-                                <input type="text" name="Nombre" id="Nombre" required>
-                                <label for="Nombre">Nombre</label>
-                            </div>
-                            <div class="input-field col s12 l6 xl6">
-                                <input type="text" name="Usuario" id="Usuario" required>
-                                <label for="Usuario">Usuario</label>
-                            </div>
-                            <div class="input-field col s12 l6 xl6">
-                                <input type="text" name="Correo" id="Correo" required
-                                    placeholder="Se usará en caso de que olvide su contraseña">
-                                <label for="Correo">Correo</label>
-                            </div>
-                            <div class="input-field col s12 l6 xl6">
-                                <input type="Password" name="Password" id="Password" required>
-                                <label for="Password">Contraseña</label>
-                            </div>
-                            <div class="input-field col s12 l6 xl6">
-                                <input type="Password" name="rep" id="rep" required>
-                                <label for="rep">Repita su contraseña</label>
-                            </div>
-                        </div>
-                        <button class="btn" type="submit" name="Enviar">Enviar</button>
-                    </div>
-                </form>
-            </div>
-            -->
         </div>
     </div>
 </body>

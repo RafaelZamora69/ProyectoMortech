@@ -32,7 +32,7 @@ class reportes
                     while ($row = $result->fetch_assoc()) {
                         $arr[] = array(
                             'idVenta' => $row['idVenta'], 'Empleado' => $row['Vendedor'], 'Cliente' => $row['Cliente'], 'Telefono' => $row['NumeroTelefono'], 'Operadora' => $row['Operadora'], 'Monto' => $row['Monto'], 'Venta' => $row['Venta'],
-                            'Pagado' => $row['Pagado'], 'Corte' => $row['Corte'],  'fecha' => $row['fecha']
+                            'Utilidad' => $row['Utilidad'], 'Verificada' => $row['Verificada'], 'Pagado' => $row['Pagado'], 'Corte' => $row['Corte'],  'fecha' => $row['fecha']
                         );
                     }
                     return json_encode($arr);
