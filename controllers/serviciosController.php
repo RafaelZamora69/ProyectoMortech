@@ -30,6 +30,11 @@ class serviciosController
         }
     }
 
+    public function buscarNumero(){
+        $venta = new venta();
+        echo $venta->infoNumero($_POST['Numero']);
+    }
+
     public function nombresClientes()
     {
         $clientes = new user();

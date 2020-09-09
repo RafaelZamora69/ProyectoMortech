@@ -53,7 +53,21 @@ class venta
     }
 
     private function getUtilidad($Monto, $Usd, $Mxn) {
-        return (($Usd * 20) + $Mxn) - $Monto;
+        return (((double)$Usd * 20) + (double)$Mxn) - (double)$Monto;
+    }
+
+    function infoNumero($Numero){
+        try{
+            $busqueda = $this->connection->prepare("call InfoNumero(?);");
+            $busqueda->bind_param('s', $Numero);
+            $busqueda->execute();
+            $result = $busqueda->get_result();
+            while($row = $result->fetch_assoc()){
+                return json_encode(Array('Empleado' => $row['Empleado'], 'Cliente' => $row['Cliente'], 'NumeroTelefono' => $row['NumeroTelefono'], 'Monto' => $row['Monto'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha']));
+            }
+        }catch(Exception $e){
+            return json_encode($e->getMessage());
+        }
     }
 
     function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones, $Carrier)

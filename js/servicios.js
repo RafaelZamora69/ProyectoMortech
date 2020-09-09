@@ -1,5 +1,30 @@
-
 document.addEventListener('DOMContentLoaded', function () {
+    const elems = document.getElementById('modal2');
+    const modal2 = M.Modal.init(elems);
+    document.getElementById('NumeroBuscar').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData();
+        data.append('Numero', document.getElementById('Numero').value);
+        fetch('buscarNumero',{
+            body: data,
+            method: 'POST'
+        })
+            .then(res => res.json())
+            .then(res => {
+                    document.getElementById('TablaInfoNumeroDatos').innerHTML += `
+                        <tr>
+                            <td>${res.Cliente}</td>
+                            <td>${res.Empleado}</td>
+                            <td>${res.Monto}</td>
+                            <td>${res.Usd} Usd, ${res.Mxn} Mxn</td>
+                            <td>${res.NumeroTelefono}</td>
+                            <td>${res.Fecha}</td>
+                        </tr>
+                    `;
+                modal2.open();
+            });
+    });
+
     document.getElementById("progress").style.visibility = "hidden";
     let count = 0;
     var autocom = document.getElementById('autocompleteName');
