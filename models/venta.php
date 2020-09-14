@@ -52,6 +52,10 @@ class venta
         return strcmp($respuesta[0], '0') == 0 ? true : false;
     }
 
+    private function limpiarEspacios($Observaciones){
+        return trim($Observaciones, ' ');
+    }
+
     private function getUtilidad($Monto, $Usd, $Mxn) {
         return (((double)$Usd * 20) + (double)$Mxn) - (double)$Monto;
     }
@@ -73,6 +77,7 @@ class venta
     function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones, $Carrier)
     {
         $this->mensajes = [];
+        $NombreCliente = $this->limpiarEspacios($NombreCliente);
         $arr = json_decode($telefonos, true);
         try {
             for ($i = 0; $i < count($arr); $i++) {
@@ -102,6 +107,7 @@ class venta
             $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, Usd, Mxn, Pagado, Observaciones) values (?,?,?,?,?,?,?)");
             $idCliente = $this->getIdCliente($NombreCliente);
             $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
+            $Observaciones = $this->limpiarEspacios($Observaciones);
             $venta->bind_param("iisddis", $idCliente, $idEmpleado, $NombreServicio, $Usd, $Mxn, $Pagado, $Observaciones);
             !$venta->execute() ?
                 $this->mensajes[] = array('Mensaje' => $venta->error, 'Codigo' => 1) :
