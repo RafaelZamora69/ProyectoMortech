@@ -60,6 +60,20 @@ class venta
         return (((double)$Usd * 20) + (double)$Mxn) - (double)$Monto;
     }
 
+    function buscarOrden($Observaciones){
+        try{
+            $busqueda = $this->connection->prepare("select count(Observaciones) from venta where Observaciones = ?");
+            $busqueda->bind_param('s', $Observaciones);
+            $busqueda->execute();
+            $result = $busqueda->get_result();
+            while($row = $result->fetch_assoc()){
+
+            }
+        }catch(Exception $e){
+            return json_encode($e->getMessage());
+        }
+    }
+
     function infoNumero($Numero){
         try{
             $busqueda = $this->connection->prepare("call InfoNumero(?);");
