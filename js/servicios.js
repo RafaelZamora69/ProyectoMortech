@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var datos = new FormData(form);
         pagado[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
         datos.append('Vendedor', nombre.innerText);
-        fetch('servicios&action=ventaServicio', {
+        fetch('ventaServicio', {
             method: 'POST',
             body: datos
         })
@@ -184,6 +184,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     M.toast({ html: 'Error ' + res[0].Mensaje, classes: 'red white-text' })
                 if (res[0].Codigo == 0) {
                     formServicio.reset();
+                } else {
+                    formServicio.data
                 }
             })
         form.reset();
