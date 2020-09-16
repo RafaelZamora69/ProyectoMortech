@@ -18,7 +18,7 @@ session_destroy();
                             <input type="Password" name="Password" id="Password" required>
                             <label for="Password">Contraseña</label>
                         </div>
-                        <p><label><input type="checkbox" class="pagado" checked="checked" id="Recordar"><span>Mantener sesión</span></label></p>
+                        <!--- <p><label><input type="checkbox" class="pagado" checked="checked" id="Recordar"><span>Mantener sesión</span></label></p> -->
                         <button class="btn" type="submit" name="Enviar">Enviar</button>
                     </div>
                 </form>
