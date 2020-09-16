@@ -42,4 +42,9 @@ class clienteController
         $cliente = new user();
         echo $cliente->getIdCliente($_POST['Nombre'], 'tel');
     }
+
+    public function fixCustomers(){
+        $cliente = new user();
+        $cliente->fixCustomer();
+    }
 }
