@@ -31,6 +31,7 @@ class clientes
             $query->bind_param("is", $idCliente, $tipo);
             $query->execute();
             $result = $query->get_result();
+            $info = [];
             while ($row = $result->fetch_assoc()) {
                 $info[] = array('idVenta' => $row['idVenta'], 'Numero' => $row['NumeroTelefono'], 'Saldo' => $row['Monto'] ,'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'fecha' => $row['fecha']);
             }

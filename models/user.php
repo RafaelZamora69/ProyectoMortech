@@ -153,4 +153,30 @@ class user
             return json_encode($e->getMessage());
         }
     }
+
+    public function fixCustomer(){
+        try{
+            $consulta = $this->connection->query("select Nombre from cliente where Nombre like '% ';");
+            $clientes = [];
+            while ($row = $consulta->fetch_assoc()){
+                echo $row['Nombre'] . '<br>';
+                $clientes[] = $row['Nombre'];
+            }
+            foreach ($clientes as $cliente){
+                $clienteProcesado = trim($cliente);
+                $consulta = $this->connection->prepare("update cliente set Nombre = ? where Nombre = ?");
+                $consulta->bind_param("ss", $clienteProcesado, $cliente);
+                if($consulta->execute()){
+                    echo "Actualizado !" . '<br>';
+                }
+            }
+            $consulta = $this->connection->query("select Nombre from cliente where Nombre like '% ';");
+            $clientes = [];
+            while ($row = $consulta->fetch_assoc()) {
+                echo $row['Nombre'] . '<br>';
+            }
+        }catch(Exception $e){
+            echo $e->getMessage();
+        }
+    }
 }

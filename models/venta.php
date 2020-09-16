@@ -52,13 +52,46 @@ class venta
         return strcmp($respuesta[0], '0') == 0 ? true : false;
     }
 
+    private function limpiarEspacios($Observaciones){
+        return trim($Observaciones, ' ');
+    }
+
     private function getUtilidad($Monto, $Usd, $Mxn) {
-        return (($Usd * 20) + $Mxn) - $Monto;
+        return (((double)$Usd * 20) + (double)$Mxn) - (double)$Monto;
+    }
+
+    function buscarOrden($Servicio){
+        try{
+            $busqueda = $this->connection->prepare("select count(NombreServicio) As 'count' from venta where NombreServicio != 'Recarga de saldo' and NombreServicio = ?");
+            $busqueda->bind_param('s', $Servicio);
+            $busqueda->execute();
+            $result = $busqueda->get_result();
+            while($row = $result->fetch_assoc()){
+                return $row['count'] > 0;
+            }
+        }catch(Exception $e){
+            return json_encode($e->getMessage());
+        }
+    }
+
+    function infoNumero($Numero){
+        try{
+            $busqueda = $this->connection->prepare("call InfoNumero(?);");
+            $busqueda->bind_param('s', $Numero);
+            $busqueda->execute();
+            $result = $busqueda->get_result();
+            while($row = $result->fetch_assoc()){
+                return json_encode(Array('Empleado' => $row['Empleado'], 'Cliente' => $row['Cliente'], 'NumeroTelefono' => $row['NumeroTelefono'], 'Monto' => $row['Monto'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha']));
+            }
+        }catch(Exception $e){
+            return json_encode($e->getMessage());
+        }
     }
 
     function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones, $Carrier)
     {
         $this->mensajes = [];
+        $NombreCliente = $this->limpiarEspacios($NombreCliente);
         $arr = json_decode($telefonos, true);
         try {
             for ($i = 0; $i < count($arr); $i++) {
@@ -84,15 +117,25 @@ class venta
     function VentaServicio($NombreCliente, $NombreEmpleado, $NombreServicio, $Usd, $Mxn, $Pagado, $Observaciones)
     {
         try {
-            $this->mensajes = [];
-            $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, Usd, Mxn, Pagado, Observaciones) values (?,?,?,?,?,?,?)");
-            $idCliente = $this->getIdCliente($NombreCliente);
-            $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
-            $venta->bind_param("iisddis", $idCliente, $idEmpleado, $NombreServicio, $Usd, $Mxn, $Pagado, $Observaciones);
-            !$venta->execute() ?
-                $this->mensajes[] = array('Mensaje' => $venta->error, 'Codigo' => 1) :
-                $this->mensajes[] = array('Mensaje' => 'Venta registrada', 'Codigo' => 0);
-            return json_encode($this->mensajes);
+            $NombreServicio = $this->limpiarEspacios($NombreServicio);
+            if(!$this->buscarOrden($NombreServicio)){
+                $NombreCliente = $this->limpiarEspacios($NombreCliente);
+                $this->mensajes = [];
+                $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, Usd, Mxn, Pagado, Observaciones, Verificada, Utilidad) values (?,?,?,?,?,?,?,1,0)");
+                $idCliente = $this->getIdCliente($NombreCliente);
+                $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
+                $Observaciones = $this->limpiarEspacios($Observaciones);
+                $Verificada = 1;
+                $Utilidad = 0;
+                $venta->bind_param("iisddis", $idCliente, $idEmpleado, $NombreServicio, $Usd, $Mxn, $Pagado, $Observaciones);
+                !$venta->execute() ?
+                    $this->mensajes[] = array('Mensaje' => $venta->error, 'Codigo' => 1) :
+                    $this->mensajes[] = array('Mensaje' => 'Venta registrada', 'Codigo' => 0);
+                return json_encode($this->mensajes);
+            } else {
+                $this->mensajes[] = array('Mensaje' => 'Servicio duplicado', 'Codigo' => 1);
+                return json_encode($this->mensajes);
+            }
         } catch (Exception $e) {
             return json_encode($e->getMessage());
         }

@@ -1,5 +1,30 @@
-
 document.addEventListener('DOMContentLoaded', function () {
+    const elems = document.getElementById('modal2');
+    const modal2 = M.Modal.init(elems);
+    document.getElementById('NumeroBuscar').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData();
+        data.append('Numero', document.getElementById('Numero').value);
+        fetch('buscarNumero',{
+            body: data,
+            method: 'POST'
+        })
+            .then(res => res.json())
+            .then(res => {
+                    document.getElementById('TablaInfoNumeroDatos').innerHTML += `
+                        <tr>
+                            <td>${res.Cliente}</td>
+                            <td>${res.Empleado}</td>
+                            <td>${res.Monto}</td>
+                            <td>${res.Usd} Usd, ${res.Mxn} Mxn</td>
+                            <td>${res.NumeroTelefono}</td>
+                            <td>${res.Fecha}</td>
+                        </tr>
+                    `;
+                modal2.open();
+            });
+    });
+
     document.getElementById("progress").style.visibility = "hidden";
     let count = 0;
     var autocom = document.getElementById('autocompleteName');
@@ -148,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var datos = new FormData(form);
         pagado[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
         datos.append('Vendedor', nombre.innerText);
-        fetch('servicios&action=ventaServicio', {
+        fetch('ventaServicio', {
             method: 'POST',
             body: datos
         })
@@ -159,6 +184,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     M.toast({ html: 'Error ' + res[0].Mensaje, classes: 'red white-text' })
                 if (res[0].Codigo == 0) {
                     formServicio.reset();
+                } else {
+                    formServicio.data
                 }
             })
         form.reset();
