@@ -45,8 +45,13 @@ require_once 'views/layouts/sidenav.php';
                     <div class="row">
                         <div class="col s6">
                             <div class="input-field">
-                                <input type="text" class="autocomplete" id="Operadora" name="Operadora" required value="Unefon" placeholder="Operadora">
-                                <label for="Operadora">Operadora</label>
+                                <a class='dropdown-trigger btn' data-target='Operadoras' id="OperadorasTrigger">Unefon</a>
+                                <ul id="Operadoras" class="dropdown-content">
+                                    <li><a>Unefon</a></li>
+                                    <li><a>AT&T</a></li>
+                                    <li><a>Telcel</a></li>
+                                    <li><a>Movistar</a></li>
+                                </ul>
                             </div>
                         </div>
                         <div class="col s6 m6">

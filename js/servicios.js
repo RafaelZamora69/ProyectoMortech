@@ -24,27 +24,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 modal2.open();
             });
     });
-
     document.getElementById("progress").style.visibility = "hidden";
+    //Seleccionar operadoras
+    var drop = document.getElementById('OperadorasTrigger');
+    var operadoras = M.Dropdown.init(drop);
+    document.getElementById('Operadoras').addEventListener('click', (e) => {
+        drop.textContent = e.target.text;
+       cargarMonto(e.target.text);
+    });
+    //
     let count = 0;
     var autocom = document.getElementById('autocompleteName');
     var clientes = M.Autocomplete.init(autocom);
-    //Operadoras
-    var autocom = document.getElementById('Operadora');
-    var operadora = M.Autocomplete.init(autocom, {
-        data: {
-            "Telcel": null,
-            "Movistar": null,
-            "Unefon": null,
-            "AT&T": null
-        },
-        onAutocomplete: function (res) {
-            cargarMonto(res);
-        },
-        dropdownOptions: {
-            "hover": false
-        }
-    });
     var chips = document.getElementById('chips');
     var telefonos = M.Chips.init(chips, {
             placeholder: "Numeros",
