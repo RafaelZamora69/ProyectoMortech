@@ -63,8 +63,26 @@ document.addEventListener('DOMContentLoaded', function () {
         count = 0;
         value[0].value = '';
     });
+    document.getElementById('registrarCompra').addEventListener('click', (e) => {
+        registrarCompra(e);
+    })
     //funciones
     ObtenerClientes();
+
+    function registrarCompra(e){
+        e.preventDefault();
+        var data = new FormData(document.getElementById('FormCompra'));
+        data.append('Ticket', document.getElementById('Ticket').files[0]);
+        fetch('Compra', {
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+            })
+    }
+
     function ObtenerClientes() {
         fetch('nombresClientes')
             .then(res => res.json())
@@ -170,6 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
+                console.log(res);
                 res[0].Codigo == 0 ?
                     M.toast({ html: res[0].Mensaje, classes: 'green white-text' }) :
                     M.toast({ html: 'Error ' + res[0].Mensaje, classes: 'red white-text' })

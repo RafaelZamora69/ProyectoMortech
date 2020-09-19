@@ -44,7 +44,6 @@ class serviciosController
     public function ventaServicio()
     {
         if (isset($_POST)) {
-            var_dump($_POST);
             $venta = new venta();
             echo $venta->VentaServicio(
                 $_POST['NombreCliente'],
@@ -57,6 +56,13 @@ class serviciosController
             );
         } else {
             echo json_encode('Datos no recibidos');
+        }
+    }
+
+    public function Compra(){
+        if(isset($_POST)){
+            $venta = new venta();
+            echo $venta->RegistrarCompra($_SESSION['identity']['Nombre'], $_POST['Proveedor'], $_POST['Referencia'], $_POST['Total'], $_FILES['Ticket']['tmp_name']);
         }
     }
 }

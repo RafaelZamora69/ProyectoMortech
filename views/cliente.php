@@ -14,6 +14,7 @@ require_once 'views/layouts/sidenav.php';
         </div>
     </div>
     <div class="row">
+        <h4>Deudas</h4>
         <div class="col s12">
             <table class="responsive-table striped">
                 <thead>
@@ -41,10 +42,12 @@ require_once 'views/layouts/sidenav.php';
             <table class="responsive-table">
                 <thead>
                 <tr>
+                    <th>Empleado</th>
                     <th>Teléfono</th>
                     <th>Monto</th>
                     <th>Ingreso</th>
                     <th>Fecha</th>
+                    <th>Observaciones</th>
                 </tr>
                 </thead>
                 <tbody id="ventasCliente"></tbody>
@@ -55,11 +58,13 @@ require_once 'views/layouts/sidenav.php';
             <table class="responsive-table">
                 <thead>
                 <tr>
+                    <th>Empleado</th>
                     <th>N° Venta</th>
                     <th>Teléfono</th>
                     <th>Monto</th>
                     <th>Crédito</th>
                     <th>Fecha</th>
+                    <th>Observaciones</th>
                 </tr>
                 </thead>
                 <tbody id="creditoCliente"></tbody>

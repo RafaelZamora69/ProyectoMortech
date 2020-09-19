@@ -157,4 +157,23 @@ class venta
             return json_encode($e->getMessage());
         }
     }
+
+    function RegistrarCompra($idEmpleado, $Proveedor, $Referencia, $Total, $Imagen){
+        //$image = base64_encode(file_get_contents($_FILES['Ticket']['tmp_name']));
+        $image = addslashes(file_get_contents($_FILES['Ticket']['tmp_name']));
+        var_dump($image);
+        try{
+            if($prueba = $this->connection->query("insert into images(Image) values ('{$image}')")) {
+                $imagen = $this->connection->query("select Image from images where idImage = 13");
+                if ($imagen->num_rows > 0) {
+                    $img = $imagen->fetch_assoc();
+                    echo base64_encode($img['Image']);
+                }
+            } else {
+                echo "nel";
+            }
+        }catch(Exception $e){
+            echo $e->getMessage();
+        }
+    }
 }

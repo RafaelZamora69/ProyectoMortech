@@ -17,8 +17,9 @@ require_once 'views/layouts/sidenav.php';
     <div class="row">
         <div class="col s12">
             <ul class="tabs">
-                <li class="tab col s6"><a href="#saldo">Venta de saldo</a></li>
-                <li class="tab col s6"><a href="#otro">Otro servicio</a></li>
+                <li class="tab col s4"><a href="#saldo">Saldo</a></li>
+                <li class="tab col s4"><a href="#otro">Servicios</a></li>
+                <li class="tab col s4"><a href="#compras">Compras</a></li>
             </ul>
         </div>
         <div id="saldo" class="col s12">
@@ -166,6 +167,38 @@ require_once 'views/layouts/sidenav.php';
                                 </p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="compras" class="col s12">
+            <form action="" method="post" id="FormCompra">
+                <div class="card-panel">
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <input type="text" name="Proveedor">
+                            <label for="Proveedor">Proveedor</label>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input type="text" name="Referencia">
+                            <label for="Referencia">Referencia</label>
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="Total">
+                        <label for="Total">$ Total</label>
+                    </div>
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>Ticket</span>
+                            <input type="file" id="Ticket">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" required>
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <input type="submit" id="registrarCompra" value="Registrar" class="btn-flat waves-effect waves-red">
                     </div>
                 </div>
             </form>

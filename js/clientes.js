@@ -117,10 +117,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     res[i].Mxn === 0 ? ingreso = ingreso.concat(res[i].Usd, ' Usd') : ingreso = ingreso.concat(res[i].Mxn, ' Mxn');
                     document.getElementById('ventasCliente').innerHTML += `
                         <tr>
+                            <td>${res[i].Empleado}</td>
                             <td>${res[i].Numero}</td>
                             <td>${res[i].Saldo}</td>
                             <td>$${ingreso}</td>
                             <td>${res[i].fecha}</td>
+                            <td>${res[i].Observaciones}</td>
                         </tr>
                     `;
                 }
@@ -140,11 +142,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     res[i].Mxn == 0 ? ingreso = ingreso.concat(res[i].Usd, ' Usd') : ingreso = ingreso.concat(res[i].Mxn, ' Mxn');
                     document.getElementById('creditoCliente').innerHTML += `
                         <tr>
+                            <td>${res[i].Empleado}</td>
                             <td>${res[i].idVenta}</td>
                             <td>${res[i].Numero}</td>
                             <td>${res[i].Saldo}</td>
                             <td>$${ingreso}</td>
                             <td>${res[i].fecha}</td>
+                            <td>${res[i].Observaciones}</td>
                         </tr>
                     `;
                 }
