@@ -176,11 +176,11 @@ require_once 'views/layouts/sidenav.php';
                 <div class="card-panel">
                     <div class="row">
                         <div class="input-field col s12 m6">
-                            <input type="text" name="Proveedor">
-                            <label for="Proveedor">Proveedor</label>
+                            <input type="text" name="Proveedor" class="autocomplete" id="autocompleteProveedores">
+                            <label for="autocompleteProveedores">Proveedor</label>
                         </div>
                         <div class="input-field col s12 m6">
-                            <input type="text" name="Referencia">
+                            <input type="text" name="Referencia" id="Referencia">
                             <label for="Referencia">Referencia</label>
                         </div>
                     </div>

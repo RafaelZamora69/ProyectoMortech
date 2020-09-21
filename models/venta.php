@@ -60,6 +60,28 @@ class venta
         return (((double)$Usd * 20) + (double)$Mxn) - (double)$Monto;
     }
 
+    private function guardarImagen($idEmpleado){
+        $extensiones = array('image/jpeg', 'image/jpg', 'image/png');
+        if(in_array($_FILES['Ticket']['type'], $extensiones)){
+            $image = addslashes(file_get_contents($_FILES['Ticket']['tmp_name']));
+            if($this->connection->query("insert into images(Image, idEmpleado) values ('{$image}', '{$idEmpleado}')")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function obtenerIdImagen($idEmpleado){
+        $query = $this->connection->prepare("select max(idImage) As idImage from images where idEmpleado = ?");
+        $query->bind_param('i', $idEmpleado);
+        if($query->execute()){
+            $result = $query->get_result();
+            while($row = $result->fetch_assoc()){
+                return $row['idImage'];
+            }
+        }
+    }
+
     function buscarOrden($Servicio){
         try{
             $busqueda = $this->connection->prepare("select count(NombreServicio) As 'count' from venta where NombreServicio != 'Recarga de saldo' and NombreServicio = ?");
@@ -158,22 +180,35 @@ class venta
         }
     }
 
-    function RegistrarCompra($idEmpleado, $Proveedor, $Referencia, $Total, $Imagen){
-        //$image = base64_encode(file_get_contents($_FILES['Ticket']['tmp_name']));
-        $image = addslashes(file_get_contents($_FILES['Ticket']['tmp_name']));
-        var_dump($image);
+    function RegistrarCompra($Empleado, $Proveedor, $Referencia, $Total){
         try{
-            if($prueba = $this->connection->query("insert into images(Image) values ('{$image}')")) {
-                $imagen = $this->connection->query("select Image from images where idImage = 13");
-                if ($imagen->num_rows > 0) {
-                    $img = $imagen->fetch_assoc();
-                    echo base64_encode($img['Image']);
+            mysqli_begin_transaction($this->connection);
+            $idEmpleado = $this->getIdEmpleado($Empleado);
+            if($this->guardarImagen($idEmpleado)){
+                $compra = $this->connection->prepare("insert into compra(idEmpleado, Proveedor, Referencia, Total, Fecha, idImagen) values (?,?,?,?,now() - 2,?)");
+                $idImagen = $this->obtenerIdImagen($idEmpleado);
+                $compra->bind_param('issdi', $idEmpleado, $Proveedor, $Referencia, $Total, $idImagen);
+                if($compra->execute()){
+                    $this->connection->commit();
+                    return json_encode(array("Codigo" => 0, "Message" => "Venta registrada"));
                 }
-            } else {
-                echo "nel";
+                $this->connection->rollback();
+                return json_encode(array("Codigo" => 1, "Message" => "Error al registrar"));
             }
+            $this->connection->rollback();
+            return json_encode(array("Codigo" => 1, "Message" => "Formato de imagen invalido"));
         }catch(Exception $e){
-            echo $e->getMessage();
+            $this->connection->rollback();
+            return json_encode(array("Codigo" => 1, "Message" => $e->getMessage()));
         }
+    }
+
+    function getProveedores(){
+        $query = $this->connection->query("select distinct(Proveedor) As Proveedor from compra");
+        $proveedores = [];
+        while($row = $query->fetch_assoc()){
+            $proveedores[] = $row["Proveedor"];
+        }
+        return json_encode($proveedores);
     }
 }

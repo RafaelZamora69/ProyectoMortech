@@ -32,7 +32,9 @@ document.addEventListener('DOMContentLoaded', function () {
         drop.textContent = e.target.text;
        cargarMonto(e.target.text);
     });
-    //
+    //Proveedores
+    const autoPro = document.getElementById('autocompleteProveedores');
+    const Proveedores = M.Autocomplete.init(autoPro);
     let count = 0;
     var autocom = document.getElementById('autocompleteName');
     var clientes = M.Autocomplete.init(autocom);
@@ -68,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     //funciones
     ObtenerClientes();
+    obtenerProveedores();
 
     function registrarCompra(e){
         e.preventDefault();
@@ -80,13 +83,32 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 console.log(res);
+                res.Codigo == 0 ? M.toast({ html: res.Message, classes: 'green white-text' }) :
+                    M.toast({ html: 'Error ' + res.Message, classes: 'red white-text' });
+                if(res.Codigo == 0){
+                    document.getElementById('FormCompra').reset();
+                }
             })
+    }
+
+    function obtenerProveedores(){
+        fetch('obtenerProveedores')
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+                var data = {};
+                for(i in res){
+                    data[res[i]] = null;
+                }
+                Proveedores.updateData(data);
+            });
     }
 
     function ObtenerClientes() {
         fetch('nombresClientes')
             .then(res => res.json())
             .then(res => {
+                console.log(res);
                 var data = {};
                 for(i in res){
                     data[res[i]] = null;
@@ -188,7 +210,6 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res);
                 res[0].Codigo == 0 ?
                     M.toast({ html: res[0].Mensaje, classes: 'green white-text' }) :
                     M.toast({ html: 'Error ' + res[0].Mensaje, classes: 'red white-text' })
