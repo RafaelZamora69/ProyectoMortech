@@ -185,7 +185,7 @@ class venta
             mysqli_begin_transaction($this->connection);
             $idEmpleado = $this->getIdEmpleado($Empleado);
             if($this->guardarImagen($idEmpleado)){
-                $compra = $this->connection->prepare("insert into compra(idEmpleado, Proveedor, Referencia, Total, Fecha, idImagen) values (?,?,?,?,now() - 2,?)");
+                $compra = $this->connection->prepare("insert into compra(idEmpleado, Proveedor, Referencia, Total, Fecha, idImagen, Pagada) values (?,?,?,?,now() - 2,?,0)");
                 $idImagen = $this->obtenerIdImagen($idEmpleado);
                 $compra->bind_param('issdi', $idEmpleado, $Proveedor, $Referencia, $Total, $idImagen);
                 if($compra->execute()){
