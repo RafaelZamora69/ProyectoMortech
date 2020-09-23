@@ -52,11 +52,23 @@ class compra {
             if($query->execute()){
                 $result = $query->get_result();
                 while($row = $result->fetch_assoc()){
-                    $image = '<img src="{$this->obtenerImagen($row['idImagen'])}"/>';
-                    echo $image;
-                    return json_encode(array('idCompra' => $row['idCompra'], 'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Fecha' => $row['Fecha'], 'Imagen' => $image, 'Pagada' => $row['Pagada']));
+                    //$image = '<img src="{$this->obtenerImagen($row['idImagen'])}"/>';
+                    return json_encode(array('idCompra' => $row['idCompra'], 'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Fecha' => $row['Fecha'], 'Imagen' => '$image', 'Pagada' => $row['Pagada']));
                 }
             }
+        }catch(Exception $e){
+            return json_encode($e->getMessage());
+        }
+    }
+
+    public function actualizarCompra($Estado, $idCompra){
+        try{
+            $query = $this->connection->prepare('update compra set Pagada = ? where idCompra = ?');
+            $query->bind_param('ii', $Estado, $idCompra);
+            if($query->execute()){
+                return json_encode(array('Codigo' => 0, 'Mensaje' => 'Compra actualizada'));
+            }
+            return json_encode(array('Codigo' => 1, 'Mensaje' => 'Error al actualizar'));
         }catch(Exception $e){
             return json_encode($e->getMessage());
         }

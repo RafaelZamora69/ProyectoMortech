@@ -23,4 +23,11 @@ class compraController {
         }
     }
 
+    function actualizarCompra(){
+        if(isset($_POST)){
+            $compra = new compra();
+            echo $compra->actualizarCompra($_POST['Pagado'], $_POST['idCompra']);
+        }
+    }
+
 }

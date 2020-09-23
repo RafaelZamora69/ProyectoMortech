@@ -47,5 +47,13 @@ require_once  'views/layouts/sidenav.php';
         </table>
     </div>
 </div>
+<div class="modal" id="modalCompra">
+    <div class="modal-content" id="contenidoCompra">
+
+    </div>
+    <div class="modal-footer">
+        <a class="btn waves-effect waves-light green white-text" id="actualizarCompra">Guardar</a>
+    </div>
+</div>
 <script src="<?= base_url ?>js/compra.js"></script>
 <?php include_once 'views/layouts/footer.php'; ?>

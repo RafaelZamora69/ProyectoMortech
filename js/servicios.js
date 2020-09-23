@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                    document.getElementById('TablaInfoNumeroDatos').innerHTML += `
+                    document.getElementById('TablaInfoNumeroDatos').innerHTML = `
                         <tr>
                             <td>${res.Cliente}</td>
                             <td>${res.Empleado}</td>
