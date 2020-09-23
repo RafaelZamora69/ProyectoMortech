@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                    document.getElementById('TablaInfoNumeroDatos').innerHTML += `
+                    document.getElementById('TablaInfoNumeroDatos').innerHTML = `
                         <tr>
                             <td>${res.Cliente}</td>
                             <td>${res.Empleado}</td>
@@ -24,27 +24,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 modal2.open();
             });
     });
-
     document.getElementById("progress").style.visibility = "hidden";
+    //Seleccionar operadoras
+    var drop = document.getElementById('OperadorasTrigger');
+    var operadoras = M.Dropdown.init(drop);
+    document.getElementById('Operadoras').addEventListener('click', (e) => {
+        drop.textContent = e.target.text;
+       cargarMonto(e.target.text);
+    });
+    //Proveedores
+    const autoPro = document.getElementById('autocompleteProveedores');
+    const Proveedores = M.Autocomplete.init(autoPro);
     let count = 0;
     var autocom = document.getElementById('autocompleteName');
     var clientes = M.Autocomplete.init(autocom);
-    //Operadoras
-    var autocom = document.getElementById('Operadora');
-    var operadora = M.Autocomplete.init(autocom, {
-        data: {
-            "Telcel": null,
-            "Movistar": null,
-            "Unefon": null,
-            "AT&T": null
-        },
-        onAutocomplete: function (res) {
-            cargarMonto(res);
-        },
-        dropdownOptions: {
-            "hover": false
-        }
-    });
     var chips = document.getElementById('chips');
     var telefonos = M.Chips.init(chips, {
             placeholder: "Numeros",
@@ -72,12 +65,50 @@ document.addEventListener('DOMContentLoaded', function () {
         count = 0;
         value[0].value = '';
     });
+    document.getElementById('registrarCompra').addEventListener('click', (e) => {
+        registrarCompra(e);
+    })
     //funciones
     ObtenerClientes();
+    obtenerProveedores();
+
+    function registrarCompra(e){
+        e.preventDefault();
+        var data = new FormData(document.getElementById('FormCompra'));
+        data.append('Ticket', document.getElementById('Ticket').files[0]);
+        fetch('Compra', {
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+                res.Codigo == 0 ? M.toast({ html: res.Message, classes: 'green white-text' }) :
+                    M.toast({ html: 'Error ' + res.Message, classes: 'red white-text' });
+                if(res.Codigo == 0){
+                    document.getElementById('FormCompra').reset();
+                }
+            })
+    }
+
+    function obtenerProveedores(){
+        fetch('obtenerProveedores')
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+                var data = {};
+                for(i in res){
+                    data[res[i]] = null;
+                }
+                Proveedores.updateData(data);
+            });
+    }
+
     function ObtenerClientes() {
         fetch('nombresClientes')
             .then(res => res.json())
             .then(res => {
+                console.log(res);
                 var data = {};
                 for(i in res){
                     data[res[i]] = null;
