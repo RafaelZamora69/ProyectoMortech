@@ -10,7 +10,7 @@ require_once  'views/layouts/sidenav.php';
 <div class="row">
     <div class="col s12">
         <h6>Pendientes</h6>
-        <table>
+        <table class="responsive-table">
             <thead>
             <tr>
                 <th>Empleado</th>
@@ -30,7 +30,7 @@ require_once  'views/layouts/sidenav.php';
 <div class="row">
     <div class="col s12">
         <h6>Pagadas</h6>
-        <table>
+        <table class="responsive-table">
             <thead>
             <tr>
                 <th>Empleado</th>

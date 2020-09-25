@@ -16,7 +16,7 @@ class clientes
             $query = $this->connection->query("select * from clientescredito;");
             $clientes = [];
             while ($row = $query->fetch_assoc()) {
-                $clientes[] = array('Empleado' => $row['Empleado'], 'Nombre' => $row['Nombre'], 'Servicio' => $row['NombreServicio'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha'], 'Observaciones' => $row['Observaciones']);
+                $clientes[] = array('Empleado' => $row['Empleado'], 'Nombre' => $row['Nombre'], 'NumeroTelefono' => $row['NumeroTelefono'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha'], 'Observaciones' => $row['Observaciones']);
             }
             return json_encode($clientes);
         } catch (Exception $e) {

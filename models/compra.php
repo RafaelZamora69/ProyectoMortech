@@ -14,7 +14,7 @@ class compra {
         if($imagen->execute()){
             $result = $imagen->get_result();
             while($row = $result->fetch_assoc()){
-                return base64_encode($row['Image']);
+                return $row['Image'];
             }
         }
     }
@@ -52,8 +52,8 @@ class compra {
             if($query->execute()){
                 $result = $query->get_result();
                 while($row = $result->fetch_assoc()){
-                    //$image = '<img src="{$this->obtenerImagen($row['idImagen'])}"/>';
-                    return json_encode(array('idCompra' => $row['idCompra'], 'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Fecha' => $row['Fecha'], 'Imagen' => '$image', 'Pagada' => $row['Pagada']));
+                    //echo '<img src="data:image/png;base64,'.base64_encode($this->obtenerImagen($row['idImagen'])).'" />';
+                    return json_encode(array('idCompra' => $row['idCompra'], 'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Fecha' => $row['Fecha'], 'Imagen' => base64_encode($this->obtenerImagen($row['idImagen'])), 'Pagada' => $row['Pagada']));
                 }
             }
         }catch(Exception $e){

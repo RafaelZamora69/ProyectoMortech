@@ -103,7 +103,7 @@ class venta
             $busqueda->execute();
             $result = $busqueda->get_result();
             while($row = $result->fetch_assoc()){
-                return json_encode(Array('Empleado' => $row['Empleado'], 'Cliente' => $row['Cliente'], 'NumeroTelefono' => $row['NumeroTelefono'], 'Monto' => $row['Monto'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha']));
+                return json_encode(Array('Empleado' => $row['Empleado'], 'Cliente' => $row['Cliente'], 'NumeroTelefono' => $row['NumeroTelefono'], 'Monto' => $row['Monto'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha'], 'Pagado' => $row['Pagado']) );
             }
         }catch(Exception $e){
             return json_encode($e->getMessage());
@@ -180,14 +180,14 @@ class venta
         }
     }
 
-    function RegistrarCompra($Empleado, $Proveedor, $Referencia, $Total){
+    function RegistrarCompra($Empleado, $Proveedor, $Referencia, $Total, $Pagada){
         try{
             mysqli_begin_transaction($this->connection);
             $idEmpleado = $this->getIdEmpleado($Empleado);
             if($this->guardarImagen($idEmpleado)){
-                $compra = $this->connection->prepare("insert into compra(idEmpleado, Proveedor, Referencia, Total, Fecha, idImagen, Pagada) values (?,?,?,?,now() - 2,?,0)");
+                $compra = $this->connection->prepare("insert into compra(idEmpleado, Proveedor, Referencia, Total, Fecha, idImagen, Pagada) values (?,?,?,?,now(),?,?)");
                 $idImagen = $this->obtenerIdImagen($idEmpleado);
-                $compra->bind_param('issdi', $idEmpleado, $Proveedor, $Referencia, $Total, $idImagen);
+                $compra->bind_param('issdii', $idEmpleado, $Proveedor, $Referencia, $Total, $idImagen, $Pagada);
                 if($compra->execute()){
                     $this->connection->commit();
                     return json_encode(array("Codigo" => 0, "Message" => "Venta registrada"));
