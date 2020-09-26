@@ -132,14 +132,14 @@ require_once 'views/layouts/sidenav.php';
                     <div class="row">
                         <div class="col s4 l4">
                             <div class="input-field">
-                                <input name="UsdServicio" type="text">
-                                <label for="CobroServicio">Usd</label>
+                                <input name="UsdServicio" type="text" id="UsdServicio">
+                                <label for="UsdServicio">Usd</label>
                             </div>
                         </div>
                         <div class="col s4 l4">
                             <div class="input-field">
-                                <input name="MxnServicio" type="text">
-                                <label for="CobroServicio">Mxn</label>
+                                <input name="MxnServicio" type="text" id="MxnServicio">
+                                <label for="MxnServicio">Mxn</label>
                             </div>
                         </div>
                         <div class="col s12 l4">
@@ -208,7 +208,7 @@ require_once 'views/layouts/sidenav.php';
         </div>
         <div id="modal1" class="modal">
             <div class="modal-content">
-                <h4 id="ModalHeader">Modal Header</h4>
+                <h4 id="ModalHeader">Operación terminada</h4>
                 <table class="stripped centered" id="TablaMensajes">
                     <thead>
                         <tr>

@@ -120,7 +120,7 @@ class venta
                 $tel = $arr[$i]['tag'];
                 //Si se realiza la recarga
                 if ($this->recarga($Carrier, $tel, $Monto)) {
-                    $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha) values (?,?,?,?,?,?,?,?,?,?,?,now());");
+                    $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 2 hour ));");
                     $idCliente = $this->getIdCliente($NombreCliente);
                     $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
                     $Utilidad = $this->getUtilidad($Monto, $Usd, $Mxn);
@@ -143,7 +143,7 @@ class venta
             if(!$this->buscarOrden($NombreServicio)){
                 $NombreCliente = $this->limpiarEspacios($NombreCliente);
                 $this->mensajes = [];
-                $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, Usd, Mxn, Pagado, Observaciones, Verificada, Utilidad) values (?,?,?,?,?,?,?,1,0)");
+                $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, Usd, Mxn, Pagado, Observaciones, Verificada, Utilidad, fecha) values (?,?,?,?,?,?,?,1,0,date_add(now(), interval 2 hour ))");
                 $idCliente = $this->getIdCliente($NombreCliente);
                 $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
                 $Observaciones = $this->limpiarEspacios($Observaciones);
@@ -185,12 +185,12 @@ class venta
             mysqli_begin_transaction($this->connection);
             $idEmpleado = $this->getIdEmpleado($Empleado);
             if($this->guardarImagen($idEmpleado)){
-                $compra = $this->connection->prepare("insert into compra(idEmpleado, Proveedor, Referencia, Total, Fecha, idImagen, Pagada) values (?,?,?,?,now(),?,?)");
+                $compra = $this->connection->prepare("insert into compra(idEmpleado, Proveedor, Referencia, Total, Fecha, idImagen, Pagada) values (?,?,?,?,date_add(now(), interval 2 hour ),?,?)");
                 $idImagen = $this->obtenerIdImagen($idEmpleado);
                 $compra->bind_param('issdii', $idEmpleado, $Proveedor, $Referencia, $Total, $idImagen, $Pagada);
                 if($compra->execute()){
                     $this->connection->commit();
-                    return json_encode(array("Codigo" => 0, "Message" => "Venta registrada"));
+                    return json_encode(array("Codigo" => 0, "Message" => "Compra registrada"));
                 }
                 $this->connection->rollback();
                 return json_encode(array("Codigo" => 1, "Message" => "Error al registrar"));
