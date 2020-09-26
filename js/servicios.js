@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('OperadorasTrigger').value = 'Unefon';
     const elems = document.getElementById('modal2');
     const modal2 = M.Modal.init(elems);
     document.getElementById('NumeroBuscar').addEventListener('submit', (e) => {
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <td>${res.Monto}</td>
                             <td>${res.Usd} Usd, ${res.Mxn} Mxn</td>
                             <td>${res.NumeroTelefono}</td>
+                            <td>${res.Pagado}</td>
                             <td>${res.Fecha}</td>
                         </tr>
                     `;
@@ -29,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var drop = document.getElementById('OperadorasTrigger');
     var operadoras = M.Dropdown.init(drop);
     document.getElementById('Operadoras').addEventListener('click', (e) => {
+        document.getElementById('OperadorasTrigger').value = e.target.text;
         drop.textContent = e.target.text;
        cargarMonto(e.target.text);
     });
@@ -37,14 +40,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const Proveedores = M.Autocomplete.init(autoPro);
     let count = 0;
     var autocom = document.getElementById('autocompleteName');
-    var clientes = M.Autocomplete.init(autocom);
+    var clientesSaldo = M.Autocomplete.init(autocom);
     var chips = document.getElementById('chips');
     var telefonos = M.Chips.init(chips, {
             placeholder: "Numeros",
             secondaryPlaceholder: "+Numero"
         });
-    var autocom = document.getElementById('autocompleteName');
-    var clientes = M.Autocomplete.init(autocom);
+    var autocom = document.getElementById('autocompleteCliente');
+    var clientesServicio = M.Autocomplete.init(autocom);
     //Modal de aviso
     var modal = document.getElementById('modal1');
     var modalAviso = M.Modal.init(modal);
@@ -76,13 +79,13 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         var data = new FormData(document.getElementById('FormCompra'));
         data.append('Ticket', document.getElementById('Ticket').files[0]);
+        data.append('Pagada', document.getElementById('CompraPagada').checked == true ? 1 : 0);
         fetch('Compra', {
             method: 'POST',
             body: data
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res);
                 res.Codigo == 0 ? M.toast({ html: res.Message, classes: 'green white-text' }) :
                     M.toast({ html: 'Error ' + res.Message, classes: 'red white-text' });
                 if(res.Codigo == 0){
@@ -95,7 +98,6 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch('obtenerProveedores')
             .then(res => res.json())
             .then(res => {
-                console.log(res);
                 var data = {};
                 for(i in res){
                     data[res[i]] = null;
@@ -108,15 +110,14 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch('nombresClientes')
             .then(res => res.json())
             .then(res => {
-                console.log(res);
                 var data = {};
                 for(i in res){
                     data[res[i]] = null;
                 }
-                clientes.updateData(data);
+                clientesSaldo.updateData(data);
+                clientesServicio.updateData(data);
             })
             .catch(function (e) {
-                console.log(e.message);
             });
     }
 
@@ -139,14 +140,13 @@ document.addEventListener('DOMContentLoaded', function () {
         let pagado = document.getElementsByClassName('pagado');
         let form = document.getElementById('FormSaldo');
         var datos = new FormData(form);
-        let carrier = getCarrierId(document.getElementById("Operadora").value);
         let nombre = document.getElementById("Name");
         let numeros = document.getElementsByClassName('chips')[0].M_Chips.chipsData;
+        datos.append('Operadora', document.getElementById("OperadorasTrigger").value);
         datos.append('numeros', JSON.stringify(numeros));
         datos.append('Vendedor', nombre.innerText);
-        datos.append('Carrier', carrier);
+        datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTrigger").value));
         pagado[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
-        datos.append('Carrier', carrier);
         fetch('recargaSaldo', {
             method: 'POST',
             body: datos
@@ -177,7 +177,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 var tbody = document.createElement("tbody");
                 tbody.id = "table";
                 table.appendChild(tbody);
-                console.log(e.message);
                 document.getElementById("progress").style.visibility = "hidden";
             });
     }

@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cargarComprasPagadas();
     cargarComprasNoPagadas();
+    document.body.addEventListener('click', (e) => {
+        if(e.target.classList.contains('detallesCompra')){
+            infoCompra(e.target.id);
+        }
+    });
 
     function cargarComprasPagadas() {
         fetch('cargarComprasPagadas')
@@ -18,13 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td class="truncate">${res[i].Referencia}</td>
                             <td>${res[i].Total}</td>
                             <td>${res[i].Fecha}</td>
-                            <td><a id="detalles" value="${res[i].idCompra}" class="btn waves-effect waves-light yellow black-text">Detalles</a></td>
+                            <td><a id="${res[i].idCompra}" class="btn waves-effect waves-light yellow black-text detallesCompra">Detalles</a></td>
                         </tr>
                     `;
                     }
-                    document.getElementById('detalles').addEventListener('click', (e) => {
-                        infoCompra(e.target.attributes.value.nodeValue)
-                    });
                 }
             })
     }
@@ -42,13 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td class="truncate">${res[i].Referencia}</td>
                             <td>${res[i].Total}</td>
                             <td>${res[i].Fecha}</td>
-                            <td><a id="detalles" value="${res[i].idCompra}" class="btn waves-effect waves-light yellow black-text">Detalles</a></td>
+                            <td><a id="${res[i].idCompra}" class="btn waves-effect waves-light yellow black-text detallesCompra">Detalles</a></td>
                         </tr>
                     `;
                     }
-                    document.getElementById('detalles').addEventListener('click', (e) => {
-                        infoCompra(e.target.attributes.value.nodeValue)
-                    });
                 }
             })
     }
@@ -76,11 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="col s12 m6">
                         <p>Total: $${res.Total}</p>
                         <p><label><input id="Pagada" type="checkbox"${res.Pagada != 0 ? 'checked' : null}/><span>Pagado</span></label></p>
-                        <p>Comprobante: </p>
+                        <p>Comprobante:<img src="data:image/png;base64,${res.Imagen}" class="responsive-img materialboxed" id="img"></p>
                     </div>
                     </div>
                 `;
-                modal.open();
                 const actualizar = document.getElementById('actualizarCompra').addEventListener('click', () => {
                     const pagada = document.getElementById('Pagada').checked != 0 ? 1 : 0;
                     const data = new FormData();
@@ -97,6 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             modal.close();
                         })
                 });
-            })
+            });
+        modal.open();
+        var elems = document.getElementById('img');
+        var instances = M.Materialbox.init(elems);
     }
 });

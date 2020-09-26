@@ -62,7 +62,7 @@ class serviciosController
     public function Compra(){
         if(isset($_POST)){
             $venta = new venta();
-            echo $venta->RegistrarCompra($_SESSION['identity']['Nombre'], $_POST['Proveedor'], $_POST['Referencia'], $_POST['Total']);
+            echo $venta->RegistrarCompra($_SESSION['identity']['Nombre'], $_POST['Proveedor'], $_POST['Referencia'], $_POST['Total'], $_POST['Pagada']);
         }
     }
 

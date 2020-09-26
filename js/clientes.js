@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <tr>
                     <td>${res[i].Empleado}</td>
                     <td>${res[i].Nombre}</td>
-                    <td>${res[i].Servicio}</td>
+                    <td>${res[i].NumeroTelefono}</td>
                     <td>$${res[i].Usd} Usd, $${res[i].Mxn} Mxn</td>
                     <td>${res[i].Fecha}</td>
                     <td>${res[i].Observaciones}</td>
@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var datos = new FormData();
         datos.append('idCliente', idCliente);
         datos.append('tipo', 'ventas');
+        limpiarTablaDetalleCliente();
         fetch('infoCliente',{
             method: 'POST',
             body: datos
@@ -111,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 document.getElementById('nombreCliente').textContent = nombre;
-                limpiarTablaDetalleCliente();
                 for (i in res) {
                     var ingreso = "";
                     res[i].Mxn === 0 ? ingreso = ingreso.concat(res[i].Usd, ' Usd') : ingreso = ingreso.concat(res[i].Mxn, ' Mxn');
@@ -127,7 +127,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     `;
                 }
             });
-        //Tabla crédito
+        cargarCredito(idCliente);
+        modalCliente.open();
+    }
+
+    function cargarCredito(idCliente){
         datos = new FormData();
         datos.append('idCliente', idCliente);
         datos.append('tipo', 'credito');
@@ -152,7 +156,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         </tr>
                     `;
                 }
-                modalCliente.open();
             })
     }
 

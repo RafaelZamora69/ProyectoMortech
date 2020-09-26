@@ -26,15 +26,13 @@ require_once 'views/layouts/sidenav.php';
             <form method="post" id="FormSaldo">
                 <div class="card-panel">
                     <div class="row">
-                        <div class="col s12">
+                        <div class="col s12 m6">
                             <div class="input-field">
                                 <input name="Name" type="text" class="autocomplete" id="autocompleteName" required>
                                 <label for="Name">Cliente</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12">
+                        <div class="col s12 m6">
                             <div class="input-field" id="chips">
                                 <input type="number">
                             </div>
@@ -118,13 +116,13 @@ require_once 'views/layouts/sidenav.php';
             <form action="" method="post" id="FormServicio">
                 <div class="card-panel">
                     <div class="row">
-                        <div class="col s12 l6">
+                        <div class="col s12 m6">
                             <div class="input-field">
-                                <input name="NombreCliente" type="text" class="autocomplete" id="autocompleteName">
+                                <input name="NombreCliente" type="text" class="autocomplete" id="autocompleteCliente">
                                 <label for="NombreCliente">Cliente</label>
                             </div>
                         </div>
-                        <div class="col s12 l6">
+                        <div class="col s12 m6">
                             <div class="input-field">
                                 <input name="Service" type="text">
                                 <label for="Service">Servicio</label>
@@ -134,14 +132,14 @@ require_once 'views/layouts/sidenav.php';
                     <div class="row">
                         <div class="col s4 l4">
                             <div class="input-field">
-                                <input name="UsdServicio" type="text">
-                                <label for="CobroServicio">Usd</label>
+                                <input name="UsdServicio" type="text" id="UsdServicio">
+                                <label for="UsdServicio">Usd</label>
                             </div>
                         </div>
                         <div class="col s4 l4">
                             <div class="input-field">
-                                <input name="MxnServicio" type="text">
-                                <label for="CobroServicio">Mxn</label>
+                                <input name="MxnServicio" type="text" id="MxnServicio">
+                                <label for="MxnServicio">Mxn</label>
                             </div>
                         </div>
                         <div class="col s12 l4">
@@ -184,9 +182,14 @@ require_once 'views/layouts/sidenav.php';
                             <label for="Referencia">Referencia</label>
                         </div>
                     </div>
-                    <div class="input-field">
-                        <input type="number" name="Total">
-                        <label for="Total">$ Total</label>
+                    <div class="row">
+                        <div class="input-field col s6 m9">
+                            <input type="number" name="Total" id="Total">
+                            <label for="Total">$ Total</label>
+                        </div>
+                        <div class="input-field col s6 m3">
+                            <p><label><input type="checkbox" checked id="CompraPagada"><span>Pagado</span></label></p>
+                        </div>
                     </div>
                     <div class="file-field input-field">
                         <div class="btn">
@@ -205,7 +208,7 @@ require_once 'views/layouts/sidenav.php';
         </div>
         <div id="modal1" class="modal">
             <div class="modal-content">
-                <h4 id="ModalHeader">Modal Header</h4>
+                <h4 id="ModalHeader">Operación terminada</h4>
                 <table class="stripped centered" id="TablaMensajes">
                     <thead>
                         <tr>
@@ -224,7 +227,7 @@ require_once 'views/layouts/sidenav.php';
         <div id="modal2" class="modal">
             <div class="modal-content">
                 <h4>Información</h4>
-                <table class="centered" id="TablaInfoNumero">
+                <table class="responsive-table" id="TablaInfoNumero">
                     <thead>
                     <tr>
                         <th>Cliente</th>
@@ -232,6 +235,7 @@ require_once 'views/layouts/sidenav.php';
                         <th>Monto</th>
                         <th>Ingreso</th>
                         <th>Teléfono</th>
+                        <th>Pagado</th>
                         <th>Fecha</th>
                     </tr>
                     </thead>
