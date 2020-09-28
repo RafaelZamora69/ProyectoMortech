@@ -39,8 +39,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const autoPro = document.getElementById('autocompleteProveedores');
     const Proveedores = M.Autocomplete.init(autoPro);
     let count = 0;
+    //Clientes
     var autocom = document.getElementById('autocompleteName');
     var clientesSaldo = M.Autocomplete.init(autocom);
+    var autocom = document.getElementById('autocompleteNameExterna');
+    var clientesSaldoExterna = M.Autocomplete.init(autocom);
+    //Numeros de teléfono
     var chips = document.getElementById('chips');
     var telefonos = M.Chips.init(chips, {
             placeholder: "Numeros",
@@ -116,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 clientesSaldo.updateData(data);
                 clientesServicio.updateData(data);
+                clientesSaldoExterna.updateData(data);
             })
             .catch(function (e) {
             });

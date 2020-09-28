@@ -9,43 +9,45 @@ require_once  'views/layouts/sidenav.php';
 <h2>Compras</h2>
 <div class="row">
     <div class="col s12">
-        <h6>Pendientes</h6>
-        <table class="responsive-table">
-            <thead>
-            <tr>
-                <th>Empleado</th>
-                <th>Proveedor</th>
-                <th>Referencia</th>
-                <th>Total</th>
-                <th>Fecha</th>
-                <th></th>
-            </tr>
-            <tbody id="comprasNoPagadas">
-
-            </tbody>
-            </thead>
-        </table>
+        <ul class="tabs">
+            <li class="tab col s6"><a href="#pendientes">Pendientes</a></li>
+            <li class="tab col s6"><a href="#pagadas">Pagadas</a></li>
+        </ul>
     </div>
 </div>
-<div class="row">
-    <div class="col s12">
-        <h6>Pagadas</h6>
-        <table class="responsive-table">
-            <thead>
-            <tr>
-                <th>Empleado</th>
-                <th>Proveedor</th>
-                <th>Referencia</th>
-                <th>Total</th>
-                <th>Fecha</th>
-                <th></th>
-            </tr>
-            <tbody id="comprasPagadas">
+<div id="pendientes" class="col s12">
+    <table class="responsive-table">
+        <thead>
+        <tr>
+            <th>Empleado</th>
+            <th>Proveedor</th>
+            <th>Referencia</th>
+            <th>Total</th>
+            <th>Fecha</th>
+            <th></th>
+        </tr>
+        <tbody id="comprasNoPagadas">
 
-            </tbody>
-            </thead>
-        </table>
-    </div>
+        </tbody>
+        </thead>
+    </table>
+</div>
+<div id="pagadas" class="col s12">
+    <table class="responsive-table">
+        <thead>
+        <tr>
+            <th>Empleado</th>
+            <th>Proveedor</th>
+            <th>Referencia</th>
+            <th>Total</th>
+            <th>Fecha</th>
+            <th></th>
+        </tr>
+        <tbody id="comprasPagadas">
+
+        </tbody>
+        </thead>
+    </table>
 </div>
 <div class="modal" id="modalCompra">
     <div class="modal-content" id="contenidoCompra">

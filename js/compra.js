@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const elem = document.getElementById('modalCompra');
     const modal = M.Modal.init(elem);
-
     cargarComprasPagadas();
     cargarComprasNoPagadas();
     document.body.addEventListener('click', (e) => {
@@ -97,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         modal.open();
-        var elems = document.getElementById('img');
-        var instances = M.Materialbox.init(elems);
+        var elems = document.querySelectorAll('.materialboxed');
+        var instances = M.Materialbox.init(elems,{});
     }
 });
