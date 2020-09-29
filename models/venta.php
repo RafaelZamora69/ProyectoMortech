@@ -187,7 +187,7 @@ class venta
             if($this->guardarImagen($idEmpleado)){
                 $compra = $this->connection->prepare("insert into compra(idEmpleado, Proveedor, Referencia, Total, Fecha, idImagen, Pagada) values (?,?,?,?,date_add(now(), interval 2 hour ),?,?)");
                 $idImagen = $this->obtenerIdImagen($idEmpleado);
-                $compra->bind_param('issdii', $idEmpleado, $Proveedor, $Referencia, $Total, $idImagen, $Pagada);
+                $compra->bind_param('issdis', $idEmpleado, $Proveedor, $Referencia, $Total, $idImagen, $Pagada);
                 if($compra->execute()){
                     $this->connection->commit();
                     return json_encode(array("Codigo" => 0, "Message" => "Compra registrada"));

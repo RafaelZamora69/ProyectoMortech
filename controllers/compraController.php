@@ -1,5 +1,7 @@
 <?php
 require_once 'models/compra.php';
+require_once 'models/user.php';
+require_once 'models/venta.php';
 class compraController {
 
     function index(){
@@ -28,6 +30,16 @@ class compraController {
             $compra = new compra();
             echo $compra->actualizarCompra($_POST['Pagado'], $_POST['idCompra']);
         }
+    }
+
+    function obtenerEmpleados() {
+        $empleados = new user();
+        echo $empleados->obtenerEmpleados();
+    }
+
+    function obtenerProveedores(){
+        $venta = new venta();
+        echo $venta->getProveedores();
     }
 
 }

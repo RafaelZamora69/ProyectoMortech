@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         var data = new FormData(document.getElementById('FormCompra'));
         data.append('Ticket', document.getElementById('Ticket').files[0]);
-        data.append('Pagada', document.getElementById('CompraPagada').checked == true ? 1 : 0);
+        data.append('Pagada', document.getElementById('CompraPagada').checked == true ? 'Efectivo' : 'Sin pagar');
         fetch('Compra', {
             method: 'POST',
             body: data

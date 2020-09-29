@@ -24,7 +24,7 @@ class compra {
             $query = $this->connection->query("select * from compraspagadas");
             $compras = [];
             while($row = $query->fetch_assoc()){
-                $compras[] = array('idCompra' => $row['idCompra'],'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Fecha' => $row['Fecha']);
+                $compras[] = array('idCompra' => $row['idCompra'],'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Pagada' => $row['Pagada'],'Fecha' => $row['Fecha'], 'Imagen' => base64_encode($this->obtenerImagen($row['idImagen'])));
             }
             return json_encode($compras);
         }catch(Exception $e){
@@ -37,7 +37,7 @@ class compra {
             $query = $this->connection->query("select * from comprasnopagadas");
             $compras = [];
             while($row = $query->fetch_assoc()){
-                $compras[] = array('idCompra' => $row['idCompra'], 'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Fecha' => $row['Fecha']);
+                $compras[] = array('idCompra' => $row['idCompra'], 'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Pagada' => $row['Pagada'],'Fecha' => $row['Fecha'], 'Imagen' => base64_encode($this->obtenerImagen($row['idImagen'])));
             }
             return json_encode($compras);
         }catch(Exception $e){
@@ -52,7 +52,6 @@ class compra {
             if($query->execute()){
                 $result = $query->get_result();
                 while($row = $result->fetch_assoc()){
-                    //echo '<img src="data:image/png;base64,'.base64_encode($this->obtenerImagen($row['idImagen'])).'" />';
                     return json_encode(array('idCompra' => $row['idCompra'], 'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Fecha' => $row['Fecha'], 'Imagen' => base64_encode($this->obtenerImagen($row['idImagen'])), 'Pagada' => $row['Pagada']));
                 }
             }
