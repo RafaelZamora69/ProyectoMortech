@@ -31,7 +31,15 @@ require_once  'views/layouts/sidenav.php';
                 </div>
             </div>
             <div class="row">
-                <a class="btn-flat waves-effect waves-green" id="Filtrar"><i class="material-icons left">search</i>Filtrar</a>
+                <div class="col s12 m3">
+                    <p><label><input type="radio" name="Tipo" checked id="Ambos"><span>Ambos</span></label></p>
+                    <p><label><input type="radio" name="Tipo" id="Efect"><span>Efectivo</span></label></p>
+                    <p><label><input type="radio" name="Tipo" id="Depos"><span>Deposito</span></label></p>
+                </div>
+                <div class="col s12 m9">
+                    <a class="btn-flat waves-effect waves-green" id="FiltrarPendientes"><i class="material-icons left">attach_money</i>Filtra Pendientes</a>
+                    <a class="btn-flat waves-effect waves-green" id="FiltrarPagados"><i class="material-icons left">done_all</i>Filtrar Pagadas</a>
+                </div>
             </div>
         </div>
     </li>
@@ -45,6 +53,9 @@ require_once  'views/layouts/sidenav.php';
     </div>
 </div>
 <div id="pendientes" class="col s12">
+    <div id="detallesPendientes">
+
+    </div>
     <table class="responsive-table">
         <thead>
         <tr>
@@ -64,6 +75,9 @@ require_once  'views/layouts/sidenav.php';
     </table>
 </div>
 <div id="pagadas" class="col s12">
+    <div id="detallesPagadas">
+
+    </div>
     <table class="responsive-table">
         <thead>
         <tr>

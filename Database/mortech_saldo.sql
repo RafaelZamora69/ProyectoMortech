@@ -21,7 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `mortech_saldo`
 --
-
+drop database if exists mortech_saldo;
+create database mortech_saldo;
+use mortech_saldo;
 DELIMITER $$
 --
 -- Procedimientos

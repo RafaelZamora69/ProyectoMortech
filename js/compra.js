@@ -5,14 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
         defaultDate: new Date(today.getFullYear(), today.getMonth(), 1),
         setDefaultDate: true,
         format: 'yyyy-mm-dd',
-        maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
+        maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
     });
     var elems = document.getElementById('Hasta');
     const Hasta = M.Datepicker.init(elems, {
-        defaultDate: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+        defaultDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1),
         setDefaultDate: true,
         format: 'yyyy-mm-dd',
-        maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
+        maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
     });
     var elems = document.getElementById('autocompleteEmpleado');
     const autocompleteEmp = M.Autocomplete.init(elems);
@@ -21,6 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
     initComponents();
     cargarComprasPagadas();
     cargarComprasNoPagadas();
+    document.getElementById('FiltrarPendientes').addEventListener('click', () => {
+        limpiarRegistros('Pendientes');
+        cargarComprasNoPagadas();
+    })
+    document.getElementById('FiltrarPagados').addEventListener('click', () => {
+        limpiarRegistros('Pagadas');
+        cargarComprasPagadas();
+    });
     document.body.addEventListener('click', (e) => {
         if(e.target.classList.contains('actualizarCompra')){
             actualizarCompra(e.target.id);
@@ -30,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById(e.target.name).textContent = e.target.textContent;
         }
     });
-    //TODO implementar filtro, se filtra en la bd con la fecha [desde, hasta] luego se aplican filtros(si los hay) con array.filter
+    //TODO implementar indice en la bd compra => fecha
     //TODO implementar leyenda como reporte, mostrar total registros, total acumulado => (Total depósito, Total Efectívo), Total deudas
     //TODO Corregir error al escoger el método de pago, no se crea bien el componente y se bugea
 
@@ -56,10 +64,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function cargarComprasPagadas() {
-        fetch('cargarComprasPagadas')
+        const data = new FormData();
+        data.append('Desde', document.getElementById('Desde').value);
+        data.append('Hasta', document.getElementById('Hasta').value);
+        fetch('cargarComprasPagadas',{
+            method: 'POST',
+            body: data
+        })
             .then(res => res.json())
             .then(res => {
                 if(res.length > 0) {
+                    if(document.getElementById('autocompleteEmpleado').value != ''){
+                        res = res.filter(x => x.Nombre == document.getElementById('autocompleteEmpleado').value);
+                    }
+                    if(document.getElementById('autocompleteProveedor').value != ''){
+                        res = res.filter(x => x.Proveedor == document.getElementById('autocompleteProveedor').value);
+                    }
+                    if(!document.getElementById('Ambos').checked){
+                        document.getElementById('Efect').checked ? res = res.filter(x => x.Pagada == 'Efectivo') : res = res.filter(x => x.Pagada == 'Deposito')
+                    }
+                    document.getElementById('detallesPagadas').innerHTML = `
+                        <p>Registros: ${res.length}</p>
+                        <p>Efectivo: $${total(res.filter(x => x.Pagada == 'Efectivo'))}</p>
+                        <p>Deposito: $${total(res.filter(x => x.Pagada == 'Deposito'))}</p>
+                        <p>Total: $${total(res)}</p>
+                    `;
                     for (i in res) {
                         document.getElementById('comprasPagadas').innerHTML += `
                         <tr>
@@ -92,17 +121,27 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    function cargarDropdown(MetodoPago, idCompra){
-        return `
-              
-        `;
-    }
-
     function cargarComprasNoPagadas() {
-        fetch('cargarComprasNoPagadas')
+        const data = new FormData();
+        data.append('Desde', document.getElementById('Desde').value);
+        data.append('Hasta', document.getElementById('Hasta').value);
+        fetch('cargarComprasNoPagadas',{
+            method: 'POST',
+            body: data
+        })
             .then(res => res.json())
             .then(res => {
                 if(res.length > 0) {
+                    if(document.getElementById('autocompleteEmpleado').value != ''){
+                        res = res.filter(x => x.Nombre == document.getElementById('autocompleteEmpleado').value);
+                    }
+                    if(document.getElementById('autocompleteProveedor').value != ''){
+                        res = res.filter(x => x.Proveedor == document.getElementById('autocompleteProveedor').value);
+                    }
+                    document.getElementById('detallesPendientes').innerHTML = `
+                        <p>Registros: ${res.length}</p>
+                        <p>Total: $${total(res)}</p>
+                    `;
                     for (i in res) {
                         document.getElementById('comprasNoPagadas').innerHTML += `
                         <tr>
@@ -133,6 +172,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 var elems = document.querySelectorAll('.dropdown-trigger');
                 var instances = M.Dropdown.init(elems);
             })
+    }
+
+    function cargarDropdown(MetodoPago, idCompra){
+        return `
+              
+        `;
+    }
+
+    function limpiarRegistros(opcion){
+        switch(opcion){
+            case 'Pagadas':
+                while(document.getElementById('comprasPagadas').firstChild){
+                    document.getElementById('comprasPagadas').removeChild(document.getElementById('comprasPagadas').firstChild);
+                }
+                break;
+            case 'Pendientes':
+                while(document.getElementById('comprasNoPagadas').firstChild){
+                    document.getElementById('comprasNoPagadas').removeChild(document.getElementById('comprasNoPagadas').firstChild);
+                }
+                break;
+        }
     }
 
     function infoCompra(id){
@@ -179,5 +239,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         })
                 });
             });
+    }
+
+    function total(res){
+        var total = 0;
+        for(i in res){
+            total += res[i].Total;
+        }
+        return total;
     }
 });

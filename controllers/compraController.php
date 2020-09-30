@@ -10,12 +10,12 @@ class compraController {
 
     function cargarComprasPagadas(){
         $compra = new compra();
-        echo $compra->cargarComprasPagadas();
+        echo $compra->cargarComprasPagadas($_POST['Desde'], $_POST['Hasta']);
     }
 
     function cargarComprasNoPagadas(){
         $compra = new compra();
-        echo $compra->cargarComprasNoPagadas();
+        echo $compra->cargarComprasNoPagadas($_POST['Desde'], $_POST['Hasta']);
     }
 
     function infoCompra(){
