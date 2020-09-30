@@ -96,5 +96,11 @@ require_once  'views/layouts/sidenav.php';
         </thead>
     </table>
 </div>
+<ul id='metodosPago' class='dropdown-content'>
+    <li><a class="metodosPago">Efectivo</a></li>
+    <li><a class="metodosPago">Deposito</a></li>
+    <li class="divider" tabindex="-1"></li>
+    <li><a class="metodosPago">Sin pagar</a></li>
+</ul>
 <script src="<?= base_url ?>js/compra.js"></script>
 <?php include_once 'views/layouts/footer.php'; ?>

@@ -71,7 +71,7 @@ class compra {
     public function actualizarCompra($Estado, $idCompra){
         try{
             $query = $this->connection->prepare('update compra set Pagada = ? where idCompra = ?');
-            $query->bind_param('ii', $Estado, $idCompra);
+            $query->bind_param('si', $Estado, $idCompra);
             if($query->execute()){
                 return json_encode(array('Codigo' => 0, 'Mensaje' => 'Compra actualizada'));
             }
