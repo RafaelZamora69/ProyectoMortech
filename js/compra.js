@@ -84,12 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         res = res.filter(x => x.Proveedor == document.getElementById('autocompleteProveedor').value);
                     }
                     if(!document.getElementById('Ambos').checked){
-                        document.getElementById('Efect').checked ? res = res.filter(x => x.Pagada == 'Efectivo') : res = res.filter(x => x.Pagada == 'Deposito')
+                        document.getElementById('Efect').checked ? res = res.filter(x => x.Pagada == 'Efectivo') : res = res.filter(x => x.Pagada == 'Banco')
                     }
                     document.getElementById('detallesPagadas').innerHTML = `
                         <p>Registros: ${res.length}</p>
                         <p>Efectivo: $${total(res.filter(x => x.Pagada == 'Efectivo'))}</p>
-                        <p>Deposito: $${total(res.filter(x => x.Pagada == 'Deposito'))}</p>
+                        <p>Banco: $${total(res.filter(x => x.Pagada == 'Banco'))}</p>
                         <p>Total: $${total(res)}</p>
                     `;
                     for (i in res) {
@@ -99,22 +99,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td>${res[i].Proveedor}</td>
                             <td><p class="truncate">${res[i].Referencia}</p></td>
                             <td>${res[i].Total}</td>
-                            <td>
-                                 <a class='dropdown-trigger btn' data-target='metodosPago' id="${res[i].idCompra}">${res[i].Pagada}</a>
-                            </td>
+                            <td><a class='dropdown-trigger btn' data-target='metodosPago' id="${res[i].idCompra}">${res[i].Pagada}</a></td>
                             <td>${res[i].Fecha}</td>
                             <td><img src="data:image/png;base64,${res[i].Imagen}" class="responsive-img materialboxed" width="100px" data-caption="Comprobante compra #${res[i].idCompra}"></td>
                             <td><a id="actualizar-${res[i].idCompra}" class="btn waves-effect waves-light yellow black-text actualizarCompra">Actualizar</a></td>
                         </tr>
                     `;
                     }
-                    //Materialboxed
-                    var elems = document.querySelectorAll('.materialboxed');
-                    var instances = M.Materialbox.init(elems);
-                    //Dropdown
-                    var elems = document.querySelectorAll('.dropdown-trigger');
-                    console.log(elems);
-                    var instances = M.Dropdown.init(elems);
                 }
             });
     }
@@ -147,24 +138,26 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td>${res[i].Proveedor}</td>
                             <td><p class="truncate">${res[i].Referencia}</p></td>
                             <td>${res[i].Total}</td>
-                            <td>
-                                 <a class='dropdown-trigger btn' data-target='metodosPago' id="${res[i].idCompra}">${res[i].Pagada}</a>
-                            </td>
+                            <td><a class='dropdown-trigger btn' data-target='metodosPago' id="${res[i].idCompra}">${res[i].Pagada}</a></td>
                             <td>${res[i].Fecha}</td>
                             <td><img src="data:image/png;base64,${res[i].Imagen}" class="responsive-img materialboxed" width="100px" data-caption="Comprobante compra #${res[i].idCompra}"></td>
                             <td><a id="actualizar-${res[i].idCompra}" class="btn waves-effect waves-light yellow black-text actualizarCompra">Actualizar</a></td>
                         </tr>
                     `;
                     }
-                    //Materialboxed
-                    var elems = document.querySelectorAll('.materialboxed');
-                    var instances = M.Materialbox.init(elems);
-                    //Dropdown
-                    var elems = document.querySelectorAll('.dropdown-trigger');
-                    console.log(elems);
-                    var instances = M.Dropdown.init(elems);
                 }
-            })
+                loadComponents();
+            });
+    }
+
+    function loadComponents(){
+        //Materialboxed
+        var elems = document.querySelectorAll('.materialboxed');
+        var instances = M.Materialbox.init(elems);
+        //Dropdown
+        var elems = document.querySelectorAll('.dropdown-trigger');
+        console.log(elems);
+        var instances = M.Dropdown.init(elems);
     }
 
     function limpiarRegistros(opcion){

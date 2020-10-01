@@ -34,7 +34,7 @@ require_once  'views/layouts/sidenav.php';
                 <div class="col s12 m3">
                     <p><label><input type="radio" name="Tipo" checked id="Ambos"><span>Ambos</span></label></p>
                     <p><label><input type="radio" name="Tipo" id="Efect"><span>Efectivo</span></label></p>
-                    <p><label><input type="radio" name="Tipo" id="Depos"><span>Deposito</span></label></p>
+                    <p><label><input type="radio" name="Tipo" id="Depos"><span>Banco</span></label></p>
                 </div>
                 <div class="col s12 m9">
                     <a class="btn-flat waves-effect waves-green" id="FiltrarPendientes"><i class="material-icons left">attach_money</i>Filtra Pendientes</a>
@@ -98,7 +98,7 @@ require_once  'views/layouts/sidenav.php';
 </div>
 <ul id='metodosPago' class='dropdown-content'>
     <li><a class="metodosPago">Efectivo</a></li>
-    <li><a class="metodosPago">Deposito</a></li>
+    <li><a class="metodosPago">Banco</a></li>
     <li class="divider" tabindex="-1"></li>
     <li><a class="metodosPago">Sin pagar</a></li>
 </ul>
