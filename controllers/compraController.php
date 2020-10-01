@@ -10,12 +10,17 @@ class compraController {
 
     function cargarComprasPagadas(){
         $compra = new compra();
-        echo $compra->cargarComprasPagadas($_POST['Desde'], $_POST['Hasta']);
+        echo $compra->cargarCompras('Pagadas', $_POST['Desde'], $_POST['Hasta']);
     }
 
     function cargarComprasNoPagadas(){
         $compra = new compra();
-        echo $compra->cargarComprasNoPagadas($_POST['Desde'], $_POST['Hasta']);
+        echo $compra->cargarCompras('Pendientes', $_POST['Desde'], $_POST['Hasta']);
+    }
+
+    function cargarAmbasCompras(){
+        $compra = new compra();
+        echo $compra->cargarCompras('Ambas', $_POST['Desde'], $_POST['Hasta']);
     }
 
     function infoCompra(){

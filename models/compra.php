@@ -19,37 +19,27 @@ class compra {
         }
     }
 
-    public function cargarComprasPagadas($Desde, $Hasta){
-        try{
-            $query = $this->connection->prepare("call ComprasPagadas(?,?)");
-            $query->bind_param('ss',$Desde, $Hasta);
-            if($query->execute()){
-                $compras = [];
-                $result = $query->get_result();
-                while($row = $result->fetch_array()){
-                    $compras[] = array('idCompra' => $row['idCompra'],'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Pagada' => $row['Pagada'],'Fecha' => $row['Fecha'], 'Imagen' => base64_encode($this->obtenerImagen($row['idImagen'])));
-                }
-                return json_encode($compras);
-            }
-        }catch(Exception $e){
-            return json_encode($e->getMessage());
+    public function cargarCompras($Tipo, $Desde, $Hasta){
+        $query = null;
+        switch ($Tipo){
+            case 'Pagadas':
+                $query = $this->connection->prepare("call ComprasPagadas(?,?)");
+                break;
+            case 'Pendientes':
+                $query = $this->connection->prepare("call ComprasPendientes(?,?)");
+                break;
+            case 'Ambas':
+                $query = $this->connection->prepare("call TodasCompras(?,?)");
+                break;
         }
-    }
-
-    public function cargarComprasNoPagadas($Desde, $Hasta){
-        try{
-            $query = $this->connection->prepare("call ComprasPendientes(?,?)");
-            $query->bind_param('ss',$Desde, $Hasta);
-            if($query->execute()){
-                $compras = [];
-                $result = $query->get_result();
-                while($row = $result->fetch_array()){
-                    $compras[] = array('idCompra' => $row['idCompra'], 'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Pagada' => $row['Pagada'],'Fecha' => $row['Fecha'], 'Imagen' => base64_encode($this->obtenerImagen($row['idImagen'])));
-                }
-                return json_encode($compras);
+        $query->bind_param('ss',$Desde, $Hasta);
+        if($query->execute()){
+            $compras = [];
+            $result = $query->get_result();
+            while($row = $result->fetch_array()){
+                $compras[] = array('idCompra' => $row['idCompra'],'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Pagada' => $row['Pagada'],'Fecha' => $row['Fecha'], 'Imagen' => base64_encode($this->obtenerImagen($row['idImagen'])));
             }
-        }catch(Exception $e){
-            return json_encode($e->getMessage());
+            return json_encode($compras);
         }
     }
 

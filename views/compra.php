@@ -32,13 +32,17 @@ require_once  'views/layouts/sidenav.php';
             </div>
             <div class="row">
                 <div class="col s12 m3">
-                    <p><label><input type="radio" name="Tipo" checked id="Ambos"><span>Ambos</span></label></p>
+                    <p><label><input type="radio" name="Tipo" id="Ambos" checked><span>Ambos</span></label></p>
                     <p><label><input type="radio" name="Tipo" id="Efect"><span>Efectivo</span></label></p>
                     <p><label><input type="radio" name="Tipo" id="Depos"><span>Banco</span></label></p>
                 </div>
-                <div class="col s12 m9">
-                    <a class="btn-flat waves-effect waves-green" id="FiltrarPendientes"><i class="material-icons left">attach_money</i>Filtra Pendientes</a>
-                    <a class="btn-flat waves-effect waves-green" id="FiltrarPagados"><i class="material-icons left">done_all</i>Filtrar Pagadas</a>
+                <div class="col s12 m3">
+                    <p><label><input type="radio" name="Estado" id="Todas"><span>Ambas</span></label></p>
+                    <p><label><input type="radio" name="Estado" id="Pend" checked><span>Pendientes</span></label></p>
+                    <p><label><input type="radio" name="Estado" id="Pagada"><span>Pagadas</span></label></p>
+                </div>
+                <div class="col s12 m6">
+                    <a class="btn-flat waves-effect waves-green" id="Filtrar"><i class="material-icons left">arrow_downward</i>Filtrar</a>
                 </div>
             </div>
         </div>
@@ -46,61 +50,27 @@ require_once  'views/layouts/sidenav.php';
 </ul>
 <div class="row">
     <div class="col s12">
-        <ul class="tabs">
-            <li class="tab col s6"><a href="#pendientes">Pendientes</a></li>
-            <li class="tab col s6"><a href="#pagadas">Pagadas</a></li>
-        </ul>
+        <div id="compras" class="col s12">
+            <div id="detallesCompras"></div>
+            <table class="responsive-table">
+                <thead>
+                <tr>
+                    <th>Empleado</th>
+                    <th>Proveedor</th>
+                    <th>Referencia</th>
+                    <th>Total</th>
+                    <th>Método de pago</th>
+                    <th>Fecha</th>
+                    <th>Comprobante</th>
+                    <th></th>
+                </tr>
+                <tbody id="tablaCompras">
+
+                </tbody>
+                </thead>
+            </table>
+        </div>
     </div>
 </div>
-<div id="pendientes" class="col s12">
-    <div id="detallesPendientes">
-
-    </div>
-    <table class="responsive-table">
-        <thead>
-        <tr>
-            <th>Empleado</th>
-            <th>Proveedor</th>
-            <th>Referencia</th>
-            <th>Total</th>
-            <th>Método de pago</th>
-            <th>Fecha</th>
-            <th>Comprobante</th>
-            <th></th>
-        </tr>
-        <tbody id="comprasNoPagadas">
-
-        </tbody>
-        </thead>
-    </table>
-</div>
-<div id="pagadas" class="col s12">
-    <div id="detallesPagadas">
-
-    </div>
-    <table class="responsive-table">
-        <thead>
-        <tr>
-            <th>Empleado</th>
-            <th>Proveedor</th>
-            <th>Referencia</th>
-            <th>Total</th>
-            <th>Método de pago</th>
-            <th>Fecha</th>
-            <th>Comprobante</th>
-            <th></th>
-        </tr>
-        <tbody id="comprasPagadas">
-
-        </tbody>
-        </thead>
-    </table>
-</div>
-<ul id='metodosPago' class='dropdown-content'>
-    <li><a class="metodosPago">Efectivo</a></li>
-    <li><a class="metodosPago">Banco</a></li>
-    <li class="divider" tabindex="-1"></li>
-    <li><a class="metodosPago">Sin pagar</a></li>
-</ul>
-<script src="<?= base_url ?>js/compra.js"></script>
 <?php include_once 'views/layouts/footer.php'; ?>
+<script src="<?= base_url ?>js/compra.js"></script>

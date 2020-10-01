@@ -209,7 +209,7 @@ require_once 'views/layouts/sidenav.php';
                 </div>
             </form>
         </div>
-        <div id="exterior">
+        <!-- <div id="exterior">
             <form method="post" id="RecargaExterna">
                 <div class="card-panel">
                     <div class="row">
@@ -293,7 +293,7 @@ require_once 'views/layouts/sidenav.php';
                     </div>
                 </div>
             </form>
-        </div>
+        </div> -->
         <div id="modal1" class="modal">
             <div class="modal-content">
                 <h4 id="ModalHeader">Operación terminada</h4>

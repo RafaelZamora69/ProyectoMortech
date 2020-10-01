@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    var datos;
     const today = new Date();
     var elems = document.getElementById('Desde');
     const Desde = M.Datepicker.init(elems, {
@@ -19,15 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
     var elems = document.getElementById('autocompleteProveedor');
     const autocompleteProv = M.Autocomplete.init(elems);
     initComponents();
-    cargarComprasPagadas();
-    cargarComprasNoPagadas();
-    document.getElementById('FiltrarPendientes').addEventListener('click', () => {
-        limpiarRegistros('Pendientes');
-        cargarComprasNoPagadas();
-    })
-    document.getElementById('FiltrarPagados').addEventListener('click', () => {
-        limpiarRegistros('Pagadas');
-        cargarComprasPagadas();
+    cargarCompras();
+    document.getElementById('Filtrar').addEventListener('click', () => {
+        limpiarRegistros();
+        cargarCompras();
     });
     document.body.addEventListener('click', (e) => {
         //Obtener el ID de compra que se cambiará la información de pago
@@ -66,10 +62,44 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    function cargarComprasPagadas() {
+    function cargarCompras() {
+        var res;
         const data = new FormData();
         data.append('Desde', document.getElementById('Desde').value);
         data.append('Hasta', document.getElementById('Hasta').value);
+        if(document.getElementById('Pend').checked){
+            cargarComprasPendientes(data);
+        } else if(document.getElementById('Pagada').checked){
+            cargarComprasPagadas(data);
+        } else {
+            cargarAmbasCompras(data);
+        }
+    }
+
+    function cargarComprasPendientes(data){
+        fetch('cargarComprasNoPagadas',{
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res => {
+                if(res.length > 0) {
+                    if(document.getElementById('autocompleteEmpleado').value != ''){
+                        res = res.filter(x => x.Nombre == document.getElementById('autocompleteEmpleado').value);
+                    }
+                    if(document.getElementById('autocompleteProveedor').value != ''){
+                        res = res.filter(x => x.Proveedor == document.getElementById('autocompleteProveedor').value);
+                    }
+                    document.getElementById('detallesCompras').innerHTML = `
+                        <p>Registros: ${res.length}</p>
+                        <p>Total: $${total(res)}</p>
+                    `;
+                    mostrarDatos(res);
+                }
+            });
+    }
+
+    function cargarComprasPagadas(data){
         fetch('cargarComprasPagadas',{
             method: 'POST',
             body: data
@@ -86,35 +116,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(!document.getElementById('Ambos').checked){
                         document.getElementById('Efect').checked ? res = res.filter(x => x.Pagada == 'Efectivo') : res = res.filter(x => x.Pagada == 'Banco')
                     }
-                    document.getElementById('detallesPagadas').innerHTML = `
+                    document.getElementById('detallesCompras').innerHTML = `
                         <p>Registros: ${res.length}</p>
                         <p>Efectivo: $${total(res.filter(x => x.Pagada == 'Efectivo'))}</p>
                         <p>Banco: $${total(res.filter(x => x.Pagada == 'Banco'))}</p>
                         <p>Total: $${total(res)}</p>
                     `;
-                    for (i in res) {
-                        document.getElementById('comprasPagadas').innerHTML += `
-                        <tr>
-                            <td>${res[i].Nombre}</td>
-                            <td>${res[i].Proveedor}</td>
-                            <td><p class="truncate">${res[i].Referencia}</p></td>
-                            <td>${res[i].Total}</td>
-                            <td><a class='dropdown-trigger btn' data-target='metodosPago' id="${res[i].idCompra}">${res[i].Pagada}</a></td>
-                            <td>${res[i].Fecha}</td>
-                            <td><img src="data:image/png;base64,${res[i].Imagen}" class="responsive-img materialboxed" width="100px" data-caption="Comprobante compra #${res[i].idCompra}"></td>
-                            <td><a id="actualizar-${res[i].idCompra}" class="btn waves-effect waves-light yellow black-text actualizarCompra">Actualizar</a></td>
-                        </tr>
-                    `;
-                    }
+                    mostrarDatos(res);
                 }
             });
     }
 
-    function cargarComprasNoPagadas() {
-        const data = new FormData();
-        data.append('Desde', document.getElementById('Desde').value);
-        data.append('Hasta', document.getElementById('Hasta').value);
-        fetch('cargarComprasNoPagadas',{
+    function cargarAmbasCompras(data){
+        fetch('cargarAmbasCompras',{
             method: 'POST',
             body: data
         })
@@ -127,51 +141,55 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(document.getElementById('autocompleteProveedor').value != ''){
                         res = res.filter(x => x.Proveedor == document.getElementById('autocompleteProveedor').value);
                     }
-                    document.getElementById('detallesPendientes').innerHTML = `
-                        <p>Registros: ${res.length}</p>
-                        <p>Total: $${total(res)}</p>
-                    `;
-                    for (i in res) {
-                        document.getElementById('comprasNoPagadas').innerHTML += `
-                        <tr>
-                            <td>${res[i].Nombre}</td>
-                            <td>${res[i].Proveedor}</td>
-                            <td><p class="truncate">${res[i].Referencia}</p></td>
-                            <td>${res[i].Total}</td>
-                            <td><a class='dropdown-trigger btn' data-target='metodosPago' id="${res[i].idCompra}">${res[i].Pagada}</a></td>
-                            <td>${res[i].Fecha}</td>
-                            <td><img src="data:image/png;base64,${res[i].Imagen}" class="responsive-img materialboxed" width="100px" data-caption="Comprobante compra #${res[i].idCompra}"></td>
-                            <td><a id="actualizar-${res[i].idCompra}" class="btn waves-effect waves-light yellow black-text actualizarCompra">Actualizar</a></td>
-                        </tr>
-                    `;
+                    if(!document.getElementById('Ambos').checked){
+                        document.getElementById('Efect').checked ? res = res.filter(x => x.Pagada == 'Efectivo') : res = res.filter(x => x.Pagada == 'Banco');
                     }
+                    document.getElementById('detallesCompras').innerHTML = `
+                        <p>Registros: ${res.length}</p>
+                        <p>Efectivo: $${total(res.filter(x => x.Pagada == 'Efectivo'))}</p>
+                        <p>Banco: $${total(res.filter(x => x.Pagada == 'Banco'))}</p>
+                        <p>Total: $${total(res)}</p>
+                        <p>Pendiente: $${total(res.filter(x => x.Pagada == 'Sin pagar'))}</p>
+                    `;
+                    mostrarDatos(res);
                 }
-                loadComponents();
             });
     }
 
-    function loadComponents(){
+    function mostrarDatos(res){
+        for(i in res){
+            document.getElementById('tablaCompras').innerHTML += `
+                <tr>
+                    <td>${res[i].Nombre}</td>
+                    <td>${res[i].Proveedor}</td>
+                    <td><p class="truncate">${res[i].Referencia}</p></td>
+                    <td>${res[i].Total}</td>
+                    <td><a class='dropdown-trigger btn' data-target='metodosPago' id="${res[i].idCompra}">${res[i].Pagada}</a></td>
+                    <td>${res[i].Fecha}</td>
+                    <td><img src="data:image/png;base64,${res[i].Imagen}" class="responsive-img materialboxed" width="100px" data-caption="Comprobante compra #${res[i].idCompra}"></td>
+                    <td><a id="actualizar-${res[i].idCompra}" class="btn waves-effect waves-light yellow black-text actualizarCompra">Actualizar</a></td>
+                </tr>
+            `;
+        }
+        document.getElementById('tablaCompras').innerHTML += `
+            <ul id='metodosPago' class='dropdown-content'>
+                <li><a class="metodosPago">Efectivo</a></li>
+                <li><a class="metodosPago">Banco</a></li>
+                <li class="divider" tabindex="-1"></li>
+                <li><a class="metodosPago">Sin pagar</a></li>
+            </ul>
+        `;
         //Materialboxed
         var elems = document.querySelectorAll('.materialboxed');
         var instances = M.Materialbox.init(elems);
         //Dropdown
-        var elems = document.querySelectorAll('.dropdown-trigger');
-        console.log(elems);
-        var instances = M.Dropdown.init(elems);
+        var elem = document.querySelectorAll('.dropdown-trigger');
+        var instances = M.Dropdown.init(elem);
     }
 
-    function limpiarRegistros(opcion){
-        switch(opcion){
-            case 'Pagadas':
-                while(document.getElementById('comprasPagadas').firstChild){
-                    document.getElementById('comprasPagadas').removeChild(document.getElementById('comprasPagadas').firstChild);
-                }
-                break;
-            case 'Pendientes':
-                while(document.getElementById('comprasNoPagadas').firstChild){
-                    document.getElementById('comprasNoPagadas').removeChild(document.getElementById('comprasNoPagadas').firstChild);
-                }
-                break;
+    function limpiarRegistros(){
+        while(document.getElementById('tablaCompras').firstChild){
+            document.getElementById('tablaCompras').removeChild(document.getElementById('tablaCompras').firstChild);
         }
     }
 

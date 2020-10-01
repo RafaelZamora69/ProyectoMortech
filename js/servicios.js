@@ -141,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function RecargaSaldo(e) {
         e.preventDefault();
+        var table = document.getElementById("table");
         document.getElementById("progress").style.visibility = "visible";
         let pagado = document.getElementsByClassName('pagado');
         let form = document.getElementById('FormSaldo');
@@ -158,7 +159,6 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                var table = document.getElementById("table");
                 while (table.firstChild) {
                     table.removeChild(table.firstChild);
                 }
