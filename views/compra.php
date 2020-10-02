@@ -6,54 +6,71 @@ require_once 'views/layouts/header.php';
 require_once  'views/layouts/navbar.php';
 require_once  'views/layouts/sidenav.php';
 ?>
-<h2>Compras</h2>
+<ul class="collapsible">
+    <li>
+        <div class="collapsible-header"><i class="material-icons">filter_alt</i>Filtro</div>
+        <div class="collapsible-body">
+            <div class="row">
+                <div class="col s12 m6">
+                    <div class="input-field">
+                        <input type="text" class="datepicker" id="Desde"><label for="">Desde</label></div>
+                </div>
+                <div class="col s12 m6">
+                    <div class="input-field">
+                        <input type="text" class="datepicker" id="Hasta"><label for="">Hasta</label></div>
+                </div>
+                <div class="col s12 m6">
+                    <div class="input-field">
+                        <input type="text" class="autocomplete" id="autocompleteEmpleado"><label for="autocompleteEmpleado">Empleado</label>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <div class="input-field">
+                        <input type="text" class="autocomplete" id="autocompleteProveedor"><label for="autocompleteProveedor">Proveedor</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m3">
+                    <p><label><input type="radio" name="Tipo" id="Ambos" checked><span>Ambos</span></label></p>
+                    <p><label><input type="radio" name="Tipo" id="Efect"><span>Efectivo</span></label></p>
+                    <p><label><input type="radio" name="Tipo" id="Depos"><span>Banco</span></label></p>
+                </div>
+                <div class="col s12 m3">
+                    <p><label><input type="radio" name="Estado" id="Todas"><span>Ambas</span></label></p>
+                    <p><label><input type="radio" name="Estado" id="Pend" checked><span>Pendientes</span></label></p>
+                    <p><label><input type="radio" name="Estado" id="Pagada"><span>Pagadas</span></label></p>
+                </div>
+                <div class="col s12 m6">
+                    <a class="btn-flat waves-effect waves-green" id="Filtrar"><i class="material-icons left">arrow_downward</i>Filtrar</a>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
 <div class="row">
     <div class="col s12">
-        <h6>Pendientes</h6>
-        <table class="responsive-table">
-            <thead>
-            <tr>
-                <th>Empleado</th>
-                <th>Proveedor</th>
-                <th>Referencia</th>
-                <th>Total</th>
-                <th>Fecha</th>
-                <th></th>
-            </tr>
-            <tbody id="comprasNoPagadas">
+        <div id="compras" class="col s12">
+            <div id="detallesCompras"></div>
+            <table class="responsive-table">
+                <thead>
+                <tr>
+                    <th>Empleado</th>
+                    <th>Proveedor</th>
+                    <th>Referencia</th>
+                    <th>Total</th>
+                    <th>Método de pago</th>
+                    <th>Fecha</th>
+                    <th>Comprobante</th>
+                    <th></th>
+                </tr>
+                <tbody id="tablaCompras">
 
-            </tbody>
-            </thead>
-        </table>
+                </tbody>
+                </thead>
+            </table>
+        </div>
     </div>
 </div>
-<div class="row">
-    <div class="col s12">
-        <h6>Pagadas</h6>
-        <table class="responsive-table">
-            <thead>
-            <tr>
-                <th>Empleado</th>
-                <th>Proveedor</th>
-                <th>Referencia</th>
-                <th>Total</th>
-                <th>Fecha</th>
-                <th></th>
-            </tr>
-            <tbody id="comprasPagadas">
-
-            </tbody>
-            </thead>
-        </table>
-    </div>
-</div>
-<div class="modal" id="modalCompra">
-    <div class="modal-content" id="contenidoCompra">
-
-    </div>
-    <div class="modal-footer">
-        <a class="btn waves-effect waves-light green white-text" id="actualizarCompra">Guardar</a>
-    </div>
-</div>
-<script src="<?= base_url ?>js/compra.js"></script>
 <?php include_once 'views/layouts/footer.php'; ?>
+<script src="<?= base_url ?>js/compra.js"></script>

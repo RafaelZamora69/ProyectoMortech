@@ -20,6 +20,9 @@ require_once 'views/layouts/sidenav.php';
                 <li class="tab col s4"><a href="#saldo">Saldo</a></li>
                 <li class="tab col s4"><a href="#otro">Servicios</a></li>
                 <li class="tab col s4"><a href="#compras">Compras</a></li>
+                <?php if($_SESSION['identity']['Jerarquia'] == 'Administrador') : ?>
+                    <li class="tab col s4"><a href="#exterior">Exterior</a></li>
+                <?php endif ?>
             </ul>
         </div>
         <div id="saldo" class="col s12">
@@ -206,6 +209,91 @@ require_once 'views/layouts/sidenav.php';
                 </div>
             </form>
         </div>
+        <!-- <div id="exterior">
+            <form method="post" id="RecargaExterna">
+                <div class="card-panel">
+                    <div class="row">
+                        <div class="col s12 m6">
+                            <div class="input-field">
+                                <input name="Name" type="text" class="autocomplete" id="autocompleteNameExterna" required>
+                                <label for="Name">Cliente</label>
+                            </div>
+                        </div>
+                        <div class="col s12 m6">
+                            <div class="input-field" id="chips">
+                                <input type="number">
+                            </div>
+                            <div class="input-field">
+                                <a class="btn waves-effect green white-text" id="Agregar">Agregar</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6">
+                            <div class="input-field">
+                                <a class='dropdown-trigger btn' data-target='Operadoras' id="OperadorasTrigger">Unefon</a>
+                                <ul id="Operadoras" class="dropdown-content">
+                                    <li><a>Unefon</a></li>
+                                    <li><a>AT&T</a></li>
+                                    <li><a>Telcel</a></li>
+                                    <li><a>Movistar</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col s6 m6">
+                            <div class="input-field">
+                                <select name="Monto" id="Monto">
+                                    <option value="10">$ 10</option>
+                                    <option value="20">$ 20</option>
+                                    <option value="30">$30</option>
+                                    <option value="50">$ 50</option>
+                                    <option value="70">$ 70</option>
+                                    <option value="100" selected>$ 100</option>
+                                    <option value="150">$ 150</option>
+                                    <option value="200">$ 200</option>
+                                    <option value="300">$ 300</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s4 m4">
+                            <div class="input-field">
+                                <input type="number" id="PagoUsd" name="PagoUsd">
+                                <label for="Pago">Usd</label>
+                            </div>
+                        </div>
+                        <div class="col s4 m4">
+                            <div class="input-field">
+                                <input type="number" id="PagoMxn" name="PagoMxn">
+                                <label for="Pago">Mxn</label>
+                            </div>
+                        </div>
+                        <div class="col s4">
+                            <p>
+                                <label>
+                                    <input type="checkbox" class="pagado" checked="checked">
+                                    <span>Pagado</span>
+                                </label>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="input-field">
+                                <textarea name="Nota" id="Nota" class="materialize-textarea"></textarea>
+                                <label for="Nota">Observaciones</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6">
+                            <input type="submit" id="CargarVentas" value="Enviar" class="btn-flat waves-effect waves-red">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div> -->
         <div id="modal1" class="modal">
             <div class="modal-content">
                 <h4 id="ModalHeader">Operación terminada</h4>

@@ -39,8 +39,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const autoPro = document.getElementById('autocompleteProveedores');
     const Proveedores = M.Autocomplete.init(autoPro);
     let count = 0;
+    //Clientes
     var autocom = document.getElementById('autocompleteName');
     var clientesSaldo = M.Autocomplete.init(autocom);
+    var autocom = document.getElementById('autocompleteNameExterna');
+    var clientesSaldoExterna = M.Autocomplete.init(autocom);
+    //Numeros de teléfono
     var chips = document.getElementById('chips');
     var telefonos = M.Chips.init(chips, {
             placeholder: "Numeros",
@@ -79,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         var data = new FormData(document.getElementById('FormCompra'));
         data.append('Ticket', document.getElementById('Ticket').files[0]);
-        data.append('Pagada', document.getElementById('CompraPagada').checked == true ? 1 : 0);
+        data.append('Pagada', document.getElementById('CompraPagada').checked == true ? 'Efectivo' : 'Sin pagar');
         fetch('Compra', {
             method: 'POST',
             body: data
@@ -116,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 clientesSaldo.updateData(data);
                 clientesServicio.updateData(data);
+                clientesSaldoExterna.updateData(data);
             })
             .catch(function (e) {
             });
@@ -136,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function RecargaSaldo(e) {
         e.preventDefault();
+        var table = document.getElementById("table");
         document.getElementById("progress").style.visibility = "visible";
         let pagado = document.getElementsByClassName('pagado');
         let form = document.getElementById('FormSaldo');
@@ -153,7 +159,6 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                var table = document.getElementById("table");
                 while (table.firstChild) {
                     table.removeChild(table.firstChild);
                 }
