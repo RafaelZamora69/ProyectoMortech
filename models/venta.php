@@ -63,6 +63,18 @@ class venta
     private function guardarImagen($idEmpleado){
         $extensiones = array('image/jpeg', 'image/jpg', 'image/png');
         if(in_array($_FILES['Ticket']['type'], $extensiones)){
+            $image = null;
+            switch ($_FILES['Ticket']['type']){
+                case 'image/jpg':
+                case 'image/jpeg':
+                    $image = imagecreatefromjpeg($_FILES['Ticket']['tmp_name']);
+                    break;
+                case 'image/png':
+                    $image = imagecreatefrompng($_FILES['Ticket']['tmp_name']);
+                    break;
+
+            }
+            imagejpeg($image, $_FILES['Ticket']['tmp_name'],30);
             $image = addslashes(file_get_contents($_FILES['Ticket']['tmp_name']));
             if($this->connection->query("insert into images(Image, idEmpleado) values ('{$image}', '{$idEmpleado}')")){
                 return true;

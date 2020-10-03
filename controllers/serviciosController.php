@@ -70,4 +70,9 @@ class serviciosController
         $venta = new venta();
         echo $venta->getProveedores();
     }
+
+    public function comprimirImagen(){
+        $venta = new venta();
+        $venta->comprimirImagen();
+    }
 }
