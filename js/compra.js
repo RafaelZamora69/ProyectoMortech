@@ -38,6 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if(e.target.classList.contains('actualizarCompra')){
             actualizarCompra(e.target.id.replace('actualizar-',''));
         }
+        if(e.target.classList.contains('descargarImagen')){
+            descargarImagen(e.target.id.replace('img-',''));
+        }
     });
     //TODO implementar indice en la bd compra => fecha
 
@@ -166,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${res[i].Total}</td>
                     <td><a class='dropdown-trigger btn' data-target='metodosPago' id="${res[i].idCompra}">${res[i].Pagada}</a></td>
                     <td>${res[i].Fecha}</td>
-                    <td><img src="data:image/png;base64,${res[i].Imagen}" class="responsive-img materialboxed" width="100px" data-caption="Comprobante compra #${res[i].idCompra}"></td>
+                    <td id="img-${res[i].idCompra}"><a href="#!" class="descargarImagen" id="img-${res[i].idCompra}">Descargar comprobante</a></td>
                     <td><a id="actualizar-${res[i].idCompra}" class="btn waves-effect waves-light yellow black-text actualizarCompra">Actualizar</a></td>
                 </tr>
             `;
@@ -185,6 +188,26 @@ document.addEventListener('DOMContentLoaded', () => {
         //Dropdown
         var elem = document.querySelectorAll('.dropdown-trigger');
         var instances = M.Dropdown.init(elem);
+    }
+
+    function descargarImagen(idCompra){
+        const data = new FormData();
+        data.append('idCompra', idCompra);
+        fetch('descargarImagen',{
+            method:'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res => {
+                while(document.getElementById('img-'+idCompra).firstChild){
+                    document.getElementById('img-'+idCompra).removeChild(document.getElementById('img-'+idCompra).firstChild);
+                }
+                document.getElementById('img-'+idCompra).innerHTML += `
+                    <img src="data:image/png;base64,${res.Imagen}" class="responsive-img materialboxed" width="100px" data-caption="Comprobante compra #${idCompra}">
+                `;
+                var elems = document.querySelectorAll('.materialboxed');
+                var instances = M.Materialbox.init(elems);
+            });
     }
 
     function limpiarRegistros(){
