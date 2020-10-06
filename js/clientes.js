@@ -118,6 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('ventasCliente').innerHTML += `
                         <tr>
                             <td>${res[i].Empleado}</td>
+                            <td>${res[i].Operadora}</td>
                             <td>${res[i].Numero}</td>
                             <td>${res[i].Saldo}</td>
                             <td>$${ingreso}</td>
@@ -147,6 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('creditoCliente').innerHTML += `
                         <tr>
                             <td>${res[i].Empleado}</td>
+                            <td>${res[i].Operadora}</td>
                             <td>${res[i].idVenta}</td>
                             <td>${res[i].Numero}</td>
                             <td>${res[i].Saldo}</td>

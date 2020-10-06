@@ -47,4 +47,9 @@ class compraController {
         echo $venta->getProveedores();
     }
 
+    function descargarImagen(){
+        $venta = new compra();
+        echo $venta->obtenerIdImagen($_POST['idCompra']);
+    }
+
 }

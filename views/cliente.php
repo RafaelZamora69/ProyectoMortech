@@ -43,6 +43,7 @@ require_once 'views/layouts/sidenav.php';
                 <thead>
                 <tr>
                     <th>Empleado</th>
+                    <th>Operadora</th>
                     <th>Teléfono</th>
                     <th>Monto</th>
                     <th>Ingreso</th>
@@ -59,6 +60,7 @@ require_once 'views/layouts/sidenav.php';
                 <thead>
                 <tr>
                     <th>Empleado</th>
+                    <th>Operadora</th>
                     <th>N° Venta</th>
                     <th>Teléfono</th>
                     <th>Monto</th>

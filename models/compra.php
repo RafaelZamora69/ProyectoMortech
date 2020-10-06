@@ -19,6 +19,18 @@ class compra {
         }
     }
 
+    public function obtenerIdImagen($idCompra){
+        $query = $this->connection->prepare("select idImagen from compra where idCompra = ?");
+        $query->bind_param('i',$idCompra);
+        if($query->execute()){
+            $result = $query->get_result();
+            $idImagen = null;
+            while($row = $result->fetch_assoc()){
+                return json_encode(array('Imagen' => base64_encode($this->obtenerImagen($row['idImagen']))));
+            }
+        }
+    }
+
     public function cargarCompras($Tipo, $Desde, $Hasta){
         $query = null;
         switch ($Tipo){
