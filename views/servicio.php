@@ -20,7 +20,7 @@ require_once 'views/layouts/sidenav.php';
                 <li class="tab col s4"><a href="#saldo">Saldo</a></li>
                 <li class="tab col s4"><a href="#otro">Servicios</a></li>
                 <li class="tab col s4"><a href="#compras">Compras</a></li>
-                <?php if($_SESSION['identity']['Jerarquia'] == 'Administrador') : ?>
+                <?php if(strcmp($_SESSION['identity']['Jerarquia'], 'Administrador') == 0) : ?>
                     <li class="tab col s4"><a href="#exterior">Exterior</a></li>
                 <?php endif ?>
             </ul>
@@ -209,7 +209,8 @@ require_once 'views/layouts/sidenav.php';
                 </div>
             </form>
         </div>
-        <!-- <div id="exterior">
+        <?php if(strcmp($_SESSION['identity']['Jerarquia'], 'Administrador') == 0) : ?>
+        <div id="exterior">
             <form method="post" id="RecargaExterna">
                 <div class="card-panel">
                     <div class="row">
@@ -220,18 +221,18 @@ require_once 'views/layouts/sidenav.php';
                             </div>
                         </div>
                         <div class="col s12 m6">
-                            <div class="input-field" id="chips">
+                            <div class="input-field" id="chipsExterna">
                                 <input type="number">
                             </div>
                             <div class="input-field">
-                                <a class="btn waves-effect green white-text" id="Agregar">Agregar</a>
+                                <a class="btn waves-effect green white-text" id="AgregarExterna">Agregar</a>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s6">
                             <div class="input-field">
-                                <a class='dropdown-trigger btn' data-target='Operadoras' id="OperadorasTrigger">Unefon</a>
+                                <a class='dropdown-trigger btn' data-target='Operadoras' id="OperadorasTriggerExterna">Unefon</a>
                                 <ul id="Operadoras" class="dropdown-content">
                                     <li><a>Unefon</a></li>
                                     <li><a>AT&T</a></li>
@@ -242,7 +243,7 @@ require_once 'views/layouts/sidenav.php';
                         </div>
                         <div class="col s6 m6">
                             <div class="input-field">
-                                <select name="Monto" id="Monto">
+                                <select name="Monto" id="MontoExterna">
                                     <option value="10">$ 10</option>
                                     <option value="20">$ 20</option>
                                     <option value="30">$30</option>
@@ -272,7 +273,7 @@ require_once 'views/layouts/sidenav.php';
                         <div class="col s4">
                             <p>
                                 <label>
-                                    <input type="checkbox" class="pagado" checked="checked">
+                                    <input type="checkbox" class="pagadoExterna" checked="checked">
                                     <span>Pagado</span>
                                 </label>
                             </p>
@@ -281,19 +282,20 @@ require_once 'views/layouts/sidenav.php';
                     <div class="row">
                         <div class="col s12">
                             <div class="input-field">
-                                <textarea name="Nota" id="Nota" class="materialize-textarea"></textarea>
+                                <textarea name="Nota" id="NotaExterna" class="materialize-textarea"></textarea>
                                 <label for="Nota">Observaciones</label>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s6">
-                            <input type="submit" id="CargarVentas" value="Enviar" class="btn-flat waves-effect waves-red">
+                            <input type="submit" id="RegistrarExterna" value="Enviar" class="btn-flat waves-effect waves-red externa">
                         </div>
                     </div>
                 </div>
             </form>
-        </div> -->
+        </div>
+        <?php endif ?>
         <div id="modal1" class="modal">
             <div class="modal-content">
                 <h4 id="ModalHeader">Operación terminada</h4>

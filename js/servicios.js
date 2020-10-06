@@ -50,6 +50,11 @@ document.addEventListener('DOMContentLoaded', function () {
             placeholder: "Numeros",
             secondaryPlaceholder: "+Numero"
         });
+    var chipsExterna = document.getElementById('chipsExterna');
+    var telefonosExterna = M.Chips.init(chipsExterna, {
+        placeholder: "Numeros",
+        secondaryPlaceholder: "+Numero"
+    });
     var autocom = document.getElementById('autocompleteCliente');
     var clientesServicio = M.Autocomplete.init(autocom);
     //Modal de aviso
@@ -66,11 +71,17 @@ document.addEventListener('DOMContentLoaded', function () {
     formSaldo.addEventListener('submit', RecargaSaldo);
     formServicio.addEventListener('submit', VentaServicio);
     chips.addEventListener('input', agregarNumero);
+    chipsExterna.addEventListener('input',agregarNumeroExterno);
     cargarChips();
     document.getElementById('Agregar').addEventListener('click', () => {
         telefonos.addChip({ tag: value[0].value });
         count = 0;
         value[0].value = '';
+    });
+    document.getElementById('AgregarExterna').addEventListener('click', () => {
+        telefonosExterna.addChip({ tag: value[1].value });
+        count = 0;
+        value[1].value = '';
     });
     document.getElementById('registrarCompra').addEventListener('click', (e) => {
         registrarCompra(e);
@@ -127,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function agregarNumero(e) {
-        if (e.inputType == 'deleteContentBackward' && count >= 0) {
+        if (e.inputType === 'deleteContentBackward' && count >= 0) {
             count--;
         } else if (Number.isInteger(parseInt(e.data))) {
             count++;
@@ -139,20 +150,39 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function agregarNumeroExterno(e) {
+        if (e.inputType === 'deleteContentBackward' && count >= 0) {
+            count--;
+        } else if (Number.isInteger(parseInt(e.data))) {
+            count++;
+            if (count == 10) {
+                telefonosExterna.addChip({ tag: value[1].value });
+                count = 0;
+                value[1].value = '';
+            }
+        }
+    }
+
     function RecargaSaldo(e) {
         e.preventDefault();
         var table = document.getElementById("table");
         document.getElementById("progress").style.visibility = "visible";
-        let pagado = document.getElementsByClassName('pagado');
-        let form = document.getElementById('FormSaldo');
-        var datos = new FormData(form);
-        let nombre = document.getElementById("Name");
-        let numeros = document.getElementsByClassName('chips')[0].M_Chips.chipsData;
-        datos.append('Operadora', document.getElementById("OperadorasTrigger").value);
-        datos.append('numeros', JSON.stringify(numeros));
-        datos.append('Vendedor', nombre.innerText);
-        datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTrigger").value));
-        pagado[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
+        if(e.classList.contains('externa')){
+            const data = new FormData(document.getElementById('RecargaExterna'));
+            data.append('Numeros', JSON.stringify(document.getElementsByClassName('chips')[1].M_Chips.chipsData));
+            document.getElementById('pagadoExterna').checked ? data.append('Pagado', 1) : data.append('Pagado', 0);
+        } else {
+            let pagado = document.getElementsByClassName('pagado');
+            let form = document.getElementById('FormSaldo');
+            var datos = new FormData(form);
+            let nombre = document.getElementById("Name");
+            let numeros = ;
+            datos.append('Operadora', document.getElementById("OperadorasTrigger").value);
+            datos.append('numeros', JSON.stringify(document.getElementsByClassName('chips')[0].M_Chips.chipsData));
+            datos.append('Vendedor', nombre.innerText);
+            datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTrigger").value));
+            pagado[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
+        }
         fetch('recargaSaldo', {
             method: 'POST',
             body: datos
