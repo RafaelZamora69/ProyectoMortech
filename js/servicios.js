@@ -30,10 +30,12 @@ document.addEventListener('DOMContentLoaded', function () {
     //Seleccionar operadoras
     var drop = document.getElementById('OperadorasTrigger');
     var operadoras = M.Dropdown.init(drop);
+    const dropExterna = document.getElementById('OperadorasTriggerExterna');
+    const operadorasExterna = M.Dropdown.init(dropExterna);
     document.getElementById('Operadoras').addEventListener('click', (e) => {
         document.getElementById('OperadorasTrigger').value = e.target.text;
         drop.textContent = e.target.text;
-       cargarMonto(e.target.text);
+       cargarMonto(e.target.text, 'normal');
     });
     //Proveedores
     const autoPro = document.getElementById('autocompleteProveedores');
@@ -56,17 +58,19 @@ document.addEventListener('DOMContentLoaded', function () {
     var modal = document.getElementById('modal1');
     var modalAviso = M.Modal.init(modal);
     //Números de teléfono
-    var value = document.querySelectorAll('.input');
+    const value = document.getElementById('numeros');
     //Monto a pagar
     var select = document.querySelectorAll('select');
     var montos = M.FormSelect.init(select);
     let formSaldo = document.getElementById('FormSaldo');
     let formServicio = document.getElementById('FormServicio');
-
+    //Empleados
+    const empleados = document.getElementById('empleadoExterno');
+    const empleadosExterna = M.Autocomplete.init(empleados);
     formSaldo.addEventListener('submit', RecargaSaldo);
     formServicio.addEventListener('submit', VentaServicio);
     chips.addEventListener('input', agregarNumero);
-    cargarChips();
+    obtenerEmpleados();
     document.getElementById('Agregar').addEventListener('click', () => {
         telefonos.addChip({ tag: value[0].value });
         count = 0;
@@ -78,12 +82,57 @@ document.addEventListener('DOMContentLoaded', function () {
     //funciones
     ObtenerClientes();
     obtenerProveedores();
-
+    var chipsExterna, telefonosExterna;
+    if(document.getElementById('OperadorasTriggerExterna')){
+        const numeroExterno = document.getElementById('numeroExterno');
+        document.getElementById('OperadorasTriggerExterna').value = 'Unefon';
+        chipsExterna = document.getElementById('chipsExterna');
+        telefonosExterna = M.Chips.init(chipsExterna, {
+            placeholder: "Numeros",
+            secondaryPlaceholder: "+Numero"
+        });
+        document.getElementById('OperadorasExterna').addEventListener('click',(e)=>{
+            console.log('click')
+            document.getElementById('OperadorasTriggerExterna').value = e.target.text;
+            dropExterna.textContent = e.target.text;
+            cargarMonto(e.target.text, 'Externa');
+        });
+        document.getElementById('RecargaExterna').addEventListener('submit',RecargaSaldo);
+        document.getElementById('AgregarExterna').addEventListener('click', () => {
+            telefonosExterna.addChip({ tag: value[0].value });
+            count = 0;
+            value[0].value = '';
+        });
+        chipsExterna.addEventListener('input',agregarNumeroExterno);
+        function agregarNumeroExterno(e) {
+            if (e.inputType === 'deleteContentBackward' && count >= 0) {
+                count--;
+            } else if (Number.isInteger(parseInt(e.data))) {
+                count++;
+                if (count == 10) {
+                    telefonosExterna.addChip({ tag: numeroExterno.value });
+                    count = 0;
+                    numeroExterno.value = '';
+                }
+            }
+        }
+        function obtenerEmpleados() {
+            fetch('obtenerEmpleados')
+                .then(res => res.json())
+                .then(res => {
+                    let data = {};
+                    for (i in res) {
+                        data[res[i]] = null;
+                    }
+                    empleadosExterna.updateData(data);
+                })
+        }
+    }
     function registrarCompra(e){
         e.preventDefault();
         var data = new FormData(document.getElementById('FormCompra'));
         data.append('Ticket', document.getElementById('Ticket').files[0]);
-        data.append('Pagada', document.getElementById('CompraPagada').checked == true ? 'Efectivo' : 'Sin pagar');
+        data.append('Pagada', document.getElementById('CompraPagada').checked == true ? 'Pagada' : 'Sin pagar');
         fetch('Compra', {
             method: 'POST',
             body: data
@@ -127,56 +176,75 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function agregarNumero(e) {
-        if (e.inputType == 'deleteContentBackward' && count >= 0) {
+        if (e.inputType === 'deleteContentBackward' && count >= 0) {
             count--;
         } else if (Number.isInteger(parseInt(e.data))) {
             count++;
             if (count == 10) {
-                telefonos.addChip({ tag: value[0].value });
+                telefonos.addChip({ tag: value.value });
                 count = 0;
-                value[0].value = '';
+                value.value = '';
             }
         }
     }
 
     function RecargaSaldo(e) {
         e.preventDefault();
-        var table = document.getElementById("table");
-        document.getElementById("progress").style.visibility = "visible";
-        let pagado = document.getElementsByClassName('pagado');
-        let form = document.getElementById('FormSaldo');
-        var datos = new FormData(form);
-        let nombre = document.getElementById("Name");
-        let numeros = document.getElementsByClassName('chips')[0].M_Chips.chipsData;
-        datos.append('Operadora', document.getElementById("OperadorasTrigger").value);
-        datos.append('numeros', JSON.stringify(numeros));
-        datos.append('Vendedor', nombre.innerText);
-        datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTrigger").value));
-        pagado[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
+        const table = document.getElementById("table");
+        let datos;
+        if(e.target.classList.contains('Externa')){
+            datos = new FormData(document.getElementById('RecargaExterna'));
+            datos.append('Operadora', document.getElementById('OperadorasTriggerExterna').value);
+            datos.append('Numeros', JSON.stringify(document.getElementsByClassName('chips')[1].M_Chips.chipsData));
+            datos.append('Vendedor', document.getElementById('empleadoExterno').value);
+            datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTriggerExterna").value));
+            document.getElementById('pagadoExterna').checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
+            datos.append('Tipo', 'Externa');
+        } else {
+            document.getElementById("progress").style.visibility = "visible";
+            datos = new FormData(document.getElementById('FormSaldo'));
+            datos.append('Operadora', document.getElementById("OperadorasTrigger").value);
+            datos.append('Numeros', JSON.stringify(document.getElementsByClassName('chips')[0].M_Chips.chipsData));
+            datos.append('Vendedor', document.getElementById("Name").innerText);
+            datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTrigger").value));
+            document.getElementsByClassName('pagado')[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
+            datos.append('Tipo', 'Local');
+        }
         fetch('recargaSaldo', {
             method: 'POST',
             body: datos
         })
             .then(res => res.json())
             .then(res => {
-                while (table.firstChild) {
-                    table.removeChild(table.firstChild);
+                if(e.target.classList.contains('Externa')){
+                    res.Codigo == 0 ?
+                        M.toast({ html: res.Mensaje, classes: 'green white-text' }) :
+                        M.toast({ html: 'Error ' + res.Mensaje, classes: 'red white-text' })
+                    if (res.Codigo == 0) {
+                        document.getElementById('RecargaExterna').reset();
+                    } else {
+                        document.getElementById('RecargaExterna').data
+                    }
+                } else {
+                    while (table.firstChild) {
+                        table.removeChild(table.firstChild);
+                    }
+                    for (var i in res) {
+                        var tr = document.createElement("tr");
+                        var Numero = document.createElement("td");
+                        var Mensaje = document.createElement("td");
+                        res[i].Codigo == 0 ? Numero.classList.add("green-text") : Numero.classList.add("red-text");
+                        Numero.innerText = res[i].Tel;
+                        Mensaje.innerText = res[i].Mensaje;
+                        tr.appendChild(Numero);
+                        tr.appendChild(Mensaje);
+                        table.appendChild(tr);
+                    }
+                    modalAviso.open();
+                    document.getElementById('FormSaldo').reset();
+                    borrarNumeros();
+                    document.getElementById("progress").style.visibility = "hidden";
                 }
-                for (var i in res) {
-                    var tr = document.createElement("tr");
-                    var Numero = document.createElement("td");
-                    var Mensaje = document.createElement("td");
-                    res[i].Codigo == 0 ? Numero.classList.add("green-text") : Numero.classList.add("red-text");
-                    Numero.innerText = res[i].Tel;
-                    Mensaje.innerText = res[i].Mensaje;
-                    tr.appendChild(Numero);
-                    tr.appendChild(Mensaje);
-                    table.appendChild(tr);
-                }
-                modalAviso.open();
-                form.reset();
-                borrarNumeros();
-                document.getElementById("progress").style.visibility = "hidden";
             })
             .catch(function (e) {
                 var tbody = document.createElement("tbody");
@@ -187,13 +255,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function borrarNumeros(){
-        telefonos = M.Chips.init(chips, {
-            placeholder: "Numeros",
-            secondaryPlaceholder: "+Numero"
-        });
-    }
-
-    function cargarChips(){
         telefonos = M.Chips.init(chips, {
             placeholder: "Numeros",
             secondaryPlaceholder: "+Numero"
@@ -239,8 +300,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function cargarMonto(res) {
-        let Montos = document.getElementById("Monto");
+    function cargarMonto(res, Tipo) {
+        const Montos = Tipo == 'Externa' ? document.getElementById("MontoExterna") : document.getElementById('Monto');
         while (Montos.firstChild) {
             Montos.removeChild(Montos.firstChild);
         }
@@ -248,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'Telcel':
                 let telcel = [100, 150, 200, 300, 500];
                 for (i in telcel) {
-                    let opciones = document.getElementById("Monto");
+                    const opciones = Tipo == 'Externa' ? document.getElementById("MontoExterna") : document.getElementById('Monto');
                     let opcion = document.createElement("option");
                     opcion.value = telcel[i];
                     opcion.text = '$ ' + telcel[i];
@@ -259,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'Movistar':
                 let movistar = [100, 150, 200];
                 for (i in movistar) {
-                    let opciones = document.getElementById("Monto");
+                    const opciones = Tipo == 'Externa' ? document.getElementById("MontoExterna") : document.getElementById('Monto');
                     let opcion = document.createElement("option");
                     opcion.value = movistar[i];
                     opcion.text = '$ ' + movistar[i];
@@ -270,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'Unefon':
                 let unefon = [100, 10, 20, 30, 50, 70, 150, 200, 300];
                 for (i in unefon) {
-                    let opciones = document.getElementById("Monto");
+                    const opciones = Tipo == 'Externa' ? document.getElementById("MontoExterna") : document.getElementById('Monto');
                     let opcion = document.createElement("option");
                     opcion.value = unefon[i];
                     opcion.text = '$ ' + unefon[i];
@@ -281,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'AT&T':
                 let at = [100, 150, 200, 300, 500, 1000];
                 for (i in at) {
-                    let opciones = document.getElementById("Monto");
+                    const opciones = Tipo == 'Externa' ? document.getElementById("MontoExterna") : document.getElementById('Monto');
                     let opcion = document.createElement("option");
                     opcion.value = at[i];
                     opcion.text = '$ ' + at[i];

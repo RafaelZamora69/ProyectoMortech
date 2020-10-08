@@ -122,7 +122,7 @@ class venta
         }
     }
 
-    function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones, $Carrier)
+    function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones, $Carrier,$Tipo)
     {
         $this->mensajes = [];
         $NombreCliente = $this->limpiarEspacios($NombreCliente);
@@ -131,7 +131,11 @@ class venta
             for ($i = 0; $i < count($arr); $i++) {
                 $tel = $arr[$i]['tag'];
                 //Si se realiza la recarga
+                if(strcmp('Externa', $Tipo) == 0) {
+                    goto insertar;
+                }
                 if ($this->recarga($Carrier, $tel, $Monto)) {
+                    insertar:
                     $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 2 hour ));");
                     $idCliente = $this->getIdCliente($NombreCliente);
                     $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
@@ -142,7 +146,7 @@ class venta
                     }
                 }
             }
-            return json_encode($this->mensajes);
+            return strcmp('Externa', $Tipo) == 0 ? json_encode(array("Codigo" => 0, "Mensaje" => 'Venta registrada')) : json_encode($this->mensajes);
         } catch (Exception $e) {
             return json_encode($e->getMessage());
         }

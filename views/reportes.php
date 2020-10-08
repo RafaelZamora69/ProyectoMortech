@@ -79,12 +79,16 @@ require_once 'views/layouts/sidenav.php';
                         </p>
                         <p>
                             <label>
-                                <input name="Tipo" type="radio" id="Ventas" checked/>
-                                <span>Ventas</span>
+                                <input name="Estado" type="radio" id="Todos" checked value="3"/>
+                                <span>Todas</span>
                             </label>
                             <label>
-                                <input name="Tipo" type="radio" id="Cortes"/>
-                                <span>Cortes</span>
+                                <input name="Estado" type="radio" id="Pagado" value="1"/>
+                                <span>Aprobadas</span>
+                            </label>
+                            <label>
+                                <input name="Estado" type="radio" id="Credito" value="0"/>
+                                <span>No aprobadas</span>
                             </label>
                         </p>
                     </div>
