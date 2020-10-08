@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var modal = document.getElementById('modal1');
     var modalAviso = M.Modal.init(modal);
     //Números de teléfono
-    var value = document.querySelectorAll('.input');
+    const value = document.getElementById('numeros');
     //Monto a pagar
     var select = document.querySelectorAll('select');
     var montos = M.FormSelect.init(select);
@@ -70,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
     formSaldo.addEventListener('submit', RecargaSaldo);
     formServicio.addEventListener('submit', VentaServicio);
     chips.addEventListener('input', agregarNumero);
-    cargarChips();
     obtenerEmpleados();
     document.getElementById('Agregar').addEventListener('click', () => {
         telefonos.addChip({ tag: value[0].value });
@@ -83,10 +82,12 @@ document.addEventListener('DOMContentLoaded', function () {
     //funciones
     ObtenerClientes();
     obtenerProveedores();
+    var chipsExterna, telefonosExterna;
     if(document.getElementById('OperadorasTriggerExterna')){
+        const numeroExterno = document.getElementById('numeroExterno');
         document.getElementById('OperadorasTriggerExterna').value = 'Unefon';
-        var chipsExterna = document.getElementById('chipsExterna');
-        var telefonosExterna = M.Chips.init(chipsExterna, {
+        chipsExterna = document.getElementById('chipsExterna');
+        telefonosExterna = M.Chips.init(chipsExterna, {
             placeholder: "Numeros",
             secondaryPlaceholder: "+Numero"
         });
@@ -98,13 +99,35 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         document.getElementById('RecargaExterna').addEventListener('submit',RecargaSaldo);
         document.getElementById('AgregarExterna').addEventListener('click', () => {
-            telefonosExterna.addChip({ tag: value[1].value });
+            telefonosExterna.addChip({ tag: value[0].value });
             count = 0;
-            value[1].value = '';
+            value[0].value = '';
         });
         chipsExterna.addEventListener('input',agregarNumeroExterno);
+        function agregarNumeroExterno(e) {
+            if (e.inputType === 'deleteContentBackward' && count >= 0) {
+                count--;
+            } else if (Number.isInteger(parseInt(e.data))) {
+                count++;
+                if (count == 10) {
+                    telefonosExterna.addChip({ tag: numeroExterno.value });
+                    count = 0;
+                    numeroExterno.value = '';
+                }
+            }
+        }
+        function obtenerEmpleados() {
+            fetch('obtenerEmpleados')
+                .then(res => res.json())
+                .then(res => {
+                    let data = {};
+                    for (i in res) {
+                        data[res[i]] = null;
+                    }
+                    empleadosExterna.updateData(data);
+                })
+        }
     }
-
     function registrarCompra(e){
         e.preventDefault();
         var data = new FormData(document.getElementById('FormCompra'));
@@ -158,22 +181,9 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (Number.isInteger(parseInt(e.data))) {
             count++;
             if (count == 10) {
-                telefonos.addChip({ tag: value[0].value });
+                telefonos.addChip({ tag: value.value });
                 count = 0;
-                value[0].value = '';
-            }
-        }
-    }
-
-    function agregarNumeroExterno(e) {
-        if (e.inputType === 'deleteContentBackward' && count >= 0) {
-            count--;
-        } else if (Number.isInteger(parseInt(e.data))) {
-            count++;
-            if (count == 10) {
-                telefonosExterna.addChip({ tag: value[1].value });
-                count = 0;
-                value[1].value = '';
+                value.value = '';
             }
         }
     }
@@ -245,13 +255,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function borrarNumeros(){
-        telefonos = M.Chips.init(chips, {
-            placeholder: "Numeros",
-            secondaryPlaceholder: "+Numero"
-        });
-    }
-
-    function cargarChips(){
         telefonos = M.Chips.init(chips, {
             placeholder: "Numeros",
             secondaryPlaceholder: "+Numero"
@@ -350,17 +353,5 @@ document.addEventListener('DOMContentLoaded', function () {
             default:
                 break;
         }
-    }
-
-    function obtenerEmpleados() {
-        fetch('obtenerEmpleados')
-            .then(res => res.json())
-            .then(res => {
-                let data = {};
-                for (i in res) {
-                    data[res[i]] = null;
-                }
-                empleadosExterna.updateData(data);
-            })
     }
 });
