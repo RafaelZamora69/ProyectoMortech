@@ -11,13 +11,11 @@ class serviciosController
     public function recargaSaldo()
     {
         if (isset($_POST)) {
-            var_dump($_POST);
-            return;
             $venta = new venta();
             echo $venta->InsertarRecarga(
                 $_POST['Name'],
                 $_POST['Vendedor'],
-                $_POST['numeros'],
+                $_POST['Numeros'],
                 'Recarga de saldo',
                 $_POST['Operadora'],
                 $_POST['Monto'],

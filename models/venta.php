@@ -146,7 +146,7 @@ class venta
                     }
                 }
             }
-            return json_encode($this->mensajes);
+            return strcmp('Externa', $Tipo) == 0 ? json_encode(array("Codigo" => 0, "Mensaje" => 'Venta registrada')) : json_encode($this->mensajes);
         } catch (Exception $e) {
             return json_encode($e->getMessage());
         }

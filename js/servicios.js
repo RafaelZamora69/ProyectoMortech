@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('OperadorasTrigger').value = 'Unefon';
-    document.getElementById('OperadorasTriggerExterna').value = 'Unefon';
     const elems = document.getElementById('modal2');
     const modal2 = M.Modal.init(elems);
     document.getElementById('NumeroBuscar').addEventListener('submit', (e) => {
@@ -38,12 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
         drop.textContent = e.target.text;
        cargarMonto(e.target.text, 'normal');
     });
-    document.getElementById('OperadorasExterna').addEventListener('click',(e)=>{
-        console.log('click')
-        document.getElementById('OperadorasTriggerExterna').value = e.target.text;
-        dropExterna.textContent = e.target.text;
-        cargarMonto(e.target.text, 'Externa');
-    });
     //Proveedores
     const autoPro = document.getElementById('autocompleteProveedores');
     const Proveedores = M.Autocomplete.init(autoPro);
@@ -59,11 +52,6 @@ document.addEventListener('DOMContentLoaded', function () {
             placeholder: "Numeros",
             secondaryPlaceholder: "+Numero"
         });
-    var chipsExterna = document.getElementById('chipsExterna');
-    var telefonosExterna = M.Chips.init(chipsExterna, {
-        placeholder: "Numeros",
-        secondaryPlaceholder: "+Numero"
-    });
     var autocom = document.getElementById('autocompleteCliente');
     var clientesServicio = M.Autocomplete.init(autocom);
     //Modal de aviso
@@ -79,12 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
     //Empleados
     const empleados = document.getElementById('empleadoExterno');
     const empleadosExterna = M.Autocomplete.init(empleados);
-
     formSaldo.addEventListener('submit', RecargaSaldo);
-    document.getElementById('RecargaExterna').addEventListener('submit',RecargaSaldo);
     formServicio.addEventListener('submit', VentaServicio);
     chips.addEventListener('input', agregarNumero);
-    chipsExterna.addEventListener('input',agregarNumeroExterno);
     cargarChips();
     obtenerEmpleados();
     document.getElementById('Agregar').addEventListener('click', () => {
@@ -92,17 +77,33 @@ document.addEventListener('DOMContentLoaded', function () {
         count = 0;
         value[0].value = '';
     });
-    document.getElementById('AgregarExterna').addEventListener('click', () => {
-        telefonosExterna.addChip({ tag: value[1].value });
-        count = 0;
-        value[1].value = '';
-    });
     document.getElementById('registrarCompra').addEventListener('click', (e) => {
         registrarCompra(e);
     })
     //funciones
     ObtenerClientes();
     obtenerProveedores();
+    if(document.getElementById('OperadorasTriggerExterna')){
+        document.getElementById('OperadorasTriggerExterna').value = 'Unefon';
+        var chipsExterna = document.getElementById('chipsExterna');
+        var telefonosExterna = M.Chips.init(chipsExterna, {
+            placeholder: "Numeros",
+            secondaryPlaceholder: "+Numero"
+        });
+        document.getElementById('OperadorasExterna').addEventListener('click',(e)=>{
+            console.log('click')
+            document.getElementById('OperadorasTriggerExterna').value = e.target.text;
+            dropExterna.textContent = e.target.text;
+            cargarMonto(e.target.text, 'Externa');
+        });
+        document.getElementById('RecargaExterna').addEventListener('submit',RecargaSaldo);
+        document.getElementById('AgregarExterna').addEventListener('click', () => {
+            telefonosExterna.addChip({ tag: value[1].value });
+            count = 0;
+            value[1].value = '';
+        });
+        chipsExterna.addEventListener('input',agregarNumeroExterno);
+    }
 
     function registrarCompra(e){
         e.preventDefault();
@@ -185,15 +186,15 @@ document.addEventListener('DOMContentLoaded', function () {
             datos = new FormData(document.getElementById('RecargaExterna'));
             datos.append('Operadora', document.getElementById('OperadorasTriggerExterna').value);
             datos.append('Numeros', JSON.stringify(document.getElementsByClassName('chips')[1].M_Chips.chipsData));
-            //Vendedor
             datos.append('Vendedor', document.getElementById('empleadoExterno').value);
+            datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTriggerExterna").value));
             document.getElementById('pagadoExterna').checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
             datos.append('Tipo', 'Externa');
         } else {
             document.getElementById("progress").style.visibility = "visible";
             datos = new FormData(document.getElementById('FormSaldo'));
             datos.append('Operadora', document.getElementById("OperadorasTrigger").value);
-            datos.append('numeros', JSON.stringify(document.getElementsByClassName('chips')[0].M_Chips.chipsData));
+            datos.append('Numeros', JSON.stringify(document.getElementsByClassName('chips')[0].M_Chips.chipsData));
             datos.append('Vendedor', document.getElementById("Name").innerText);
             datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTrigger").value));
             document.getElementsByClassName('pagado')[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
@@ -205,24 +206,35 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                while (table.firstChild) {
-                    table.removeChild(table.firstChild);
+                if(e.target.classList.contains('Externa')){
+                    res.Codigo == 0 ?
+                        M.toast({ html: res.Mensaje, classes: 'green white-text' }) :
+                        M.toast({ html: 'Error ' + res.Mensaje, classes: 'red white-text' })
+                    if (res.Codigo == 0) {
+                        document.getElementById('RecargaExterna').reset();
+                    } else {
+                        document.getElementById('RecargaExterna').data
+                    }
+                } else {
+                    while (table.firstChild) {
+                        table.removeChild(table.firstChild);
+                    }
+                    for (var i in res) {
+                        var tr = document.createElement("tr");
+                        var Numero = document.createElement("td");
+                        var Mensaje = document.createElement("td");
+                        res[i].Codigo == 0 ? Numero.classList.add("green-text") : Numero.classList.add("red-text");
+                        Numero.innerText = res[i].Tel;
+                        Mensaje.innerText = res[i].Mensaje;
+                        tr.appendChild(Numero);
+                        tr.appendChild(Mensaje);
+                        table.appendChild(tr);
+                    }
+                    modalAviso.open();
+                    document.getElementById('FormSaldo').reset();
+                    borrarNumeros();
+                    document.getElementById("progress").style.visibility = "hidden";
                 }
-                for (var i in res) {
-                    var tr = document.createElement("tr");
-                    var Numero = document.createElement("td");
-                    var Mensaje = document.createElement("td");
-                    res[i].Codigo == 0 ? Numero.classList.add("green-text") : Numero.classList.add("red-text");
-                    Numero.innerText = res[i].Tel;
-                    Mensaje.innerText = res[i].Mensaje;
-                    tr.appendChild(Numero);
-                    tr.appendChild(Mensaje);
-                    table.appendChild(tr);
-                }
-                modalAviso.open();
-                form.reset();
-                borrarNumeros();
-                document.getElementById("progress").style.visibility = "hidden";
             })
             .catch(function (e) {
                 var tbody = document.createElement("tbody");
