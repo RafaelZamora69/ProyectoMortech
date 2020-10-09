@@ -63,6 +63,7 @@ require_once  'views/layouts/sidenav.php';
                     <th>Fecha</th>
                     <th>Comprobante</th>
                     <th></th>
+                    <th></th>
                 </tr>
                 <tbody id="tablaCompras">
 

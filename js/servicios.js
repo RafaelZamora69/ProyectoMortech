@@ -70,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
     formSaldo.addEventListener('submit', RecargaSaldo);
     formServicio.addEventListener('submit', VentaServicio);
     chips.addEventListener('input', agregarNumero);
-    obtenerEmpleados();
     document.getElementById('Agregar').addEventListener('click', () => {
         telefonos.addChip({ tag: value.value });
         count = 0;
@@ -84,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
     obtenerProveedores();
     var chipsExterna, telefonosExterna;
     if(document.getElementById('OperadorasTriggerExterna')){
+        obtenerEmpleados();
         const numeroExterno = document.getElementById('numeroExterno');
         document.getElementById('OperadorasTriggerExterna').value = 'Unefon';
         chipsExterna = document.getElementById('chipsExterna');

@@ -37,6 +37,13 @@ class compraController {
         }
     }
 
+    function eliminarCompra(){
+        if(isset($_POST)){
+            $compra = new compra();
+            echo $compra->eliminarCompra($_POST['idCompra']);
+        }
+    }
+
     function obtenerEmpleados() {
         $empleados = new user();
         echo $empleados->obtenerEmpleados();
@@ -49,7 +56,7 @@ class compraController {
 
     function descargarImagen(){
         $venta = new compra();
-        echo $venta->obtenerIdImagen($_POST['idCompra']);
+        echo $venta->obtenerIdImagen($_POST['idCompra'], 'Web');
     }
 
 }

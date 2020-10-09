@@ -38,11 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if(e.target.classList.contains('actualizarCompra')){
             actualizarCompra(e.target.id.replace('actualizar-',''));
         }
+        if(e.target.classList.contains('eliminarCompra')){
+            eliminarCompra(e.target.id.replace('eliminar-',''));
+        }
         if(e.target.classList.contains('descargarImagen')){
             descargarImagen(e.target.id.replace('img-',''));
         }
     });
-    //TODO implementar indice en la bd compra => fecha
 
     function initComponents(){
         fetch('obtenerEmpleados')
@@ -171,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${res[i].Fecha}</td>
                     <td id="img-${res[i].idCompra}"><a href="#!" class="descargarImagen" id="img-${res[i].idCompra}">Descargar comprobante</a></td>
                     <td><a id="actualizar-${res[i].idCompra}" class="btn waves-effect waves-light yellow black-text actualizarCompra">Actualizar</a></td>
+                    <td><a id="eliminar-${res[i].idCompra}" class="btn waves-effect waves-light red eliminarCompra">Eliminar</a></td>
                 </tr>
             `;
         }
@@ -221,6 +224,21 @@ document.addEventListener('DOMContentLoaded', () => {
         data.append('idCompra', idCompra);
         data.append('Pagada', document.getElementById(idCompra).value);
         fetch('actualizarCompra',{
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res => {
+                res.Codigo == 0 ?
+                    M.toast({ html: res.Mensaje, classes: 'green white-text' }) :
+                    M.toast({ html: 'Error ' + res.Mensaje, classes: 'red white-text' });
+            });
+    }
+
+    function eliminarCompra(idCompra){
+        const data = new FormData();
+        data.append('idCompra', idCompra);
+        fetch('eliminarCompra',{
             method: 'POST',
             body: data
         })
