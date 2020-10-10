@@ -70,11 +70,10 @@ document.addEventListener('DOMContentLoaded', function () {
     formSaldo.addEventListener('submit', RecargaSaldo);
     formServicio.addEventListener('submit', VentaServicio);
     chips.addEventListener('input', agregarNumero);
-    obtenerEmpleados();
     document.getElementById('Agregar').addEventListener('click', () => {
-        telefonos.addChip({ tag: value[0].value });
+        telefonos.addChip({ tag: value.value });
         count = 0;
-        value[0].value = '';
+        value.value = '';
     });
     document.getElementById('registrarCompra').addEventListener('click', (e) => {
         registrarCompra(e);
@@ -84,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
     obtenerProveedores();
     var chipsExterna, telefonosExterna;
     if(document.getElementById('OperadorasTriggerExterna')){
+        obtenerEmpleados();
         const numeroExterno = document.getElementById('numeroExterno');
         document.getElementById('OperadorasTriggerExterna').value = 'Unefon';
         chipsExterna = document.getElementById('chipsExterna');
@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     function registrarCompra(e){
         e.preventDefault();
+        document.getElementById('registrarCompra').classList.add('disabled');
         var data = new FormData(document.getElementById('FormCompra'));
         data.append('Ticket', document.getElementById('Ticket').files[0]);
         data.append('Pagada', document.getElementById('CompraPagada').checked == true ? 'Pagada' : 'Sin pagar');
@@ -144,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(res.Codigo == 0){
                     document.getElementById('FormCompra').reset();
                 }
+                document.getElementById('registrarCompra').classList.remove('disabled');
             })
     }
 

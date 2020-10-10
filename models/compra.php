@@ -19,14 +19,24 @@ class compra {
         }
     }
 
-    public function obtenerIdImagen($idCompra){
+    private function eliminarImagen($idImagen){
+        $conn = new dbConnect();
+        $this->connection = $conn->connect();
+        $query = $this->connection->prepare("delete from images where idImage = ?");
+        $query->bind_param('i',$idImagen);
+        if($query->execute()){
+            return json_encode(array('Codigo' => 0, 'Mensaje' => 'Compra eliminada'));
+        }
+    }
+
+    public function obtenerIdImagen($idCompra, $modo){
         $query = $this->connection->prepare("select idImagen from compra where idCompra = ?");
         $query->bind_param('i',$idCompra);
         if($query->execute()){
             $result = $query->get_result();
             $idImagen = null;
             while($row = $result->fetch_assoc()){
-                return json_encode(array('Imagen' => base64_encode($this->obtenerImagen($row['idImagen']))));
+                return strcmp('Web', $modo) == 0 ? json_encode(array('Imagen' => base64_encode($this->obtenerImagen($row['idImagen'])))) : $row['idImagen'];
             }
         }
     }
@@ -49,7 +59,7 @@ class compra {
             $compras = [];
             $result = $query->get_result();
             while($row = $result->fetch_array()){
-                $compras[] = array('idCompra' => $row['idCompra'],'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Pagada' => $row['Pagada'],'Fecha' => $row['Fecha'], 'Imagen' => base64_encode($this->obtenerImagen($row['idImagen'])));
+                $compras[] = array('idCompra' => $row['idCompra'],'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Pagada' => $row['Pagada'],'Fecha' => $row['Fecha']);
             }
             return json_encode($compras);
         }
@@ -78,6 +88,20 @@ class compra {
                 return json_encode(array('Codigo' => 0, 'Mensaje' => 'Compra actualizada'));
             }
             return json_encode(array('Codigo' => 1, 'Mensaje' => 'Error al actualizar'));
+        }catch(Exception $e){
+            return json_encode($e->getMessage());
+        }
+    }
+
+    public function eliminarCompra($idCompra){
+        try {
+            $idImagen = $this->obtenerIdImagen($idCompra, 'Api');
+            $query = $this->connection->prepare("delete from compra where idCompra = ?");
+            $query->bind_param('i',$idCompra);
+            if($query->execute()){
+                return $this->eliminarImagen($idImagen);
+            }
+            $query = $this->connection->prepare("delete compra");
         }catch(Exception $e){
             return json_encode($e->getMessage());
         }
