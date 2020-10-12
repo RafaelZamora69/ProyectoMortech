@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     function registrarCompra(e){
         e.preventDefault();
-        document.getElementById('registrarCompra').classList.add('disabled');
+        document.getElementById('registrarCompra').disabled = true;
         var data = new FormData(document.getElementById('FormCompra'));
         data.append('Ticket', document.getElementById('Ticket').files[0]);
         data.append('Pagada', document.getElementById('CompraPagada').checked == true ? 'Pagada' : 'Sin pagar');
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(res.Codigo == 0){
                     document.getElementById('FormCompra').reset();
                 }
-                document.getElementById('registrarCompra').classList.remove('disabled');
+                document.getElementById('registrarCompra').disabled = false;
             })
     }
 
@@ -193,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function RecargaSaldo(e) {
         e.preventDefault();
         const table = document.getElementById("table");
+        document.getElementById('finalizarVenta').disabled = true;
         let datos;
         if(e.target.classList.contains('Externa')){
             datos = new FormData(document.getElementById('RecargaExterna'));
@@ -202,7 +203,8 @@ document.addEventListener('DOMContentLoaded', function () {
             datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTriggerExterna").value));
             document.getElementById('pagadoExterna').checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
             datos.append('Tipo', 'Externa');
-        } else {
+        }
+        else {
             document.getElementById("progress").style.visibility = "visible";
             datos = new FormData(document.getElementById('FormSaldo'));
             datos.append('Operadora', document.getElementById("OperadorasTrigger").value);
@@ -247,12 +249,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     borrarNumeros();
                     document.getElementById("progress").style.visibility = "hidden";
                 }
+                document.getElementById('finalizarVenta').disabled = false;
             })
             .catch(function (e) {
                 var tbody = document.createElement("tbody");
                 tbody.id = "table";
                 table.appendChild(tbody);
                 document.getElementById("progress").style.visibility = "hidden";
+                document.getElementById('finalizarVenta').disabled = false;
             });
     }
 

@@ -27,17 +27,17 @@ require_once 'views/layouts/sidenav.php';
                     <div class="row">
                         <div class="col s6 input-field">
                             <input type="text" class="datepicker" name="From" id="Desde">
-                            <label for="From">Desde</label>
+                            <label for="From"><i class="material-icons">today</i> Desde</label>
                         </div>
                         <div class="col s6 input-field">
                             <input type="text" class="datepicker" name="To" id="Hasta">
-                            <label for="To">Hasta</label>
+                            <label for="To"><i class="material-icons">event</i> Hasta</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12 m6">
                             <div class="input-field">
-                                <input type="text" name="Empleado" class="autocomplete" id="autoCompleteEmpleados">
+                                <input type="text" name="Empleado" class="autocomplete" id="autocompleteEmpleado">
                                 <label for="Empleado">Empleado</label>
                             </div>
                         </div>
@@ -62,6 +62,10 @@ require_once 'views/layouts/sidenav.php';
                                 <input name="Servicio" type="radio" id="Servicios"/>
                                 <span>Servicios</span>
                             </label>
+                            <label>
+                                <input name="Servicio" type="radio" id="Corte"/>
+                                <span>Cortes</span>
+                            </label>
                         </p>
                         <p>
                             <label>
@@ -77,7 +81,7 @@ require_once 'views/layouts/sidenav.php';
                                 <span>Crédito</span>
                             </label>
                         </p>
-                        <p>
+                        <p id="Estados">
                             <label>
                                 <input name="Estado" type="radio" id="Todos" checked value="3"/>
                                 <span>Todas</span>
@@ -93,10 +97,7 @@ require_once 'views/layouts/sidenav.php';
                         </p>
                     </div>
                     <div class="row">
-                        <a value="Consultar" class="btn-flat waves-effect waves-red" id="Consultar"><i
-                                    class="material-icons left">get_app</i>Consultar</a>
-                        <a value="Filtrar" class="btn-flat waves-effect waves-red" id="Filtrar"><i
-                                    class="material-icons left">filter_alt</i>Filtrar</a>
+                        <a value="Consultar" class="btn-flat waves-effect waves-red" id="Consultar"><i class="material-icons left">get_app</i>Consultar</a>
                     </div>
                 </form>
             </div>

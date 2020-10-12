@@ -81,4 +81,51 @@ class reportes
             return json_encode(array('Codigo' => 0, 'Mensaje' => $e->getMessage()));
         }
     }
+
+    function consultaCorte($Desde, $Hasta, $Empleado){
+        $query = null;
+        if(strcmp($Empleado,'') == 0){
+            $venta = new venta();
+            $idEmpleado = $venta->getIdEmpleado($Empleado);
+            $query = $this->connection->prepare('call DetalleCorteEmpleado(?,?,?)');
+            $query->bind_param('iss',$idEmpleado,$Desde,$Hasta);
+        } else {
+            $query = $this->connection->prepare("call ReporteCorte(?,?)");
+            $query->bind_param('ss',$Desde,$Hasta);
+        }
+        if($query->execute()){
+            $result = $query->get_result();
+            $array = [];
+            while($row = $result->fetch_assoc()){
+                $array[] = array('idCorte' => $row['idCorte'], 'Empleado' => $row['Empleado'], 'Iniciado' => $row['IniciadoEl'], 'Realizado' => $row['RealizadoEl'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn']);
+            }
+            return json_encode($array);
+        }
+    }
+
+    function recargasCorte($idCorte){
+        $query = $this->connection->prepare('call RecargasCorte(?)');
+        $query->bind_param('i', $idCorte);
+        if($query->execute()){
+            $result = $query->get_result();
+            $recargas = [];
+            while($row = $result->fetch_assoc()){
+                $recargas[] = array('idVenta' => $row['idVenta'], 'Cliente' => $row['Nombre'], 'Telefono' => $row['NumeroTelefono'], 'Operadora' => $row['Operadora'], 'Monto' => $row['Monto'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Utilidad' => $row['Utilidad'], 'Observaciones' => $row['Observaciones']);
+            }
+            return json_encode($recargas);
+        }
+    }
+
+    function serviciosCorte($idCorte){
+        $query = $this->connection->prepare('call RecargasCorte(?)');
+        $query->bind_param('i', $idCorte);
+        if($query->execute()){
+            $result = $query->get_result();
+            $servicios = [];
+            while($row = $result->fetch_assoc()){
+                $servicios[] = array('idVenta' => $row['idVenta'], 'Cliente' => $row['Nombre'], 'NombreServicio' => $row['NombreServicio'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'fecha' => $row['fecha'], 'Verificada' => $row['Verificada']);
+            }
+            return json_encode($servicios);
+        }
+    }
 }

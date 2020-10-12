@@ -44,4 +44,19 @@ class reportesController
         $reporte = new reportes();
         echo $reporte->actualizar($_POST['Empleado'], $_POST['Cliente'], $_POST['idVenta'], $_POST['Mxn'], $_POST['Usd'], $_POST['pagado'], $_POST['Observaciones']);
     }
+
+    public function consultaCorte(){
+        $reporte = new reportes();
+        echo $reporte->consultaCorte($_POST['From'], $_POST['To'], $_POST['Empleado']);
+    }
+
+    public function recargasCorte(){
+        $reporte = new reportes();
+        echo $reporte->recargasCorte($_POST['idCorte']);
+    }
+
+    public function serviciosCorte(){
+        $reporte = new reportes();
+        echo $reporte->serviciosCorte($_POST['idCorte']);
+    }
 }
