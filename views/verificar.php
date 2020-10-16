@@ -12,12 +12,17 @@ require_once  'views/layouts/sidenav.php';
             <div class="file-field input-field">
                 <div class="btn">
                     <span>Archivo</span>
-                    <input type="file" accept="text/csv">
+                    <input type="file" accept="text/csv" id="Archivo">
                 </div>
                 <div class="file-path-wrapper">
                     <input type="text" class="file-path validate" accept="text/csv">
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <input type="submit" value="Analizar" class="btn waves-effect waves-light white-text" id="Analizar">
         </div>
     </div>
 </form>

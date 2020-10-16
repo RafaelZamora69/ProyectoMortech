@@ -163,8 +163,6 @@ class venta
                 $idCliente = $this->getIdCliente($NombreCliente);
                 $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
                 $Observaciones = $this->limpiarEspacios($Observaciones);
-                $Verificada = 1;
-                $Utilidad = 0;
                 $venta->bind_param("iisddis", $idCliente, $idEmpleado, $NombreServicio, $Usd, $Mxn, $Pagado, $Observaciones);
                 !$venta->execute() ?
                     $this->mensajes[] = array('Mensaje' => $venta->error, 'Codigo' => 1) :
