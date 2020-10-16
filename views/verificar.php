@@ -26,5 +26,12 @@ require_once  'views/layouts/sidenav.php';
         </div>
     </div>
 </form>
+<div class="row">
+    <div class="col s12">
+        <div id="body">
+
+        </div>
+    </div>
+</div>
 <script src="<?= base_url ?>js/validar.js"></script>
 <?php include_once 'views/layouts/footer.php'; ?>

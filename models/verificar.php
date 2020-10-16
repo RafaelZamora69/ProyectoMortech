@@ -12,19 +12,24 @@ class verificar {
         try{
             $Mensajes = [];
             for($i = 0; $i < sizeof($Compras); $i++){
-                if($result = $this->connection->query("select NombreServicio, Usd, Verificada from venta where NombreServicio = '{$Compras[$i]['Orden']}'")){
+                $query = "select e.Nombre, NombreServicio, Usd, Verificada, fecha 
+	                from venta inner join empleado e on venta.idEmpleado = e.idEmpleado
+	                where venta.NombreServicio = '{$Compras[$i]['Orden']}';";
+                if($result = $this->connection->query($query)){
                     if($result->num_rows > 0){
                         $row = $result->fetch_array();
-                        if($row['Verificada'] == 0){
+                        if(strcmp($row['Verificada'], '0') == 0){
                             if($Compras[$i]['Total'] == $row['Usd']){
-                                $Mensajes[] = array('Codigo' => 0, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => 'Correcta');
-                                $this->connection->query("update venta set Verificada = 1 where NombreServicio = '{$Compras[$i]['Orden']}'");
+                                $Mensajes[] = array('Codigo' => 0, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => 'Correcta', 'Empleado' => $row['Nombre'], 'Fecha' => $row['fecha']);
+                                if($this->connection->query("update venta set Verificada = 1 where NombreServicio = '{$Compras[$i]['Orden']}'")){
+                                    echo "Venta verificada";
+                                }
                             } elseif($Compras[$i]['Total'] < $row['Usd']){
                                 $Falta = (double)$row['Usd'] - (double)$Compras[$i]['Total'];
-                                $Mensajes[] = array('Codigo' => 2, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => "Faltan {$Falta} Usd");
+                                $Mensajes[] = array('Codigo' => 2, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => "Faltan {$Falta} Usd", 'Empleado' => $row['Nombre'], 'Fecha' => $row['fecha']);
                             } elseif($Compras[$i]['Total'] > $row['Usd']){
                                 $Sobra = (double)$Compras[$i]['Total'] - (double)$row['Usd'] ;
-                                $Mensajes[] = array('Codigo' => 2, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => "Sobran {$Sobra} Usd");
+                                $Mensajes[] = array('Codigo' => 2, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => "Sobran {$Sobra} Usd", 'Empleado' => $row['Nombre'], 'Fecha' => $row['fecha']);
                             }
                         }
                     } else {
