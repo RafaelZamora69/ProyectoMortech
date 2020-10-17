@@ -20,11 +20,7 @@ class compra {
     }
 
     private function eliminarImagen($idImagen){
-        $conn = new dbConnect();
-        $this->connection = $conn->connect();
-        $query = $this->connection->prepare("delete from images where idImage = ?");
-        $query->bind_param('i',$idImagen);
-        if($query->execute()){
+        if($this->connection->query("delete from images where idImage = {$idImagen}")){
             return json_encode(array('Codigo' => 0, 'Mensaje' => 'Compra eliminada'));
         }
     }
@@ -95,13 +91,11 @@ class compra {
 
     public function eliminarCompra($idCompra){
         try {
+            $idCompra = $this->connection->real_escape_string($idCompra);
             $idImagen = $this->obtenerIdImagen($idCompra, 'Api');
-            $query = $this->connection->prepare("delete from compra where idCompra = ?");
-            $query->bind_param('i',$idCompra);
-            if($query->execute()){
+            if($this->connection->query("delete from compra where idCompra = {$idCompra}")){
                 return $this->eliminarImagen($idImagen);
             }
-            $query = $this->connection->prepare("delete compra");
         }catch(Exception $e){
             return json_encode($e->getMessage());
         }

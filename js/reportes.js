@@ -1,30 +1,32 @@
 document.addEventListener('DOMContentLoaded', function () {
+    //Fechas
     var today = new Date();
-    //Inicializar componentes
-    var elems = document.querySelectorAll('.collapsible');
-    var instances = M.Collapsible.init(elems);
-    var elems = document.getElementById('autoCompleteClientes');
-    var clientes = M.Autocomplete.init(elems);
-    var elems = document.getElementById('autoCompleteEmpleados');
-    var empleados = M.Autocomplete.init(elems);
-    var elems = document.getElementById('NombreCliente');
-    var clientesModal = M.Autocomplete.init(elems);
-    var elems = document.getElementById('NombreEmpleado');
-    var empleadoModal = M.Autocomplete.init(elems);
     var elems = document.getElementById('Desde');
-    var Desde = M.Datepicker.init(elems, {
+    const Desde = M.Datepicker.init(elems, {
         defaultDate: new Date(today.getFullYear(), today.getMonth(), 1),
         setDefaultDate: true,
         format: 'yyyy-mm-dd',
         maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
     });
     var elems = document.getElementById('Hasta');
-    var Hasta = M.Datepicker.init(elems, {
+    const Hasta = M.Datepicker.init(elems, {
         defaultDate: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
         setDefaultDate: true,
         format: 'yyyy-mm-dd',
         maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
     });
+    //Inicializar componentes
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+    var elems = document.getElementById('autoCompleteClientes');
+    var clientes = M.Autocomplete.init(elems);
+    var elems = document.getElementById('autocompleteEmpleado');
+    var empleados = M.Autocomplete.init(elems);
+    var elems = document.getElementById('NombreCliente');
+    var clientesModal = M.Autocomplete.init(elems);
+    var elems = document.getElementById('NombreEmpleado');
+    var empleadoModal = M.Autocomplete.init(elems);
+
     var elems = document.getElementById('modalEditar');
     var modal = M.Modal.init(elems);
     document.getElementById('Actualizar').onclick = actualizar;
@@ -32,26 +34,26 @@ document.addEventListener('DOMContentLoaded', function () {
     let Tipo = 'Ventas';
     let Servicio = 'TodosServicios';
     let Mostrar;
-    let Estado = 3;
     let originalData;
     let filterData;
     let idVenta;
     let Usd = 0;
     let Mxn = 0;
-    //Carga de métodos
-    document.body.addEventListener('click', function (e) {
+    document.body.addEventListener('click', (e) => {
         if (e.target.classList.contains('infoCliente')) {
-            obtenerDatos(e.srcElement.id);
+            obtenerDatos(e.target.id);
+        } else if(e.target.classList.contains('DetallesCorte')){
+            console.log('Detalles');
+            RecargasCorte(e.target.id.replace('Detalles-'));
         }
+
     });
     document.getElementById("Consultar").addEventListener('click', Consultar);
-    document.getElementById("Filtrar").addEventListener('click', filtrar);
     document.getElementById('buscarVenta').addEventListener('keypress', function(e){
        if(e.key == 'Enter'){
            obtenerDatos(document.getElementById('buscarVenta').value);
        }
     });
-    radioButtons();
     obtenerEmpleados();
     obtenerClientes();
 
@@ -134,33 +136,57 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function Consultar() {
-        var form = new FormData(document.getElementById('FormFiltro'));
-        form.append('Estado', Estado);
-        form.append('Servicio', Servicio);
-        form.append('Tipo', Tipo);
-        fetch('filtro', {
-            body: form,
-            method: 'POST'
+        const form = new FormData(document.getElementById('FormFiltro'));
+        var res;
+        if(document.getElementById('Corte').checked){
+            consultaCorte(form);
+        } else {
+            res = consultaVenta(form);
+        }
+    }
+
+    function consultaCorte(data){
+        fetch('consultaCorte',{
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res =>{
+                CargarTablaCorte();
+                if(document.getElementById('autocompleteEmpleado').value != ''){
+                    res = res.filter(x => x.Empleado == document.getElementById('autocompleteEmpleado').value);
+                }
+                TablaCorte(res);
+            });
+    }
+
+    function RecargasCorte(idCorte){
+        const data = new FormData();
+        data.append('idCorte', idCorte);
+        fetch('recargasCorte',{
+            method: 'POST',
+            body: data
         })
             .then(res => res.json())
             .then(res => {
-                originalData = res;
-                switch (originalData[0].Tipo) {
-                    case 'General':
-                        Mostrar = 'General';
-                        TablaGeneral(originalData);
-                        break;
-                    case 'Saldo':
-                        Mostrar = 'Saldo'
-                        TablaSaldo(originalData);
-                        break;
-                    case 'Corte':
-                        Mostrar = 'Corte'
-                        TablaCorte(originalData);
-                        break;
-                }
-                mostrarDetalles(originalData);
-            })
+                //TODO añadir datos a tabla con modal
+                console.log(res);
+                ServiciosCorte(idCorte);
+            });
+    }
+
+    function ServiciosCorte(idCorte){
+        const data = new FormData();
+        data.append('idCorte', idCorte);
+        fetch('serviciosCorte',{
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res => {
+                //TODO añadir datos a tabla con modal y luego mostrar el modal
+                console.log(res);
+            });
     }
 
     function actualizar() {
@@ -207,17 +233,16 @@ document.addEventListener('DOMContentLoaded', function () {
     function TablaCorte(data) {
         CargarTablaCorte();
         for (i in data) {
-            if (data[i].Empleado != undefined) {
-                document.getElementById('TableBody').innerHTML += `
+            document.getElementById('TableBody').innerHTML += `
                     </tr>
                         <td>${data[i].Empleado}</td>
-                        <td>${data[i].Inicio}</td>
-                        <td>${data[i].Fin}</td>
+                        <td>${data[i].Iniciado}</td>
+                        <td>${data[i].Realizado}</td>
                         <td>${data[i].Usd}</td>
                         <td>${data[i].Mxn}</td>
+                        <td><a class="btn waves-effect waves-ligth green white-text DetallesCorte" id="Detalles-${data[i].idCorte}">Detalles</a></td>
                     </tr>
-                `;
-            }
+            `;
         }
     }
 
@@ -229,6 +254,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <th>Realizado</th>
             <th>Usd</th>
             <th>Mxn</th>
+            <th></th>
         `;
     }
 
@@ -318,27 +344,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function radioButtons() {
-        document.getElementById("TodosServicios").addEventListener('click', function () {
-            servicio();
-        });
-        document.getElementById("Saldo").addEventListener('click', function () {
-            servicio();
-        });
-        document.getElementById("Servicios").addEventListener('click', function () {
-            servicio();
-        });
-        document.getElementById("Ventas").addEventListener('click', function () {
-            tipo('Ventas');
-        });
-        document.getElementById("Cortes").addEventListener('click', function () {
-            tipo('Cortes');
-        });
-        document.getElementById("Todos").addEventListener('click', estado);
-        document.getElementById("Pagado").addEventListener('click', estado);
-        document.getElementById("Credito").addEventListener('click', estado);
-    }
-
     function obtenerEmpleados() {
         fetch('obtenerEmpleados')
             .then(res => res.json())
@@ -363,27 +368,5 @@ document.addEventListener('DOMContentLoaded', function () {
                 clientes.updateData(data);
                 clientesModal.updateData(data);
             })
-    }
-
-    function tipo(tipo) {
-        Tipo = tipo;
-    }
-
-    function estado() {
-        let array = Array.from(document.getElementsByName("Estado"));
-        for (i in array) {
-            if (array[i].checked == true) {
-                Estado = array[i].value;
-            }
-        }
-    }
-
-    function servicio() {
-        let array = Array.from(document.getElementsByName("Servicio"));
-        for (i in array) {
-            if (array[i].checked == true) {
-                Servicio = array[i].id;
-            }
-        }
     }
 });

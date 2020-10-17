@@ -20,6 +20,7 @@
     <?php if ($_SESSION['identity']['Jerarquia'] == 'Administrador') : ?>
         <li><a class="subheader">Administración</a></li>
         <li><a href="<?= base_url ?>compra/index" class="waves-effect">Compras</a></li>
+        <li><a href="<?= base_url ?>verificar/index" class="waves-effect">Verificar servicios</a></li>
         <li><a href="<?= base_url ?>reportes/index" class="waves-effect">Reportes</a></li>
         <li><a href="<?= base_url ?>corte/index" class="waves-effect">Corte</a></li>
         <li><a href="" class="waves-effect">Utilidades</a></li>
