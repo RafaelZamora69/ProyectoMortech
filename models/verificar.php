@@ -21,9 +21,7 @@ class verificar {
                         if(strcmp($row['Verificada'], '0') == 0){
                             if($Compras[$i]['Total'] == $row['Usd']){
                                 $Mensajes[] = array('Codigo' => 0, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => 'Correcta', 'Empleado' => $row['Nombre'], 'Fecha' => $row['fecha']);
-                                if($this->connection->query("update venta set Verificada = 1 where NombreServicio = '{$Compras[$i]['Orden']}'")){
-                                    echo "Venta verificada";
-                                }
+                                $this->connection->query("update venta set Verificada = 1 where NombreServicio = '{$Compras[$i]['Orden']}'");
                             } elseif($Compras[$i]['Total'] < $row['Usd']){
                                 $Falta = (double)$row['Usd'] - (double)$Compras[$i]['Total'];
                                 $Mensajes[] = array('Codigo' => 2, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => "Faltan {$Falta} Usd", 'Empleado' => $row['Nombre'], 'Fecha' => $row['fecha']);
@@ -33,7 +31,7 @@ class verificar {
                             }
                         }
                     } else {
-                        $Mensajes[] = array('Codigo' => 1, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => "No existe");
+                        $Mensajes[] = array('Codigo' => 1, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => "Aún no está registrada");
                     }
                 }
             }
