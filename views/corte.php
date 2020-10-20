@@ -43,17 +43,25 @@ require_once 'views/layouts/sidenav.php';
     <div class="modal-content">
         <h4 id="Nombre"></h4>
         <h6 id="Fecha"></h6>
-        <table class="highlight">
-            <thead>
+        <div class="tablaResumen">
+            <table class="highlight">
+                <thead>
                 <tr>
                     <th></th>
                     <th>Usd</th>
                     <th>Mxn</th>
                 </tr>
-            </thead>
-            <tbody id="tabla">
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="tabla">
+                </tbody>
+            </table>
+        </div>
+        <div id="tablaRecargas">
+
+        </div>
+        <div id="tablaServicios">
+
+        </div>
     </div>
     <div class="modal-footer">
         <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="CerrarCorte">Finalizar</a>

@@ -50,15 +50,15 @@ class corte
     public function registrarCorte($Nombre, $Usd, $Mxn)
     {
         try {
-            $corte = $this->conexion->prepare('call ActualizarCorte(?);');
+            $corte = $this->conexion->prepare('call InsertarCorte(?,?,?)');
+            $Usd = str_replace('$ ', '', $Usd);
+            $Mxn = str_replace('$ ', '', $Mxn);
             $id = $this->getVendedorId($Nombre);
-            $corte->bind_param('i', $id);
+            $corte->bind_param('idd', $id, $Usd, $Mxn);
             if ($corte->execute()) {
-                $corte = $this->conexion->prepare('call InsertarCorte(?,?,?)');
-                $Usd = str_replace('$ ', '', $Usd);
-                $Mxn = str_replace('$ ', '', $Mxn);
+                $corte = $this->conexion->prepare('call ActualizarCorte(?);');
                 $id = $this->getVendedorId($Nombre);
-                $corte->bind_param('idd', $id, $Usd, $Mxn);
+                $corte->bind_param('i', $id);
                 return $corte->execute() ?
                     json_encode(array('Mensaje' => 'Corte registrado', 'Codigo' => 0)) :
                     json_encode(array('Mensaje' => $corte->error, 'Codigo' => 1));
@@ -83,5 +83,47 @@ class corte
         } catch (Exception $e) {
             return json_encode($e->getMessage());
         }
+    }
+
+    public function RecargasCortePreeliminar($idEmpleado){
+        try {
+            $query = $this->conexion->prepare('call RecargasCortePreeliminar(?)');
+            $query->bind_param('i', $idEmpleado);
+            if($query->execute()){
+                $result = $query->get_result();
+                $Ventas = [];
+                while($row = $result->fetch_array()){
+                    $Ventas[] = array('Cliente' => $row['Cliente'], 'Telefono' => $row['NumeroTelefono'], 'Operadora' => $row['Operadora'], 'Monto' => $row['Monto'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha']);
+                }
+                return json_encode($Ventas);
+            }
+        }catch(Exception $e){
+            return json_encode($e->getMessage());
+        }
+    }
+
+    public function ServiciosCortePreeliminar($idEmpleado){
+        try {
+            $query = $this->conexion->prepare('call ServiciosCortePreeliminar(?)');
+            $query->bind_param('i', $idEmpleado);
+            if($query->execute()){
+                $result = $query->get_result();
+                $Ventas = [];
+                while($row = $result->fetch_array()){
+                    $Ventas[] = array('Cliente' => $row['Cliente'], 'Servicio' => $row['NombreServicio'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha']);
+                }
+                return json_encode($Ventas);
+            }
+        }catch(Exception $e){
+            return json_encode($e->getMessage());
+        }
+    }
+
+    public function RecargasCorte($idCorte){
+
+    }
+
+    public function ServiciosCorte($idCorte){
+
     }
 }

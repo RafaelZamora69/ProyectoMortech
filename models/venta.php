@@ -159,7 +159,7 @@ class venta
             if(!$this->buscarOrden($NombreServicio)){
                 $NombreCliente = $this->limpiarEspacios($NombreCliente);
                 $this->mensajes = [];
-                $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, Usd, Mxn, Pagado, Observaciones, Verificada, Utilidad, fecha) values (?,?,?,?,?,?,?,1,0,date_add(now(), interval 2 hour ))");
+                $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, Usd, Mxn, Pagado, Observaciones, Verificada, Utilidad, fecha) values (?,?,?,?,?,?,?,0,0,date_add(now(), interval 2 hour ))");
                 $idCliente = $this->getIdCliente($NombreCliente);
                 $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
                 $Observaciones = $this->limpiarEspacios($Observaciones);

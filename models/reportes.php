@@ -84,7 +84,7 @@ class reportes
 
     function consultaCorte($Desde, $Hasta, $Empleado){
         $query = null;
-        if(strcmp($Empleado,'') == 0){
+        if(strcmp($Empleado,'') != 0){
             $venta = new venta();
             $idEmpleado = $venta->getIdEmpleado($Empleado);
             $query = $this->connection->prepare('call DetalleCorteEmpleado(?,?,?)');
@@ -104,6 +104,7 @@ class reportes
     }
 
     function recargasCorte($idCorte){
+        echo $idCorte;
         $query = $this->connection->prepare('call RecargasCorte(?)');
         $query->bind_param('i', $idCorte);
         if($query->execute()){

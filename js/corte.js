@@ -64,17 +64,113 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => {
                 borrarTabla();
                 inicializarTabla(res);
-                var modal = document.getElementById('modalCorte');
-                var modalReporte = M.Modal.init(modal);
                 document.getElementById("CerrarCorte").classList.remove("disabled");
                 document.getElementById("CerrarCorte").textContent = "Registrar corte";
                 if (res.Dolares <= 0 && res.Mxn <= 0) {
                     document.getElementById("CerrarCorte").classList.add("disabled");
                     document.getElementById("CerrarCorte").textContent = "No se puede registrar un corte sin ingresos";
                 }
-                modalReporte.open();
+                tablaRecargasCorte(document.getElementById("CorteOption").value);
             }).catch(function (e) {
                 console.log(e.message);
+            })
+    }
+
+    function tablaRecargasCorte(idEmpleado){
+        const datos = new FormData();
+        datos.append('IdEmpleado', idEmpleado);
+        fetch('RecargasCortePreeliminar',{
+            body: datos,
+            method: 'POST'
+        })
+            .then(res => res.json())
+            .then(res => {
+                if(res.length > 0){
+                    document.getElementById('tablaRecargas').innerHTML = `
+                        <h5>Recargas incluidas</h5>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Monto</th>
+                                    <th>Teléfono</th>
+                                    <th>Operadora</th>
+                                    <th>Usd</th>
+                                    <th>Mxn</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recargasPreeliminarBody"></tbody>
+                        </table>
+                    `;
+                    for(i in res){
+                        document.getElementById('recargasPreeliminarBody').innerHTML += `
+                            <tr>
+                                <td>${res[i].Cliente}</td>
+                                <td>${res[i].Monto}</td>
+                                <td>${res[i].Telefono}</td>
+                                <td>${res[i].Operadora}</td>
+                                <td>${res[i].Usd}</td>
+                                <td>${res[i].Mxn}</td>
+                                <td>${res[i].Fecha}</td>
+                            </tr>
+                        `;
+                    }
+                } else {
+                    document.getElementById('tablaRecargas').innerHTML = `
+                        <h5>Recargas incluidas</h5>
+                        <h5 class="center-align">No hay datos que mostrar</h5>
+                    `;
+                }
+                tablaServiciosCorte(idEmpleado);
+            });
+    }
+
+    function tablaServiciosCorte(idEmpleado){
+        const datos = new FormData();
+        datos.append('IdEmpleado', idEmpleado);
+        fetch('ServiciosCortePreeliminar',{
+            body: datos,
+            method: 'POST'
+        })
+            .then(res => res.json())
+            .then(res => {
+                if(res.length > 0){
+                    document.getElementById('tablaServicios').innerHTML = `
+                        <h5>Servicios incluidos</h5>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Servicio</th>
+                                    <th>Usd</th>
+                                    <th>Mxn</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody id="serviciosPreeliminarBody"></tbody>
+                        </table>
+                    `;
+                    for(i in res){
+                        document.getElementById('serviciosPreeliminarBody').innerHTML += `
+                            <tr>
+                                <td>${res[i].Cliente}</td>
+                                <td>${res[i].Servicio}</td>
+                                <td>${res[i].Usd}</td>
+                                <td>${res[i].Mxn}</td>
+                                <td>${res[i].Fecha}</td>
+                            </tr>
+                        `;
+                    }
+                } else {
+                    document.getElementById('tablaServicios').innerHTML = `
+                        <h5>Servicios incluidos</h5>
+                        <h5 class="center-align">No hay datos que mostrar</h5>
+                    `;
+                }
+                var modal = document.getElementById('modalCorte');
+                var modalReporte = M.Modal.init(modal);
+                modalReporte.open();
             })
     }
 

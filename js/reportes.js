@@ -43,8 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.target.classList.contains('infoCliente')) {
             obtenerDatos(e.target.id);
         } else if(e.target.classList.contains('DetallesCorte')){
-            console.log('Detalles');
-            RecargasCorte(e.target.id.replace('Detalles-'));
+            RecargasCorte(e.target.id.replace('Detalles-',''));
         }
 
     });
@@ -161,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function RecargasCorte(idCorte){
+        console.log(idCorte);
         const data = new FormData();
         data.append('idCorte', idCorte);
         fetch('recargasCorte',{
