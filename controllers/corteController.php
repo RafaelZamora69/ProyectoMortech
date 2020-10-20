@@ -37,4 +37,12 @@ class corteController
             echo $this->corte->registrarCorte($_POST['Nombre'], $_POST['Usd'], $_POST['Mxn']);
         }
     }
+
+    public function RecargasCortePreeliminar(){
+        echo $this->corte->RecargasCortePreeliminar($_POST['IdEmpleado']);
+    }
+
+    public function ServiciosCortePreeliminar(){
+        echo $this->corte->ServiciosCortePreeliminar($_POST['IdEmpleado']);
+    }
 }

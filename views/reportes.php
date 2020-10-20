@@ -15,11 +15,16 @@ require_once 'views/layouts/sidenav.php';
             <div class="collapsible-header"><i class="material-icons">filter_list</i>Filtros</div>
             <div class="collapsible-body">
                 <div class="row">
-                    <div class="col s12 m6">
+                    <div class="col s6 m6">
                         <div class="input-field">
-                            <i class="material-icons prefix">search</i>
                             <input type="text" name="buscarVenta" id="buscarVenta">
-                            <label for="buscarVenta">idVenta</label>
+                            <label for="buscarVenta"><i class="material-icons">search</i> idVenta</label>
+                        </div>
+                    </div>
+                    <div class="col s6 m6">
+                        <div class="input-field">
+                            <input type="text" name="buscarCorte" id="buscarCorte">
+                            <label for="buscarCorte"><i class="material-icons">content_cut</i> idCorte</label>
                         </div>
                     </div>
                 </div>
