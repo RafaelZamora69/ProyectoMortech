@@ -74,30 +74,44 @@ require_once 'views/layouts/sidenav.php';
                         </p>
                         <p>
                             <label>
-                                <input name="Estado" type="radio" id="Todos" checked value="3"/>
+                                <input name="Pagadas" type="radio" id="Todos" checked/>
                                 <span>Todo</span>
                             </label>
                             <label>
-                                <input name="Estado" type="radio" id="Pagado" value="1"/>
+                                <input name="Pagadas" type="radio" id="Pagado"/>
                                 <span>Pagado</span>
                             </label>
                             <label>
-                                <input name="Estado" type="radio" id="Credito" value="0"/>
+                                <input name="Pagadas" type="radio" id="Credito"/>
                                 <span>Crédito</span>
                             </label>
                         </p>
                         <p id="Estados">
                             <label>
-                                <input name="Estado" type="radio" id="Todos" checked value="3"/>
+                                <input name="Verificadas" type="radio" id="Todas" checked/>
                                 <span>Todas</span>
                             </label>
                             <label>
-                                <input name="Estado" type="radio" id="Pagado" value="1"/>
-                                <span>Aprobadas</span>
+                                <input name="Verificadas" type="radio" id="Verificadas"/>
+                                <span>Verificadas</span>
                             </label>
                             <label>
-                                <input name="Estado" type="radio" id="Credito" value="0"/>
-                                <span>No aprobadas</span>
+                                <input name="Verificadas" type="radio" id="NoVerificadas"/>
+                                <span>No verificadas</span>
+                            </label>
+                        </p>
+                        <p id="Cortes">
+                            <label>
+                                <input type="radio" name="Cortes" id="Todas" checked>
+                                <span>Todas</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="Cortes" id="EnCorte">
+                                <span>En corte</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="Cortes" id="SinCorte">
+                                <span>Sin corte</span>
                             </label>
                         </p>
                     </div>
@@ -111,16 +125,8 @@ require_once 'views/layouts/sidenav.php';
     <div class="row">
         <div class="col s12" id="Detalles">
         </div>
-        <div class="col s12">
-            <table class="highlight responsive-table">
-                <thead>
-                <tr id="Headers">
-                </tr>
-                </thead>
-                <tbody id="TableBody">
+        <div class="col s12" id="Tabla">
 
-                </tbody>
-            </table>
         </div>
     </div>
     <div id="modalEditar" class="modal">
@@ -171,6 +177,14 @@ require_once 'views/layouts/sidenav.php';
         </div>
         <div class="modal-footer">
             <a id="Actualizar" class="modal-close waves-effect waves-green btn-flat">Actualizar</a>
+        </div>
+    </div>
+    <div id="modalDetalles" class="modal">
+        <div class="modal-content" id="modalDetallesCuerpo">
+
+        </div>
+        <div class="modal-footer">
+
         </div>
     </div>
     <script src="<?= base_url ?>js/reportes.js"></script>

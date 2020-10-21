@@ -104,29 +104,47 @@ class reportes
     }
 
     function recargasCorte($idCorte){
-        echo $idCorte;
         $query = $this->connection->prepare('call RecargasCorte(?)');
         $query->bind_param('i', $idCorte);
         if($query->execute()){
             $result = $query->get_result();
             $recargas = [];
             while($row = $result->fetch_assoc()){
-                $recargas[] = array('idVenta' => $row['idVenta'], 'Cliente' => $row['Nombre'], 'Telefono' => $row['NumeroTelefono'], 'Operadora' => $row['Operadora'], 'Monto' => $row['Monto'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Utilidad' => $row['Utilidad'], 'Observaciones' => $row['Observaciones']);
+                $recargas[] = array('idVenta' => $row['idVenta'], 'Cliente' => $row['Nombre'], 'Telefono' => $row['NumeroTelefono'], 'Operadora' => $row['Operadora'], 'Monto' => $row['Monto'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Utilidad' => $row['Utilidad'], 'Observaciones' => $row['Observaciones'], 'Fecha' => $row['fecha']);
             }
             return json_encode($recargas);
         }
     }
 
     function serviciosCorte($idCorte){
-        $query = $this->connection->prepare('call RecargasCorte(?)');
+        $query = $this->connection->prepare('call ServiciosCorte(?)');
         $query->bind_param('i', $idCorte);
         if($query->execute()){
             $result = $query->get_result();
             $servicios = [];
             while($row = $result->fetch_assoc()){
-                $servicios[] = array('idVenta' => $row['idVenta'], 'Cliente' => $row['Nombre'], 'NombreServicio' => $row['NombreServicio'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'fecha' => $row['fecha'], 'Verificada' => $row['Verificada']);
+                $servicios[] = array('idVenta' => $row['idVenta'], 'Cliente' => $row['Nombre'], 'Servicio' => $row['NombreServicio'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha'], 'Verificada' => $row['Verificada'], 'Observaciones' => $row['Observaciones']);
             }
             return json_encode($servicios);
+        }
+    }
+
+    function reporteTodo($Desde, $Hasta){
+        try {
+            $query = $this->connection->prepare('call ReporteTodo(?,?);');
+            $query->bind_param('ss',$Desde,$Hasta);
+            if($query->execute()){
+                $result = $query->get_result();
+                $Ventas = [];
+                while($row = $result->fetch_array()){
+                    $Ventas[] = array('idVenta' => $row['idVenta'], 'Empleado' => $row['Vendedor'], 'Servicio' =>
+                        $row['NombreServicio'], 'Cliente' => $row['Cliente'], 'Venta' => $row['Venta'], 'Pagado' =>
+                        $row['Pagado'], 'Corte' => $row['Corte'], 'Fecha' => $row['fecha'], 'Verificada' => $row['Verificada']);
+                }
+                return json_encode($Ventas);
+            }
+        }catch(Exception $e){
+            return json_encode($e->getMessage());
         }
     }
 }
