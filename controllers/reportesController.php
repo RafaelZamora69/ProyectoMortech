@@ -2,19 +2,11 @@
 require_once 'models/user.php';
 require_once 'models/reportes.php';
 require_once 'models/venta.php';
-class reportesController
-{
+class reportesController {
 
     public function index()
     {
         require_once 'views/reportes.php';
-    }
-
-    public function reporteVentas()
-    {
-        if (isset($_POST)) {
-            var_dump($_POST);
-        }
     }
 
     public function obtenerEmpleados()
@@ -58,5 +50,20 @@ class reportesController
     public function serviciosCorte(){
         $reporte = new reportes();
         echo $reporte->serviciosCorte($_POST['idCorte']);
+    }
+
+    public function consultaTodosServicios(){
+        $reporte = new reportes();
+        echo $reporte->reporteTodo($_POST['From'], $_POST['To']);
+    }
+
+    public function consultaRecargas(){
+        $reporte = new reportes();
+        echo $reporte->reporteRecargas($_POST['From'], $_POST['To']);
+    }
+
+    public function consultaServicios(){
+        $reporte = new reportes();
+        echo $reporte->reporteServicios($_POST['From'], $_POST['To']);
     }
 }
