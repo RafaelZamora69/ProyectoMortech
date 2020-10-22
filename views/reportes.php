@@ -61,7 +61,7 @@ require_once 'views/layouts/sidenav.php';
                             </label>
                             <label>
                                 <input name="Servicio" type="radio" id="Saldo"/>
-                                <span>Recarga de saldo</span>
+                                <span>Recargas</span>
                             </label>
                             <label>
                                 <input name="Servicio" type="radio" id="Servicios"/>

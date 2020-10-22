@@ -56,4 +56,14 @@ class reportesController {
         $reporte = new reportes();
         echo $reporte->reporteTodo($_POST['From'], $_POST['To']);
     }
+
+    public function consultaRecargas(){
+        $reporte = new reportes();
+        echo $reporte->reporteRecargas($_POST['From'], $_POST['To']);
+    }
+
+    public function consultaServicios(){
+        $reporte = new reportes();
+        echo $reporte->reporteServicios($_POST['From'], $_POST['To']);
+    }
 }

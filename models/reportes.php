@@ -147,4 +147,44 @@ class reportes
             return json_encode($e->getMessage());
         }
     }
+
+    function reporteRecargas($Desde, $Hasta){
+        try{
+            $query = $this->connection->prepare('call ReporteSaldo(?,?);');
+            $query->bind_param('ss', $Desde, $Hasta);
+            if($query->execute()){
+                $result = $query->get_result();
+                $Ventas = [];
+                while($row = $result->fetch_array()){
+                    $Ventas[] = array('idVenta' => $row['idVenta'], 'Empleado' => $row['Vendedor'], 'Cliente' =>
+                        $row['Cliente'], 'Telefono' => $row['NumeroTelefono'], 'Operadora' => $row['Operadora'],
+                        'Monto' => $row['Monto'], 'Venta' => $row['Venta'], 'Utilidad' => $row['Utilidad'],
+                        'Verificada' => $row['Verificada'], 'Pagado' => $row['Pagado'], 'Corte' => $row['Corte'], 'Fecha' => $row['fecha']);
+                }
+                return json_encode($Ventas);
+            }
+        }catch(Exception $e){
+            return json_encode($e->getMessage());
+        }
+    }
+
+    function reporteServicios($Desde, $Hasta){
+        try{
+            $query = $this->connection->prepare('call ReporteServicios(?,?)');
+            $query->bind_param('ss', $Desde, $Hasta);
+            if($query->execute()){
+                $result = $query->get_result();
+                $Ventas = [];
+                while($row = $result->fetch_array()){
+                    $Ventas[] = array('idVenta' => $row['idVenta'], 'Empleado' => $row['Vendedor'], 'Cliente' =>
+                        $row['Cliente'], 'Servicio' => $row['NombreServicio'], 'Venta' => $row['Venta'], 'Pagado' =>
+                        $row['Pagado'], 'Corte' => $row['Corte'], 'Verificada' => $row['Verificada'], 'Fecha' =>
+                        $row['fecha']);
+                }
+                return json_encode($Ventas);
+            }
+        }catch(Exception $e){
+            return json_encode($e->getMessage());
+        }
+    }
 }

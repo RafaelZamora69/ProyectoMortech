@@ -29,15 +29,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var elems = document.getElementById('modalEditar');
     var modal = M.Modal.init(elems);
     document.getElementById('Actualizar').onclick = actualizar;
-    //Datos para el filtro
-    let Tipo = 'Ventas';
-    let Servicio = 'TodosServicios';
+    //
     let idVenta;
-    let Usd = 0;
-    let Mxn = 0;
     document.body.addEventListener('click', (e) => {
-        if (e.target.classList.contains('infoCliente')) {
-            obtenerDatos(e.target.id);
+        if (e.target.classList.contains('infoVenta')) {
+            obtenerDatos(e.target.id.replace('detalles-', ''));
         } else if(e.target.classList.contains('DetallesCorte')){
             RecargasCorte(e.target.id.replace('Detalles-',''));
         }
@@ -57,19 +53,26 @@ document.addEventListener('DOMContentLoaded', function () {
     obtenerEmpleados();
     obtenerClientes();
 
-    function mostrarDetalles(data) {
-        let container = document.getElementById('Detalles');
-        container.innerHTML = `<p>Registros: ${data.length}</p>
-        <p>Usd: $${Usd = obtenerDolares(data, 'Si')} Usd</p>
-        <p>Credito Usd: $${Usd = obtenerDolares(data, 'No')} Usd</p>
-        <p>Mxn: $${Mxn = obtenerPesos(data, 'Si')} Mxn</p>
-        <p>Credito Mxn: $${Mxn = obtenerPesos(data, 'No')} Mxn</p>
-        `;
-        if (Servicio == 'Saldo') {
-            //Detalles en formato de saldo
-            container.innerHTML += `
+    function mostrarDetalles(data, Servicio) {
+        if(Servicio == 'Corte'){
+            document.getElementById('Detalles').innerHTML = `
+                <p>Registros: ${data.length}</p>
+                <p>Usd: $${obtenerDolares(data,'Corte')}</p>
+                <p>Mxn: $${obtenerPesos(data, 'Corte')}</p>
+            `;
+        } else {
+            document.getElementById('Detalles').innerHTML = `
+                <p>Registros: ${data.length}</p>
+                <p>Usd: $${obtenerDolares(data, 'Si')} Usd</p>
+                <p>Credito Usd: $${obtenerDolares(data, 'No')} Usd</p>
+                <p>Mxn: $${obtenerPesos(data, 'Si')} Mxn</p>
+                <p>Credito Mxn: $${obtenerPesos(data, 'No')} Mxn</p>
+            `;
+            if (Servicio == 'Saldo') {
+                document.getElementById('Detalles').innerHTML += `
                 <p>Saldo utilizado: $${saldoUtilizado(data)}</p>
             `
+            }
         }
     }
 
@@ -84,28 +87,36 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function obtenerDolares(data, Pagado) {
-        Usd = 0;
-        data.filter(function (entry) {
-            if (entry['Venta'] !== undefined) {
-                if (entry['Venta'].includes(' Usd') && entry['Pagado'] === Pagado) {
-                    var aux = entry['Venta'].replace(' Usd', '');
-                    Usd += parseFloat(aux);
+        let Usd = 0;
+        if(Pagado == 'Corte'){
+            data.filter(entry => Usd += parseFloat(entry['Usd']));
+        } else {
+            data.filter((entry) => {
+                if (entry['Venta'] !== undefined) {
+                    if (entry['Venta'].includes(' Usd') && entry['Pagado'] === Pagado) {
+                        const aux = entry['Venta'].replace(' Usd', '');
+                        Usd += parseFloat(aux);
+                    }
                 }
-            }
-        });
+            });
+        }
         return new Intl.NumberFormat().format(Usd);
     }
 
     function obtenerPesos(data, Pagado) {
-        Mxn = 0;
-        data.filter(function (entry) {
-            if (entry['Venta'] !== undefined) {
-                if (entry['Venta'].includes(' Mxn') && entry['Pagado'] === Pagado) {
-                    var aux = entry['Venta'].replace(' Mxn', '');
-                    Mxn += parseFloat(aux);
+        let Mxn = 0;
+        if(Pagado == 'Corte'){
+            data.filter(entry => Mxn += parseFloat(entry['Mxn']));
+        } else {
+            data.filter(entry => {
+                if (entry['Venta'] !== undefined) {
+                    if (entry['Venta'].includes(' Mxn') && entry['Pagado'] === Pagado) {
+                        const aux = entry['Venta'].replace(' Mxn', '');
+                        Mxn += parseFloat(aux);
+                    }
                 }
-            }
-        });
+            });
+        }
         return new Intl.NumberFormat().format(Mxn);
     }
 
@@ -117,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
             res = res.filter(x => x.Cliente == document.getElementById('autoCompleteClientes').value);
         }
         if(tipo == 'Corte'){
-            mostrarDetalles(res);
+            mostrarDetalles(res,tipo);
             return res;
         }
         if(document.getElementById('Pagado').checked){
@@ -135,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if(document.getElementById('SinCorte').checked){
             res = res.filter(x => x.Corte == 'No');
         }
-        mostrarDetalles(res);
+        mostrarDetalles(res, tipo);
         return res;
     }
 
@@ -159,6 +170,102 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function consultaServicios(data){
+        fetch('consultaServicios', {
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res => {
+                res = filtrar(res);
+                if(res.length > 0) {
+                    document.getElementById('Tabla').innerHTML = `
+                        <table class="centered responsive-table">
+                            <thead>
+                                <tr>
+                                    <th>Empleado</th>
+                                    <th>Cliente</th>
+                                    <th>Servicio</th>
+                                    <th>Venta</th>
+                                    <th>Fecha</th>
+                                    <th>Pagada</th>
+                                    <th>Verificada</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="serviciosBody"></tbody>
+                        </table>
+                    `;
+                    for(i in res){
+                        document.getElementById('serviciosBody').innerHTML += `
+                            <tr>
+                                <td>${res[i].Empleado}</td>
+                                <td>${res[i].Cliente}</td>
+                                <td>${res[i].Servicio}</td>
+                                <td>${res[i].Venta}</td>
+                                <td>${res[i].Fecha}</td>
+                                <td>${res[i].Pagado}</td>
+                                <td>${res[i].Verificada}</td>
+                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${res[i].idVenta}">Detalles</a></td>
+                            </tr>
+                        `;
+                    }
+                } else {
+                    document.getElementById('Tabla').innerHTML = `
+                        <h4 class="center-align">No hay datos que mostrar</h4>
+                    `;
+                }
+            });
+    }
+
+    function consultaRecargas(data){
+        fetch('consultaRecargas',{
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res => {
+                res = filtrar(res, 'Saldo');
+                if(res.length > 0){
+                    document.getElementById('Tabla').innerHTML = `
+                        <table class="responsive-table centered">
+                            <thead>
+                                <tr>
+                                    <th>Empleado</th>
+                                    <th>Cliente</th>
+                                    <th>Teléfono</th>
+                                    <th>Operadora</th>
+                                    <th>Monto</th>
+                                    <th>Venta</th>
+                                    <th>fecha</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="recargasBody"></tbody>
+                        </table>
+                    `;
+                    for(i in res){
+                        document.getElementById('recargasBody').innerHTML += `
+                            <tr>
+                                <td>${res[i].Empleado}</td>
+                                <td>${res[i].Cliente}</td>
+                                <td>${res[i].Telefono}</td>
+                                <td>${res[i].Operadora}</td>
+                                <td>${res[i].Monto}</td>
+                                <td>${res[i].Venta}</td>
+                                <td>${res[i].Fecha}</td>
+                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${res[i].idVenta}">Detalles</a></td>
+                            </tr>
+                        `;
+                    }
+                } else {
+                    document.getElementById('Tabla').innerHTML = `
+                        <h4 class="center-align">No hay datos que mostrar</h4>
+                    `;
+                }
+            });
+    }
+
     function consultaTodosServicios(data){
         fetch('consultaTodosServicios',{
             method: 'POST',
@@ -167,10 +274,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 res = filtrar(res);
-                console.log(res);
                 if(res.length > 0){
                     document.getElementById('Tabla').innerHTML = `
-                        <table>
+                        <table class="centered responsive-table">
                             <thead>
                                 <tr>
                                     <th>Empleado</th>
@@ -192,6 +298,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <td>${res[i].Servicio}</td>
                                 <td>${res[i].Venta}</td>
                                 <td>${res[i].Pagado}</td>
+                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${res[i].idVenta}">Detalles</a></td>
                             </tr>
                         `;
                     }
@@ -200,7 +307,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         <h4 class="center-align">No hay datos que mostrar</h4>
                     `;
                 }
-
             });
     }
 
@@ -211,9 +317,40 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res =>{
-                CargarTablaCorte();
                 res = filtrar(res, 'Corte');
-                TablaCorte(res);
+                if(res.length > 0){
+                    document.getElementById('Tabla').innerHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Empleado</th>
+                        <th>Iniciado</th>
+                        <th>Realizado</th>
+                        <th>Usd</th>
+                        <th>Mxn</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCorte"></tbody>
+            </table>
+        `;
+                    for (i in res) {
+                        document.getElementById('tablaCorte').innerHTML += `
+                            </tr>
+                                <td>${res[i].Empleado}</td>
+                                <td>${res[i].Iniciado}</td>
+                                <td>${res[i].Realizado}</td>
+                                <td>${res[i].Usd}</td>
+                                <td>${res[i].Mxn}</td>
+                                <td><a class="btn waves-effect waves-ligth green white-text DetallesCorte" id="Detalles-${res[i].idCorte}">Detalles</a></td>
+                            </tr>
+                    `;
+                    }
+                } else {
+                    document.getElementById('Tabla').innerHTML = `
+                        <h4 class="center-align">No hay datos que mostrar</h4>
+                    `;
+                }
             });
     }
 
@@ -367,40 +504,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }).catch(function (){
             M.toast({ html: 'Venta no encontrada', classes: 'red white-text'})
         });
-    }
-
-    function TablaCorte(data) {
-        CargarTablaCorte();
-        for (i in data) {
-            document.getElementById('tablaCorte').innerHTML += `
-                    </tr>
-                        <td>${data[i].Empleado}</td>
-                        <td>${data[i].Iniciado}</td>
-                        <td>${data[i].Realizado}</td>
-                        <td>${data[i].Usd}</td>
-                        <td>${data[i].Mxn}</td>
-                        <td><a class="btn waves-effect waves-ligth green white-text DetallesCorte" id="Detalles-${data[i].idCorte}">Detalles</a></td>
-                    </tr>
-            `;
-        }
-    }
-
-    function CargarTablaCorte() {
-        document.getElementById('Tabla').innerHTML = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>Empleado</th>
-                        <th>Iniciado</th>
-                        <th>Realizado</th>
-                        <th>Usd</th>
-                        <th>Mxn</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="tablaCorte"></tbody>
-            </table>
-        `;
     }
 
     function obtenerEmpleados() {
