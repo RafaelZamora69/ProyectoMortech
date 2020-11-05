@@ -320,20 +320,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 res = filtrar(res, 'Corte');
                 if(res.length > 0){
                     document.getElementById('Tabla').innerHTML = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>Empleado</th>
-                        <th>Iniciado</th>
-                        <th>Realizado</th>
-                        <th>Usd</th>
-                        <th>Mxn</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="tablaCorte"></tbody>
-            </table>
-        `;
+                        <table class="responsive-table centered">
+                            <thead>
+                                <tr>
+                                    <th>Empleado</th>
+                                    <th>Iniciado</th>
+                                    <th>Realizado</th>
+                                    <th>Usd</th>
+                                    <th>Mxn</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaCorte"></tbody>
+                        </table>
+                    `;
                     for (i in res) {
                         document.getElementById('tablaCorte').innerHTML += `
                             </tr>

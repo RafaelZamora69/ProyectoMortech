@@ -59,9 +59,9 @@ require_once 'views/layouts/sidenav.php';
                         <div class="col s6 m6">
                             <div class="input-field">
                                 <select name="Monto" id="Monto">
-                                    <option value="10">$ 10</option>
+                                    <option value="15">$ 15</option>
                                     <option value="20">$ 20</option>
-                                    <option value="30">$30</option>
+                                    <option value="30">$ 30</option>
                                     <option value="50">$ 50</option>
                                     <option value="70">$ 70</option>
                                     <option value="100" selected>$ 100</option>

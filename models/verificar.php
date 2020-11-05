@@ -12,22 +12,33 @@ class verificar {
         try{
             $Mensajes = [];
             for($i = 0; $i < sizeof($Compras); $i++){
-                $query = "select e.Nombre, NombreServicio, Usd, Verificada, fecha 
+                $query = "select idVenta, e.Nombre, NombreServicio, Usd, Mxn, Verificada, fecha 
 	                from venta inner join empleado e on venta.idEmpleado = e.idEmpleado
 	                where venta.NombreServicio = '{$Compras[$i]['Orden']}';";
                 if($result = $this->connection->query($query)){
                     if($result->num_rows > 0){
                         $row = $result->fetch_array();
                         if(strcmp($row['Verificada'], '0') == 0){
-                            if($Compras[$i]['Total'] == $row['Usd']){
-                                $Mensajes[] = array('Codigo' => 0, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => 'Correcta', 'Empleado' => $row['Nombre'], 'Fecha' => $row['fecha']);
-                                $this->connection->query("update venta set Verificada = 1 where NombreServicio = '{$Compras[$i]['Orden']}'");
-                            } elseif($Compras[$i]['Total'] < $row['Usd']){
-                                $Falta = (double)$row['Usd'] - (double)$Compras[$i]['Total'];
-                                $Mensajes[] = array('Codigo' => 2, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => "Faltan {$Falta} Usd", 'Empleado' => $row['Nombre'], 'Fecha' => $row['fecha']);
-                            } elseif($Compras[$i]['Total'] > $row['Usd']){
-                                $Sobra = (double)$Compras[$i]['Total'] - (double)$row['Usd'] ;
-                                $Mensajes[] = array('Codigo' => 2, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => "Sobran {$Sobra} Usd", 'Empleado' => $row['Nombre'], 'Fecha' => $row['fecha']);
+                            if(strcmp($row['Usd'], '0') == 0){
+                                //Pagada con pesos
+                                $Mensajes[] = array('idVenta' => $row['idVenta'], 'Codigo' => 3, 'Orden' =>
+                                    $Compras[$i]['Orden'],'Mensaje' => "Pagada con {$row['Mxn']} Mxn", 'Empleado' =>
+                                    $row['Nombre'], 'Fecha' => $row['fecha']);
+                            } else {
+                                //Pagada con dolares
+                                if($Compras[$i]['Total'] == $row['Usd']){
+                                    if($this->verificar($row['idVenta'])){
+                                        $Mensajes[] = array('idVenta' => $row['idVenta'], 'Codigo' => 0, 'Orden' =>
+                                            $Compras[$i]['Orden'],'Mensaje' => 'Correcta', 'Empleado' => $row['Nombre'], 'Fecha' => $row['fecha']);
+                                    }
+                                } elseif($Compras[$i]['Total'] < $row['Usd']){
+                                    $Falta = (double)$row['Usd'] - (double)$Compras[$i]['Total'];
+                                    $Mensajes[] = array('idVenta' => $row['idVenta'], 'Codigo' => 3, 'Orden' =>
+                                        $Compras[$i]['Orden'],'Mensaje' => "Sobran {$Falta} Usd", 'Empleado' => $row['Nombre'], 'Fecha' => $row['fecha']);
+                                } elseif($Compras[$i]['Total'] > $row['Usd']){
+                                    $Sobra = (double)$Compras[$i]['Total'] - (double)$row['Usd'] ;
+                                    $Mensajes[] = array('Codigo' => 2, 'Orden' => $Compras[$i]['Orden'],'Mensaje' => "Faltan {$Sobra} Usd", 'Empleado' => $row['Nombre'], 'Fecha' => $row['fecha']);
+                                }
                             }
                         }
                     } else {
@@ -72,6 +83,9 @@ class verificar {
         }
     }
 
-
-
+    function verificar($idVenta){
+        if($this->connection->query("update venta set Verificada = 1 where idVenta = '{$idVenta}'")){
+            return true;
+        }
+    }
 }
