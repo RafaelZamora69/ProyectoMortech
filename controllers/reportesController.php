@@ -21,12 +21,6 @@ class reportesController {
         echo $clientes->obtenerClientes();
     }
 
-    public function filtro()
-    {
-        $reporte = new reportes();
-        echo $reporte->consulta($_POST);
-    }
-
     public function obtenerDetalles() {
         $reporte = new venta();
         echo $reporte->detalleVenta($_POST['idVenta']);
