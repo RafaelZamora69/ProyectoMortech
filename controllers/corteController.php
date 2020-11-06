@@ -34,7 +34,7 @@ class corteController
     public function RegistrarCorte()
     {
         if (isset($_POST)) {
-            echo $this->corte->registrarCorte($_POST['Nombre'], $_POST['Usd'], $_POST['Mxn']);
+            echo $this->corte->registrarCorte($_POST['Nombre'], $_POST['Usd'], $_POST['Mxn'], $_POST['Comentarios']);
         }
     }
 

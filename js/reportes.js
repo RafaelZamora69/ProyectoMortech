@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var empleadoModal = M.Autocomplete.init(elems);
     var elems = document.getElementById('modalEditar');
     var modal = M.Modal.init(elems);
+    const modalDetalles = M.Modal.init(document.getElementById('modalDetalles'));
     document.getElementById('Actualizar').onclick = actualizar;
     //
     let idVenta;
@@ -47,9 +48,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     document.getElementById('buscarCorte').addEventListener('keypress', (e) => {
         if(e.key == 'Enter'){
-            RecargasCorte(document.getElementById('buscarCorte').value);
+            RecargasCorte((document.getElementById('buscarCorte').value).replace('/\s/g',''));
         }
     })
+    document.getElementById('buscarNumero').addEventListener('keypress', (e) => {
+        if(e.key == 'Enter'){
+            infoNumero((document.getElementById('buscarNumero').value).replace('/\s/g',''));
+        }
+    });
     obtenerEmpleados();
     obtenerClientes();
 
@@ -466,10 +472,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function actualizar() {
-        var data = new FormData(document.getElementById('dataActualizar'));
-        var pagado = document.getElementById('EstaPagado').checked ? 1 : 0;
+        const data = new FormData(document.getElementById('dataActualizar'));
+        const pagado = document.getElementById('EstaPagado').checked ? 1 : 0;
+        const verificada = document.getElementById('Verificada').checked ? 1 : 0;
         data.append('pagado', pagado);
         data.append('idVenta', idVenta);
+        data.append('Verificada', verificada);
         fetch('actualizarVenta', {
             method: 'POST',
             body: data
@@ -498,8 +506,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById("Mxn").value = res[0].Mxn;
                 document.getElementById("Usd").value = res[0].Usd;
                 document.getElementById("Observaciones").value = res[0].Observaciones;
-                res[0].Pagado == 0 ? document.getElementById("EstaPagado").checked = false : document.getElementById("EstaPagado").checked = true;
+                document.getElementById("EstaPagado").checked = res[0].Pagado == 0 ?  false : true;
                 res[0].Corte == 0 ? document.getElementById("Actualizar").classList.remove("disabled") : document.getElementById("Actualizar").classList.add("disabled")
+                document.getElementById('Verificada').checked = res[0].Verificada == 0 ?  false : true;
                 modal.open();
             }).catch(function (){
             M.toast({ html: 'Venta no encontrada', classes: 'red white-text'})
@@ -530,5 +539,52 @@ document.addEventListener('DOMContentLoaded', function () {
                 clientes.updateData(data);
                 clientesModal.updateData(data);
             })
+    }
+
+    function infoNumero(Numero){
+        const data = new FormData();
+        data.append('Numero', Numero);
+        fetch('infoNumero', {
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res => {
+                document.getElementById('modalDetallesCuerpo').innerHTML = `
+                    <h4>Detalles</h4>
+                    <table class="striped responsive-table">
+                        <thead>
+                            <tr>
+                                <th># Venta</th>
+                                <th>Cliente</th>
+                                <th>Empleado</th> 
+                                <th>Número</th>
+                                <th>Operadora</th>
+                                <th>Monto</th>
+                                <th>Ingreso</th>
+                                <th>Pagado</th>
+                                <th>Fecha</th>
+                            </tr> 
+                        </thead>
+                        <tbody id="detalleNumero"></tbody>
+                    </table>
+                `;
+                for(i in res){
+                    document.getElementById('detalleNumero').innerHTML += `
+                        <tr>
+                            <td>${res[i].idVenta}</td> 
+                            <td>${res[i].Cliente}</td>
+                            <td>${res[i].Empleado}</td>
+                            <td>${res[i].NumeroTelefono}</td>
+                            <td>${res[i].Operadora}</td>
+                            <td>${res[i].Monto}</td>
+                            <td>$${res[i].Usd} Usd, $${res[i].Mxn} Mxn</td>
+                            <td>${res[i].Pagado}</td>
+                            <td>${res[i].Fecha}</td>
+                        </tr>
+                    `;
+                }
+                modalDetalles.open();
+            });
     }
 });

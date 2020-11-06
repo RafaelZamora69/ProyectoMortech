@@ -32,6 +32,7 @@ require_once 'views/layouts/sidenav.php';
                     <th>Realizado el</th>
                     <th>Usd</th>
                     <th>Mxn</th>
+                    <th>Comentarios</th>
                 </tr>
             <tbody id="TablaCortes">
             </tbody>
@@ -64,7 +65,15 @@ require_once 'views/layouts/sidenav.php';
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="CerrarCorte">Finalizar</a>
+        <div class="row">
+            <div class="input-field col s12 m6">
+                <textarea name="Comentarios" id="ComentarioCorte" class="materialize-textarea"></textarea>
+                <label for="ComentarioCorte">Comentarios</label>
+            </div>
+            <div class="col s12 m6">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="CerrarCorte">Finalizar</a>
+            </div>
+        </div>
     </div>
 </div>
 <script src="<?= base_url ?>js/corte.js"></script>

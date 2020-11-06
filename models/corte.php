@@ -29,7 +29,8 @@ class corte
             $cortes = $this->conexion->query('select * from reportecorte');
             $result = [];
             while ($row = $cortes->fetch_array(MYSQLI_NUM)) {
-                $result[] = array('Nombre' => $row[0], 'Inicio' => $row[1], 'Fin' => $row[2], 'Usd' => $row[3], 'Mxn' => $row[4]);
+                $result[] = array('Nombre' => $row[0], 'Inicio' => $row[1], 'Fin' => $row[2], 'Usd' => $row[3], 'Mxn'
+                => $row[4], 'Comentarios' => $row[5]);
             }
             return $result;
         } catch (Exception $e) {
@@ -47,14 +48,14 @@ class corte
         return $idEmpleado;
     }
 
-    public function registrarCorte($Nombre, $Usd, $Mxn)
+    public function registrarCorte($Nombre, $Usd, $Mxn, $Comentarios)
     {
         try {
-            $corte = $this->conexion->prepare('call InsertarCorte(?,?,?)');
+            $corte = $this->conexion->prepare('call InsertarCorte(?,?,?,?)');
             $Usd = str_replace('$ ', '', $Usd);
             $Mxn = str_replace('$ ', '', $Mxn);
             $id = $this->getVendedorId($Nombre);
-            $corte->bind_param('idd', $id, $Usd, $Mxn);
+            $corte->bind_param('idds', $id, $Usd, $Mxn, $Comentarios);
             if ($corte->execute()) {
                 $corte = $this->conexion->prepare('call ActualizarCorte(?);');
                 $id = $this->getVendedorId($Nombre);
