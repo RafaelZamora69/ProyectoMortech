@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('NumeroBuscar').addEventListener('submit', (e) => {
         e.preventDefault();
         const data = new FormData();
-        data.append('Numero', document.getElementById('Numero').value);
+        data.append('Numero', (document.getElementById('Numero').value).replace('/\s/g',''));
         fetch('buscarNumero',{
             body: data,
             method: 'POST'
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <td>${res.Empleado}</td>
                             <td>${res.Monto}</td>
                             <td>${res.Usd} Usd, ${res.Mxn} Mxn</td>
+                            <td>${res.Operadora}</td>
                             <td>${res.NumeroTelefono}</td>
                             <td>${res.Pagado}</td>
                             <td>${res.Fecha}</td>

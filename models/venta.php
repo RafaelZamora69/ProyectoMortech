@@ -114,9 +114,12 @@ class venta
             $busqueda->bind_param('s', $Numero);
             $busqueda->execute();
             $result = $busqueda->get_result();
+            $Ventas = [];
             while($row = $result->fetch_assoc()){
-                return json_encode(Array('Empleado' => $row['Empleado'], 'Cliente' => $row['Cliente'], 'NumeroTelefono' => $row['NumeroTelefono'], 'Monto' => $row['Monto'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha'], 'Pagado' => $row['Pagado']) );
+                $Ventas[] = Array('idVenta' => $row['idVenta'], 'Empleado' => $row['Empleado'], 'Cliente' => $row['Cliente'],
+                'NumeroTelefono' => $row['NumeroTelefono'], 'Operadora' => $row['Operadora'], 'Monto' => $row['Monto'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha'], 'Pagado' => $row['Pagado']);
             }
+            return json_encode($Ventas);
         }catch(Exception $e){
             return json_encode($e->getMessage());
         }
@@ -136,11 +139,13 @@ class venta
                 }
                 if ($this->recarga($Carrier, $tel, $Monto)) {
                     insertar:
-                    $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 2 hour ));");
+                    $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha, Verificada) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 2 hour ),?);");
                     $idCliente = $this->getIdCliente($NombreCliente);
                     $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
                     $Utilidad = $this->getUtilidad($Monto, $Usd, $Mxn);
-                    $venta->bind_param("iisssddddis", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones);
+                    $Verificado = $Utilidad <= 0 ? 0 : 1;
+                    $venta->bind_param("iisssddddisi", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora,
+                        $Monto, $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado);
                     if (!$venta->execute()) {
                         return json_encode('Error en la inserción ' . $venta->error);
                     }
@@ -180,13 +185,13 @@ class venta
     function detalleVenta($idVenta)
     {
         try {
-            $detalle = $this->connection->prepare("select idVenta, cliente.Nombre As 'Cliente', empleado.Nombre As 'Empleado', Usd, Mxn, Pagado, Observaciones, Corte from venta inner join cliente on venta.idCliente = cliente.idCliente inner join empleado on venta.idEmpleado = empleado.idEmpleado where idVenta = ?");
+            $detalle = $this->connection->prepare("select idVenta, cliente.Nombre As 'Cliente', empleado.Nombre As 'Empleado', Usd, Mxn, Pagado, Observaciones, Corte, Verificada from venta inner join cliente on venta.idCliente = cliente.idCliente inner join empleado on venta.idEmpleado = empleado.idEmpleado where idVenta = ?");
             $detalle->bind_param("i", $idVenta);
             $detalle->execute();
             $result = $detalle->get_result();
             $arr = [];
             while ($row = $result->fetch_assoc()) {
-                $arr[] = array('idVenta' => $row['idVenta'], 'Cliente' => $row['Cliente'], 'Empleado' => $row['Empleado'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Pagado' => $row['Pagado'], 'Observaciones' => $row['Observaciones'], 'Corte' => $row['Corte']);
+                $arr[] = array('idVenta' => $row['idVenta'], 'Cliente' => $row['Cliente'], 'Empleado' => $row['Empleado'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Pagado' => $row['Pagado'], 'Observaciones' => $row['Observaciones'], 'Corte' => $row['Corte'], 'Verificada' => $row['Verificada']);
             }
             return json_encode($arr);
         } catch (Exception $e) {

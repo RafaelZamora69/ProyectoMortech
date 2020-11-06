@@ -29,25 +29,15 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => {
                 for (i in res) {
                     document.getElementById('TablaCortes').innerHTML += `
-                        <tr></tr>
+                        <tr>
+                            <td>${res[i].Nombre}</td> 
+                            <td>${res[i].Inicio}</td>
+                            <td>${res[i].Fin}</td>
+                            <td>${res[i].Usd}</td>
+                            <td>${res[i].Mxn}</td>
+                            <td>${res[i].Comentarios}</td>
+                        </tr>
                     `;
-                    var tr = document.createElement("tr");
-                    document.getElementById("TablaCortes").appendChild(tr);
-                    var td = document.createElement("td");
-                    td.innerText = res[i].Nombre;
-                    tr.appendChild(td);
-                    var td = document.createElement("td");
-                    td.innerText = res[i].Inicio;
-                    tr.appendChild(td);
-                    var td = document.createElement("td");
-                    td.innerText = res[i].Fin;
-                    tr.appendChild(td);
-                    var td = document.createElement("td");
-                    td.innerText = res[i].Usd;
-                    tr.appendChild(td);
-                    var td = document.createElement("td");
-                    td.innerText = res[i].Mxn;
-                    tr.appendChild(td);
                 }
             })
     }
@@ -88,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(res.length > 0){
                     document.getElementById('tablaRecargas').innerHTML = `
                         <h5>Recargas incluidas</h5>
-                        <table>
+                        <table class="striped responsive-table">
                             <thead>
                                 <tr>
                                     <th>Cliente</th>
@@ -138,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(res.length > 0){
                     document.getElementById('tablaServicios').innerHTML = `
                         <h5>Servicios incluidos</h5>
-                        <table>
+                        <table class="striped responsive-table">
                             <thead>
                                 <tr>
                                     <th>Cliente</th>
@@ -175,13 +165,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function GuardarCorte(e) {
-        var nombre = document.getElementById("Nombre").innerText;
-        var usd = document.getElementById("Usd").innerText;
-        var mxn = document.getElementById("Mxn").innerText;
-        datos = new FormData();
-        datos.append('Nombre', nombre);
-        datos.append('Usd', usd);
-        datos.append('Mxn', mxn);
+        const datos = new FormData();
+        datos.append('Nombre', document.getElementById("Nombre").innerText);
+        datos.append('Usd', document.getElementById("Usd").innerText);
+        datos.append('Mxn', document.getElementById("Mxn").innerText);
+        datos.append('Comentarios', document.getElementById('ComentarioCorte').value);
         fetch('RegistrarCorte', {
             method: 'POST',
             body: datos

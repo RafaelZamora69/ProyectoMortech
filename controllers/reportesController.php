@@ -28,7 +28,7 @@ class reportesController {
 
     public function actualizarVenta() {
         $reporte = new reportes();
-        echo $reporte->actualizar($_POST['Empleado'], $_POST['Cliente'], $_POST['idVenta'], $_POST['Mxn'], $_POST['Usd'], $_POST['pagado'], $_POST['Observaciones']);
+        echo $reporte->actualizar($_POST['Empleado'], $_POST['Cliente'], $_POST['idVenta'], $_POST['Mxn'], $_POST['Usd'], $_POST['pagado'], $_POST['Observaciones'], $_POST['Verificada']);
     }
 
     public function consultaCorte(){
@@ -59,5 +59,10 @@ class reportesController {
     public function consultaServicios(){
         $reporte = new reportes();
         echo $reporte->reporteServicios($_POST['From'], $_POST['To']);
+    }
+
+    public function infoNumero(){
+        $venta = new venta();
+        echo $venta->infoNumero($_POST['Numero']);
     }
 }

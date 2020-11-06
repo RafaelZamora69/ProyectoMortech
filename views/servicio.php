@@ -330,6 +330,7 @@ require_once 'views/layouts/sidenav.php';
                         <th>Empleado</th>
                         <th>Monto</th>
                         <th>Ingreso</th>
+                        <th>Operadora</th>
                         <th>Teléfono</th>
                         <th>Pagado</th>
                         <th>Fecha</th>

@@ -15,16 +15,22 @@ require_once 'views/layouts/sidenav.php';
             <div class="collapsible-header"><i class="material-icons">filter_list</i>Filtros</div>
             <div class="collapsible-body">
                 <div class="row">
-                    <div class="col s6 m6">
+                    <div class="col s4 m4">
                         <div class="input-field">
                             <input type="text" name="buscarVenta" id="buscarVenta">
                             <label for="buscarVenta"><i class="material-icons">search</i> idVenta</label>
                         </div>
                     </div>
-                    <div class="col s6 m6">
+                    <div class="col s4 m4">
                         <div class="input-field">
                             <input type="text" name="buscarCorte" id="buscarCorte">
                             <label for="buscarCorte"><i class="material-icons">content_cut</i> idCorte</label>
+                        </div>
+                    </div>
+                    <div class="col s4 m4">
+                        <div class="input-field">
+                            <input type="text" name="buscarNumero" id="buscarNumero">
+                            <label for="buscarNumero"><i class="material-icons">call</i> Número</label>
                         </div>
                     </div>
                 </div>
@@ -159,13 +165,19 @@ require_once 'views/layouts/sidenav.php';
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s6">
+                    <div class="col s4">
                         <label>
                             <input type="checkbox" id="EstaPagado">
                             <span>Pagado</span>
                         </label>
                     </div>
-                    <div class="col s6">
+                    <div class="col s4">
+                        <label>
+                            <input type="checkbox" id="Verificada">
+                            <span>Verificada</span>
+                        </label>
+                    </div>
+                    <div class="col s4">
                         <div class="input-field">
                             <textarea name="Observaciones" id="Observaciones" class="materialize-textarea"
                                       placeholder="Observaciones"></textarea>
