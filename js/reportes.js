@@ -244,12 +244,23 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <th>Monto</th>
                                     <th>Venta</th>
                                     <th>fecha</th>
-                                    <th></th>
+                                    <th><a class="btn waves-effect waves-light" id="Copiar">Copiar números</a></th>
                                 </tr>
                             </thead>
                             <tbody id="recargasBody"></tbody>
                         </table>
                     `;
+                    document.getElementById('Copiar').addEventListener('click',(e) => {
+                        document.getElementById('Tabla').innerHTML += `
+                            <input type="text" value="${Numeros(res)}" id="Nums">
+                        `;
+                        const cop = document.getElementById('Nums');
+                       cop.select();
+                       document.execCommand('selectAll');
+                       document.execCommand('copy');
+                       cop.style.visibility = 'hidden';
+                       M.toast({ html: 'Numeros copiados', classes: 'green white-text' });
+                    });
                     for(i in res){
                         document.getElementById('recargasBody').innerHTML += `
                             <tr>
@@ -586,5 +597,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 modalDetalles.open();
             });
+    }
+
+    function Numeros(res){
+        var numeros = '';
+        for(i in res){
+            numeros = numeros.concat(res[i].Telefono,',');
+        }
+        return numeros;
     }
 });
