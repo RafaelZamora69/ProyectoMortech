@@ -53,6 +53,7 @@ require_once 'views/layouts/sidenav.php';
                                     <li><a>AT&T</a></li>
                                     <li><a>Telcel</a></li>
                                     <li><a>Movistar</a></li>
+                                    <li><a>MT</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -238,6 +239,7 @@ require_once 'views/layouts/sidenav.php';
                                     <li><a>AT&T</a></li>
                                     <li><a>Telcel</a></li>
                                     <li><a>Movistar</a></li>
+                                    <li><a>MT</a></li>
                                 </ul>
                             </div>
                         </div>

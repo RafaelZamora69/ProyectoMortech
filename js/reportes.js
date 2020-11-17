@@ -583,7 +583,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 for(i in res){
                     document.getElementById('detalleNumero').innerHTML += `
                         <tr>
-                            <td>${res[i].idVenta}</td> 
+                            <td><a id="detalles-${res[i].idVenta}" class="infoVenta">${res[i].idVenta}</a></td> 
                             <td>${res[i].Cliente}</td>
                             <td>${res[i].Empleado}</td>
                             <td>${res[i].NumeroTelefono}</td>
