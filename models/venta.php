@@ -134,7 +134,7 @@ class venta
             for ($i = 0; $i < count($arr); $i++) {
                 $tel = $arr[$i]['tag'];
                 //Si se realiza la recarga
-                if(strcmp('Externa', $Tipo) == 0) {
+                if(strcmp('Externa', $Tipo) == 0 || strcmp($Operadora, 'MT') == 0) {
                     goto insertar;
                 }
                 if ($this->recarga($Carrier, $tel, $Monto)) {
@@ -144,10 +144,12 @@ class venta
                     $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
                     $Utilidad = $this->getUtilidad($Monto, $Usd, $Mxn);
                     $Verificado = $Utilidad <= 0 ? 0 : 1;
-                    $venta->bind_param("iisssddddisi", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora,
-                        $Monto, $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado);
+                    $venta->bind_param("iisssddddisi", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado);
                     if (!$venta->execute()) {
                         return json_encode('Error en la inserción ' . $venta->error);
+                    }
+                    if(strcmp($Operadora, 'MT') == 0){
+                        $this->mensajes[] = array('Tel' => $tel, 'Codigo' => 0, 'Mensaje' => 'Recarga exitosa');
                     }
                 }
             }

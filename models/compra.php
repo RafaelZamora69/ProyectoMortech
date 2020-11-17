@@ -100,4 +100,9 @@ class compra {
             return json_encode($e->getMessage());
         }
     }
+
+    public function generarOrdenCompra(){
+        $curl = curl_init("https://app.stelorder.com/app/purchaseOrders?APIKEY=[APIKEY]");
+
+    }
 }

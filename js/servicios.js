@@ -304,6 +304,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return 3;
             case "AT&T":
                 return 4;
+            case "MT":
+                return 101;
         }
     }
 
@@ -354,6 +356,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     opcion.value = at[i];
                     opcion.text = '$ ' + at[i];
                     opciones.appendChild(opcion);
+                }
+                montos = M.FormSelect.init(select);
+                break;
+            case 'MT':
+                const values = [99,199,299];
+                for(i in values){
+                    const opciones = Tipo == 'Externa' ? document.getElementById('MontoExterna') : document.getElementById('Monto');
+                    opciones.innerHTML += `
+                        <option value="${values[i]}">$ ${values[i]}</option>
+                    `;
                 }
                 montos = M.FormSelect.init(select);
                 break;
