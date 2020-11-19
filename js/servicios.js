@@ -12,18 +12,22 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                    document.getElementById('TablaInfoNumeroDatos').innerHTML = `
-                        <tr>
-                            <td>${res.Cliente}</td>
-                            <td>${res.Empleado}</td>
-                            <td>${res.Monto}</td>
-                            <td>${res.Usd} Usd, ${res.Mxn} Mxn</td>
-                            <td>${res.Operadora}</td>
-                            <td>${res.NumeroTelefono}</td>
-                            <td>${res.Pagado}</td>
-                            <td>${res.Fecha}</td>
-                        </tr>
-                    `;
+                const TablaInfoNumeroDatos = document.getElementById('TablaInfoNumeroDatos');
+                TablaInfoNumeroDatos.innerHTML = '';
+                    if(res.length > 0){
+                        res.map(i => TablaInfoNumeroDatos.insertAdjacentHTML('beforeend',`
+                            <tr>
+                                <td>${i.Cliente}</td>
+                                <td>${i.Empleado}</td>
+                                <td>${i.Monto}</td>
+                                <td>${i.Usd} Usd, ${i.Mxn} Mxn</td>
+                                <td>${i.Operadora}</td>
+                                <td>${i.NumeroTelefono}</td>
+                                <td>${i.Pagado}</td>
+                                <td>${i.Fecha}</td>
+                            </tr>
+                        `));
+                    }
                 modal2.open();
             });
     });

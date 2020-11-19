@@ -83,21 +83,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function cargarTabla(res) {
-        for (i in res) {
-            document.getElementById('TablaDeudas').innerHTML += `
-                <tr>
-                    <td>${res[i].Empleado}</td>
-                    <td>${res[i].Nombre}</td>
-                    <td>${res[i].NumeroTelefono}</td>
-                    <td>$${res[i].Usd} Usd, $${res[i].Mxn} Mxn</td>
-                    <td>${res[i].Fecha}</td>
-                    <td>${res[i].Observaciones}</td>
-                </tr>
-            `;
-            if (res[i].Deudas == 0) {
-                document.getElementById(res[i].idCliente).classList.add('disabled');
-            }
-        }
+        const TablaDeudas = document.getElementById('TablaDeudas');
+        res.map(i => TablaDeudas.insertAdjacentHTML('beforeend', `
+            <tr>
+                <td>${i.Empleado}</td>
+                <td>${i.Nombre}</td>
+                <td>${i.Servicio}</td>
+                <td>${i.NumeroTelefono === null ? '----' : i.NumeroTelefono}</td>
+                <td>$${i.Usd} Usd, $${i.Mxn} Mxn</td>
+                <td>${i.Fecha}</td>
+                <td>${i.Observaciones}</td>
+            </tr>
+        `));
     }
 
     function obtenerInfo(idCliente, nombre) {

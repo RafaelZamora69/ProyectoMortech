@@ -21,6 +21,7 @@ require_once 'views/layouts/sidenav.php';
                     <tr>
                         <th>Vendedor</th>
                         <th>Cliente</th>
+                        <th>Servicio</th>
                         <th>Teléfono</th>
                         <th>Crédito</th>
                         <th>Fecha</th>
