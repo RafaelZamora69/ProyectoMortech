@@ -261,20 +261,19 @@ document.addEventListener('DOMContentLoaded', function () {
                        cop.style.visibility = 'hidden';
                        M.toast({ html: 'Numeros copiados', classes: 'green white-text' });
                     });
-                    for(i in res){
-                        document.getElementById('recargasBody').innerHTML += `
+                    const recargasBody = document.getElementById('recargasBody');
+                    res.map(i => recargasBody.insertAdjacentHTML('beforeend', `
                             <tr>
-                                <td>${res[i].Empleado}</td>
-                                <td>${res[i].Cliente}</td>
-                                <td>${res[i].Telefono}</td>
-                                <td>${res[i].Operadora}</td>
-                                <td>${res[i].Monto}</td>
-                                <td>${res[i].Venta}</td>
-                                <td>${res[i].Fecha}</td>
-                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${res[i].idVenta}">Detalles</a></td>
+                                <td>${i.Empleado}</td>
+                                <td>${i.Cliente}</td>
+                                <td>${i.Telefono}</td>
+                                <td>${i.Operadora}</td>
+                                <td>${i.Monto}</td>
+                                <td>${i.Venta}</td>
+                                <td>${i.Fecha}</td>
+                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${i.idVenta}">Detalles</a></td>
                             </tr>
-                        `;
-                    }
+                        `));
                 } else {
                     document.getElementById('Tabla').innerHTML = `
                         <h4 class="center-align">No hay datos que mostrar</h4>
@@ -307,18 +306,17 @@ document.addEventListener('DOMContentLoaded', function () {
                             <tbody id="todoServiciosBody"></tbody>
                         </table>
                     `;
-                    for(i in res){
-                        document.getElementById('todoServiciosBody').innerHTML += `
-                            <tr>
-                                <td>${res[i].Empleado}</td>
-                                <td>${res[i].Cliente}</td>
-                                <td>${res[i].Servicio}</td>
-                                <td>${res[i].Venta}</td>
-                                <td>${res[i].Pagado}</td>
-                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${res[i].idVenta}">Detalles</a></td>
-                            </tr>
-                        `;
-                    }
+                    const todoServiciosBody = document.getElementById('todoServiciosBody');
+                    res.map( i => todoServiciosBody.insertAdjacentHTML('beforeend', `
+                        <tr>
+                                <td>${i.Empleado}</td>
+                                <td>${i.Cliente}</td>
+                                <td>${i.Servicio}</td>
+                                <td>${i.Venta}</td>
+                                <td>${i.Pagado}</td>
+                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${i.idVenta}">Detalles</a></td>
+                        </tr>
+                    `));
                 } else {
                     document.getElementById('Tabla').innerHTML = `
                         <h4 class="center-align">No hay datos que mostrar</h4>
