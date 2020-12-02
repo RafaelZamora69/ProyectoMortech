@@ -136,13 +136,13 @@ require_once 'views/layouts/sidenav.php';
                     <div class="row">
                         <div class="col s4 l4">
                             <div class="input-field">
-                                <input name="UsdServicio" type="number" id="UsdServicio">
+                                <input name="UsdServicio" type="number" id="UsdServicio" step="0.1">
                                 <label for="UsdServicio">Usd</label>
                             </div>
                         </div>
                         <div class="col s4 l4">
                             <div class="input-field">
-                                <input name="MxnServicio" type="number" id="MxnServicio">
+                                <input name="MxnServicio" type="number" id="MxnServicio" step="0.1">
                                 <label for="MxnServicio">Mxn</label>
                             </div>
                         </div>
