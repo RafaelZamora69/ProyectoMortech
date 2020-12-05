@@ -57,23 +57,9 @@ require_once  'views/layouts/sidenav.php';
     <div class="col s12">
         <div id="compras" class="col s12">
             <div id="detallesCompras"></div>
-            <table class="responsive-table">
-                <thead>
-                <tr>
-                    <th>Empleado</th>
-                    <th>Proveedor</th>
-                    <th>Referencia</th>
-                    <th>Total</th>
-                    <th>Método de pago</th>
-                    <th>Fecha</th>
-                    <th>Comprobante</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tbody id="tablaCompras">
-
-                </tbody>
-                </thead>
+            <table class="responsive-table centered">
+                <thead id="theadDetalleCompra"></thead>
+                <tbody id="tablaCompras"></tbody>
             </table>
         </div>
     </div>

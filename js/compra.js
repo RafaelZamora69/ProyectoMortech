@@ -1,24 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
-    var elems = document.getElementById('Desde');
-    const Desde = M.Datepicker.init(elems, {
+    M.Datepicker.init(document.getElementById('Desde'), {
         defaultDate: new Date(today.getFullYear(), today.getMonth(), 1),
         setDefaultDate: true,
         format: 'yyyy-mm-dd',
         maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
     });
-    var elems = document.getElementById('Hasta');
-    const Hasta = M.Datepicker.init(elems, {
+    M.Datepicker.init(document.getElementById('Hasta'), {
         defaultDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1),
         setDefaultDate: true,
         format: 'yyyy-mm-dd',
         maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
     });
-    var elems = document.getElementById('autocompleteEmpleado');
-    const autocompleteEmp = M.Autocomplete.init(elems);
-    var elems = document.getElementById('autocompleteProveedor');
-    const modalCompras = M.Modal.init(document.getElementById('modalCompras'));
-    const autocompleteProv = M.Autocomplete.init(elems);
+    M.Autocomplete.init(document.getElementById('autocompleteEmpleado'));
+    M.Modal.init(document.getElementById('modalCompras'));
+    M.Autocomplete.init(document.getElementById('autocompleteProveedor'));
     let Compras = null;
     initComponents();
     cargarCompras();
@@ -75,14 +71,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function cargarCompras() {
-        var res;
         const data = new FormData();
         data.append('Desde', document.getElementById('Desde').value);
         data.append('Hasta', document.getElementById('Hasta').value);
         if(document.getElementById('Pend').checked){
             cargarComprasPendientes(data);
         } else if(document.getElementById('Pagada').checked){
-            cargarComprasPagadas(data);
+            cargarComprasPagadas(data);1
         } else {
             cargarAmbasCompras(data);
         }
@@ -102,11 +97,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(document.getElementById('autocompleteProveedor').value != ''){
                         res = res.filter(x => x.Proveedor == document.getElementById('autocompleteProveedor').value);
                     }
-                    document.getElementById('detallesCompras').innerHTML = `
+                    document.getElementById('detallesCompras').insertAdjacentHTML('beforeend',`
                         <p>Registros: ${res.length}</p>
                         <p>Total: $${total(res)}</p>
+                    `);
+                    document.getElementById('theadDetalleCompra').innerHTML = `
+                        <tr>
+                            <th>Empleado</th>
+                            <th>Proveedor</th>
+                            <th>Referencia</th>
+                            <th>Total</th>
+                            <th>Método de pago</th>
+                            <th>Fecha</th>
+                            <th>Comprobante</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
                     `;
-                    mostrarDatos(res);
+                    mostrarDatos(res,'normal');
                 }
             });
     }
@@ -128,13 +136,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(!document.getElementById('Ambos').checked){
                         document.getElementById('Efect').checked ? res = res.filter(x => x.Pagada == 'Efectivo') : res = res.filter(x => x.Pagada == 'Banco')
                     }
-                    document.getElementById('detallesCompras').innerHTML = `
+                    document.getElementById('detallesCompras').insertAdjacentHTML('beforeend',`
                         <p>Registros: ${res.length}</p>
                         <p>Efectivo: $${total(res.filter(x => x.Pagada == 'Efectivo'))}</p>
                         <p>Banco: $${total(res.filter(x => x.Pagada == 'Banco'))}</p>
                         <p>Total: $${total(res)}</p>
+                    `);
+                    document.getElementById('theadDetalleCompra').innerHTML = `
+                        <tr>
+                            <th>Empleado</th>
+                            <th>Proveedor</th>
+                            <th>Referencia</th>
+                            <th># Stel</th>
+                            <th>Total</th>
+                            <th>Método de pago</th>
+                            <th>Fecha</th>
+                            <th>Comprobante</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
                     `;
-                    mostrarDatos(res);
+                    mostrarDatos(res,'stel');
                 }
             });
     }
@@ -156,48 +178,79 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(!document.getElementById('Ambos').checked){
                         document.getElementById('Efect').checked ? res = res.filter(x => x.Pagada == 'Efectivo') : res = res.filter(x => x.Pagada == 'Banco');
                     }
-                    document.getElementById('detallesCompras').innerHTML = `
+                    document.getElementById('detallesCompras').insertAdjacentHTML('beforeend',`
                         <p>Registros: ${res.length}</p>
                         <p>Efectivo: $${total(res.filter(x => x.Pagada == 'Efectivo'))}</p>
                         <p>Banco: $${total(res.filter(x => x.Pagada == 'Banco'))}</p>
                         <p>Total: $${total(res)}</p>
                         <p>Pendiente: $${total(res.filter(x => x.Pagada == 'Sin pagar'))}</p>
+                    `);
+                    document.getElementById('theadDetalleCompra').innerHTML = `
+                        <tr>
+                            <th>Empleado</th>
+                            <th>Proveedor</th>
+                            <th>Referencia</th>
+                            <th>Total</th>
+                            <th>Método de pago</th>
+                            <th>Fecha</th>
+                            <th>Comprobante</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
                     `;
-                    mostrarDatos(res);
+                    mostrarDatos(res,'normal');
                 }
             });
     }
 
-    function mostrarDatos(res){
-        for(i in res){
-            document.getElementById('tablaCompras').innerHTML += `
-                <tr>
-                    <td>${res[i].Nombre}</td>
-                    <td>${res[i].Proveedor}</td>
-                    <td><p class="truncate">${res[i].Referencia}</p></td>
-                    <td>${res[i].Total}</td>
-                    <td><a class='dropdown-trigger btn' data-target='metodosPago' id="${res[i].idCompra}">${res[i].Pagada}</a></td>
-                    <td>${res[i].Fecha}</td>
-                    <td id="img-${res[i].idCompra}"><a href="#!" class="descargarImagen" id="img-${res[i].idCompra}">Descargar comprobante</a></td>
-                    <td><a id="actualizar-${res[i].idCompra}" class="btn waves-effect waves-light yellow black-text actualizarCompra">Actualizar</a></td>
-                    <td><a id="eliminar-${res[i].idCompra}" class="btn waves-effect waves-light red eliminarCompra">Eliminar</a></td>
-                </tr>
-            `;
+    function mostrarDatos(res,modo){
+        const tablaCompras = document.getElementById('tablaCompras');
+        if(modo === 'normal'){
+            res.map(x => {
+                tablaCompras.insertAdjacentHTML('beforeend',`
+                    <tr>
+                        <td>${x.Nombre}</td>
+                        <td>${x.Proveedor}</td>
+                        <td><p class="truncate">${x.Referencia}</p></td>
+                        <td>${x.Total}</td>
+                        <td><a class='dropdown-trigger btn' data-target='metodosPago' id="${x.idCompra}">${x.Pagada}</a></td>
+                        <td>${x.Fecha}</td>
+                        <td id="img-${x.idCompra}"><a href="#!" class="descargarImagen" id="img-${x.idCompra}">Descargar comprobante</a></td>
+                        <td><a id="actualizar-${x.idCompra}" class="btn waves-effect waves-light yellow black-text actualizarCompra">Actualizar</a></td>
+                        <td><a id="eliminar-${x.idCompra}" class="btn waves-effect waves-light red eliminarCompra">Eliminar</a></td>
+                    </tr>
+                `);
+            });
+        } else {
+            res.map(x => {
+                tablaCompras.insertAdjacentHTML('beforeend',`
+                    <tr>
+                        <td>${x.Nombre}</td>
+                        <td>${x.Proveedor}</td>
+                        <td><p class="truncate">${x.Referencia}</p></td>
+                        <td>${x.Stel}</td>
+                        <td>${x.Total}</td>
+                        <td><a class='dropdown-trigger btn' data-target='metodosPago' id="${x.idCompra}">${x.Pagada}</a></td>
+                        <td>${x.Fecha}</td>
+                        <td id="img-${x.idCompra}"><a href="#!" class="descargarImagen" id="img-${x.idCompra}">Descargar comprobante</a></td>
+                        <td><a id="actualizar-${x.idCompra}" class="btn waves-effect waves-light yellow black-text actualizarCompra">Actualizar</a></td>
+                        <td><a id="eliminar-${x.idCompra}" class="btn waves-effect waves-light red eliminarCompra">Eliminar</a></td>
+                    </tr>
+                `);
+            })
         }
-        document.getElementById('tablaCompras').innerHTML += `
+        document.getElementById('tablaCompras').insertAdjacentHTML('beforeend',`
             <ul id='metodosPago' class='dropdown-content'>
                 <li><a class="metodosPago">Efectivo</a></li>
                 <li><a class="metodosPago">Banco</a></li>
                 <li class="divider" tabindex="-1"></li>
                 <li><a class="metodosPago">Sin pagar</a></li>
             </ul>
-        `;
+        `);
         //Materialboxed
-        var elems = document.querySelectorAll('.materialboxed');
-        var instances = M.Materialbox.init(elems);
+        M.Materialbox.init(document.querySelectorAll('.materialboxed'));
         //Dropdown
-        var elem = document.querySelectorAll('.dropdown-trigger');
-        var instances = M.Dropdown.init(elem);
+        M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'));
     }
 
     function descargarImagen(idCompra){
@@ -212,18 +265,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 while(document.getElementById('img-'+idCompra).firstChild){
                     document.getElementById('img-'+idCompra).removeChild(document.getElementById('img-'+idCompra).firstChild);
                 }
-                document.getElementById('img-'+idCompra).innerHTML += `
+                document.getElementById('img-'+idCompra).insertAdjacentHTML('beforeend',`
                     <img src="data:image/png;base64,${res.Imagen}" class="responsive-img materialboxed" width="100px" data-caption="Comprobante compra #${idCompra}">
-                `;
-                var elems = document.querySelectorAll('.materialboxed');
-                var instances = M.Materialbox.init(elems);
+                `);
+                M.Materialbox.init(document.querySelectorAll('.materialboxed'));
             });
     }
 
     function limpiarRegistros(){
-        while(document.getElementById('tablaCompras').firstChild){
-            document.getElementById('tablaCompras').removeChild(document.getElementById('tablaCompras').firstChild);
-        }
+        document.getElementById('tablaCompras').innerHTML = '';
     }
 
     function actualizarCompra(idCompra){
@@ -259,10 +309,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function total(res){
         var total = 0;
-        for(i in res){
-            total += res[i].Total;
-        }
-        return total;
+        res.map(x => total += x.Total);
+        console.log(total);
+        return total.toFixed(2);
     }
 
     function mostrarCompras(){
@@ -292,9 +341,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     Compras = res;
                     document.getElementById('registrarCompras').classList.remove('disabled');
                 } else {
-                    document.getElementById('modalComprasBody').innerHTML += `
+                    document.getElementById('modalComprasBody').insertAdjacentHTML('beforeend',`
                         <h5>No hay nada que registrar</h5>
-                    `;
+                    `);
                     document.getElementById('registrarCompras').classList.add('disabled');
                 }
                 modalCompras.open();

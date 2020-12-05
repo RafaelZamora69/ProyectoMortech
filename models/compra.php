@@ -61,8 +61,14 @@ class compra
         if ($query->execute()) {
             $compras = [];
             $result = $query->get_result();
-            while ($row = $result->fetch_array()) {
-                $compras[] = array('idCompra' => $row['idCompra'], 'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Pagada' => $row['Pagada'], 'Fecha' => $row['Fecha']);
+            if(strcmp($Tipo,'Pagadas') == 0){
+                while ($row = $result->fetch_array()) {
+                    $compras[] = array('idCompra' => $row['idCompra'], 'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Pagada' => $row['Pagada'], 'Fecha' => $row['Fecha'], 'Stel' => $row['ReferenciaStel']);
+                }
+            } else {
+                while ($row = $result->fetch_array()) {
+                    $compras[] = array('idCompra' => $row['idCompra'], 'Nombre' => $row['Nombre'], 'Proveedor' => $row['Proveedor'], 'Referencia' => $row['Referencia'], 'Total' => $row['Total'], 'Pagada' => $row['Pagada'], 'Fecha' => $row['Fecha']);
+                }
             }
             return json_encode($compras);
         }

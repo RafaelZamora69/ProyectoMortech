@@ -1,7 +1,11 @@
-.centerDiv{
+.centerDiv {
     height: 100vh;
     display: flex;
     flex-flow: column wrap;
     align-items: center;
     justify-content: center;
+}
+.truncate {
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
