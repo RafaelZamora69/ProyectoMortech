@@ -97,10 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(document.getElementById('autocompleteProveedor').value != ''){
                         res = res.filter(x => x.Proveedor == document.getElementById('autocompleteProveedor').value);
                     }
-                    document.getElementById('detallesCompras').insertAdjacentHTML('beforeend',`
+                    document.getElementById('detallesCompras').innerHTML = `
                         <p>Registros: ${res.length}</p>
                         <p>Total: $${total(res)}</p>
-                    `);
+                    `;
                     document.getElementById('theadDetalleCompra').innerHTML = `
                         <tr>
                             <th>Empleado</th>
@@ -136,12 +136,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(!document.getElementById('Ambos').checked){
                         document.getElementById('Efect').checked ? res = res.filter(x => x.Pagada == 'Efectivo') : res = res.filter(x => x.Pagada == 'Banco')
                     }
-                    document.getElementById('detallesCompras').insertAdjacentHTML('beforeend',`
+                    document.getElementById('detallesCompras').innerHTML = `
                         <p>Registros: ${res.length}</p>
                         <p>Efectivo: $${total(res.filter(x => x.Pagada == 'Efectivo'))}</p>
                         <p>Banco: $${total(res.filter(x => x.Pagada == 'Banco'))}</p>
                         <p>Total: $${total(res)}</p>
-                    `);
+                    `;
                     document.getElementById('theadDetalleCompra').innerHTML = `
                         <tr>
                             <th>Empleado</th>
@@ -178,13 +178,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(!document.getElementById('Ambos').checked){
                         document.getElementById('Efect').checked ? res = res.filter(x => x.Pagada == 'Efectivo') : res = res.filter(x => x.Pagada == 'Banco');
                     }
-                    document.getElementById('detallesCompras').insertAdjacentHTML('beforeend',`
+                    document.getElementById('detallesCompras').innerHTML = `
                         <p>Registros: ${res.length}</p>
                         <p>Efectivo: $${total(res.filter(x => x.Pagada == 'Efectivo'))}</p>
                         <p>Banco: $${total(res.filter(x => x.Pagada == 'Banco'))}</p>
                         <p>Total: $${total(res)}</p>
                         <p>Pendiente: $${total(res.filter(x => x.Pagada == 'Sin pagar'))}</p>
-                    `);
+                    `;
                     document.getElementById('theadDetalleCompra').innerHTML = `
                         <tr>
                             <th>Empleado</th>
