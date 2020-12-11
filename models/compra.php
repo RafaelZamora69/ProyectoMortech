@@ -134,4 +134,17 @@ class compra
             return json_encode(array('Codigo' => 0, 'Mensaje' => 'Compras registradas'));
         }
     }
+
+    public function misCompras($idEmpleado){
+        $query = $this->connection->prepare('select Proveedor,Referencia,Total,Fecha,Pagada,idImagen from compra where idEmpleado = ? limit 5;');
+        $query->bind_param('i',$idEmpleado);
+        if($query->execute()){
+            $result = $query->get_result();
+            $compras = [];
+            while($row = $result->fetch_assoc()){
+                $compras[] = array('Proveedor'=>$row['Proveedor'],'Referencia'=>$row['Referencia'],'Total'=>$row['Total'],'Fecha'=>$row['Fecha'],'Pagada'=>$row['Pagada'],'Recibo'=>$row['idImagen']);
+            }
+            return json_encode($compras);
+        }
+    }
 }

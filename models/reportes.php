@@ -132,4 +132,24 @@ class reportes
             return json_encode($e->getMessage());
         }
     }
+
+    function obtenerServiciosStel(){
+        if($result = $this->connection->query("select * from ventas_servicios_stel;")){
+            $servicios = [];
+            while($row = $result->fetch_assoc()){
+                $servicios[] = array('idVenta' => $row['idVenta'], 'Cliente' => $row['Nombre'], 'Servicio' => $row['NombreServicio'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'Fecha' => $row['fecha']);
+            }
+            return json_encode($servicios);
+        }
+    }
+
+    function obtenerRecargasStel(){
+        if($result = $this->connection->query("select * from ventas_recargas_stel;")){
+            $recargas = [];
+            while($row = $result->fetch_assoc()){
+                $recargas[] = array('idVenta' => $row['idVenta'], 'Cliente' => $row['Nombre'], 'Usd' => $row['Usd'], 'Mxn' => $row['Mxn'], 'fecha' => $row['fecha']);
+            }
+            return json_encode($recargas);
+        }
+    }
 }

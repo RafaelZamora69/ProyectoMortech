@@ -69,4 +69,15 @@ class compraController {
         echo $compra->actualizarCompras($_POST['referenciaStel']);
     }
 
+    function usuario(){
+        require_once 'views/misCompras.php';
+    }
+
+    function misCompras(){
+        $Usuario = new venta();
+        $idUsuario = $Usuario->getIdEmpleado($_POST['usuario']);
+        $compra = new compra();
+        echo $compra->misCompras($idUsuario);
+    }
+
 }

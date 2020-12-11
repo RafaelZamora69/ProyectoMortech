@@ -65,4 +65,14 @@ class reportesController {
         $venta = new venta();
         echo $venta->infoNumero($_POST['Numero']);
     }
+
+    public function serviciosStel(){
+        $servicios = new reportes();
+        echo $servicios->obtenerServiciosStel();
+    }
+
+    public function recargasStel(){
+        $recargas = new reportes();
+        echo $recargas->obtenerRecargasStel();
+    }
 }

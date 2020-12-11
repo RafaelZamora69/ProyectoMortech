@@ -129,6 +129,11 @@ require_once 'views/layouts/sidenav.php';
         </li>
     </ul>
     <div class="row">
+        <div class="col s12">
+            <a class="orange white-text btn waves-effect waves-light" id="facturaStel">Ventas a Stel Order</a>
+        </div>
+    </div>
+    <div class="row">
         <div class="col s12" id="Detalles">
         </div>
         <div class="col s12" id="Tabla">

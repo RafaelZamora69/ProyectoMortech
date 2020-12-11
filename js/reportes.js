@@ -56,8 +56,25 @@ document.addEventListener('DOMContentLoaded', function () {
             infoNumero((document.getElementById('buscarNumero').value).replace('/\s/g',''));
         }
     });
+    document.getElementById('facturaStel').addEventListener('click', () => {
+        cargarDetalles();
+    });
     obtenerEmpleados();
     obtenerClientes();
+
+    function cargarDetalles(){
+
+        fetch('serviciosStel')
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+                fetch('recargasStel')
+                    .then(res => res.json())
+                    .then(res => {
+                        console.log(res);
+                    });
+            });
+    }
 
     function mostrarDetalles(data, Servicio) {
         if(Servicio == 'Corte'){
