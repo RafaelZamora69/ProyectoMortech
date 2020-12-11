@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 montos = M.FormSelect.init(select);
                 break;
             case 'AT&T':
-                let at = [100, 150, 200, 300, 500, 1000];
+                let at = [50,100, 150, 200, 300, 500, 1000];
                 for (i in at) {
                     const opciones = Tipo == 'Externa' ? document.getElementById("MontoExterna") : document.getElementById('Monto');
                     let opcion = document.createElement("option");

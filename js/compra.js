@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
         format: 'yyyy-mm-dd',
         maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
     });
-    M.Autocomplete.init(document.getElementById('autocompleteEmpleado'));
+    const autocompleteEmp = M.Autocomplete.init(document.getElementById('autocompleteEmpleado'));
     M.Modal.init(document.getElementById('modalCompras'));
-    M.Autocomplete.init(document.getElementById('autocompleteProveedor'));
+    const autocompleteProv = M.Autocomplete.init(document.getElementById('autocompleteProveedor'));
     let Compras = null;
     initComponents();
     cargarCompras();

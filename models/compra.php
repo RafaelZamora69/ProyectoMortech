@@ -136,13 +136,13 @@ class compra
     }
 
     public function misCompras($idEmpleado){
-        $query = $this->connection->prepare('select Proveedor,Referencia,Total,Fecha,Pagada,idImagen from compra where idEmpleado = ? limit 5;');
+        $query = $this->connection->prepare('select idCompra,Proveedor,Referencia,Total,Fecha,Pagada from compra where idEmpleado = ? and Fecha = current_date();');
         $query->bind_param('i',$idEmpleado);
         if($query->execute()){
             $result = $query->get_result();
             $compras = [];
             while($row = $result->fetch_assoc()){
-                $compras[] = array('Proveedor'=>$row['Proveedor'],'Referencia'=>$row['Referencia'],'Total'=>$row['Total'],'Fecha'=>$row['Fecha'],'Pagada'=>$row['Pagada'],'Recibo'=>$row['idImagen']);
+                $compras[] = array('Proveedor'=>$row['Proveedor'],'Referencia'=>$row['Referencia'],'Total'=>$row['Total'],'Fecha'=>$row['Fecha'],'Pagada'=>$row['Pagada'],'idCompra'=>$row['idCompra']);
             }
             return json_encode($compras);
         }
