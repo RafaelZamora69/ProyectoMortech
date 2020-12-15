@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('OperadorasTrigger').value = 'Unefon';
-    var countNemi = 0;
+    document.getElementById('OperadorasTrigger').value = 'MT';
     const elems = document.getElementById('modal2');
     const modal2 = M.Modal.init(elems);
     document.getElementById('NumeroBuscar').addEventListener('submit', (e) => {
@@ -74,7 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const empleados = document.getElementById('empleadoExterno');
     const empleadosExterna = M.Autocomplete.init(empleados);
     formSaldo.addEventListener('submit', (e) => {
-        console.log(document.getElementById('idNemi').value.length)
         if(document.getElementById('idNemi').value.length == 5){
             e.preventDefault();
             obtenerNumeroNemi(document.getElementById('idNemi').value);
@@ -91,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     document.getElementById('registrarCompra').addEventListener('click', (e) => {
         registrarCompra(e);
-    })
+    });
     //funciones
     ObtenerClientes();
     obtenerProveedores();
@@ -152,8 +150,8 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                RecargaNemi(res.Tel,'Nemi');
                 const modalNemiContent = document.getElementById('modalNemiContent');
+                const modalNemiFooter = document.getElementById('modalNemiFooter');
                 modalNemiContent.innerHTML = `
                     <h4>Verificar información</h4>
                     <div class="row">
@@ -171,11 +169,23 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                     </div>
                 `;
+                res.Activada === 0 ?
+                    modalNemiFooter.innerHTML = `<a id="ActivarNemi" class="ActivarNemi">Activar</a>` :
+                    modalNemiFooter.innerHTML = `<a id="ActivarNemi" class="ActivarNemi">Confirmar</a>`
                 const modal = M.Modal.init(document.getElementById('modalNemi')).open();
-                document.getElementById('ActivarNemi').addEventListener('click',() => {
+                document.getElementById('ActivarNemi').addEventListener('click',(e) => {
+                    e.stopPropagation();
                     modal.close()
+                    RecargaNemi(res.Tel,'Nemi');
+                    document.getElementById('copy').innerHTML = `<input type="text" value="${res.Tel}" id="Nums">`;
+                    document.getElementById('Nums').select();
+                    document.execCommand('selectAll');
+                    if(document.execCommand('copy')){
+                        window.open('https://nemi.tel/mi-cuenta/activa/','_blank');
+                    }
+                    document.getElementById('copy').style.visibility = 'hidden';
+                    document.getElementById('FormSaldo').reset();
                 });
-                countNemi = 0;
             }).catch((e) => {});
     }
 
@@ -242,22 +252,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function RecargaNemi(Tel,Operadora){
-        console.log(Tel);
-        console.log(Operadora);
         datos = new FormData(document.getElementById('FormSaldo'));
         datos.append('Operadora', document.getElementById("OperadorasTrigger").value);
-        datos.append('Numeros',JSON.stringify(Tel));
+        datos.append('Numeros',Tel);
         datos.append('Vendedor', document.getElementById("Name").innerText);
         datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTrigger").value));
         document.getElementsByClassName('pagado')[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
-        datos.append('Tipo','Externa');
-        fetch('recargaSaldo',{
+        fetch('recargaNemi',{
             method: 'POST',
             body: datos
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res);
+                if(res.Codigo === 0){
+                    M.toast({ html: res.Mensaje, classes: 'green white-text' });
+                }
             })
     }
 

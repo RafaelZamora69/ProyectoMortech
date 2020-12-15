@@ -60,10 +60,10 @@ require_once 'views/layouts/sidenav.php';
                         <div class="col s4 m4">
                             <div class="input-field">
                                 <select name="Monto" id="Monto">
-                                    <option value="100" selected>$ 50</option>
-                                    <option value="150">$ 99</option>
-                                    <option value="200">$ 199</option>
-                                    <option value="300">$ 299</option>
+                                    <option value="50" selected>$ 50</option>
+                                    <option value="99">$ 99</option>
+                                    <option value="199">$ 199</option>
+                                    <option value="299">$ 299</option>
                                 </select>
                             </div>
                         </div>
@@ -341,9 +341,10 @@ require_once 'views/layouts/sidenav.php';
     </div>
 <div id="modalNemi" class="modal">
     <div class="modal-content" id="modalNemiContent"></div>
-    <div class="modal-footer">
-        <a href="https://nemi.tel/mi-cuenta/activa/" target="_blank" id="ActivarNemi">Activar</a>
+    <div class="modal-footer" id="modalNemiFooter">
+
     </div>
 </div>
+<div id="copy"></div>
 <script src="<?= base_url ?>js/servicios.js"></script>
 <?php include_once 'views/layouts/footer.php'; ?>

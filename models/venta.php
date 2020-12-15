@@ -125,6 +125,33 @@ class venta
         }
     }
 
+    function recargaNemi($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones){
+        $NombreCliente = $this->limpiarEspacios($NombreCliente);
+        try{
+            $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha, Verificada) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 2 hour ),?);");
+            $idCliente = $this->getIdCliente($NombreCliente);
+            $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
+            $Utilidad = $this->getUtilidad($Monto, $Usd, $Mxn);
+            $Verificado = $Utilidad <= 0 ? 0 : 1;
+            $tel = json_decode($telefonos,true);
+            $venta->bind_param("iisssddddisi", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado);
+            if (!$venta->execute()) {
+                return json_encode('Error en la inserción ' . $venta->error);
+            } else {
+                $this->ActivarNemi($tel);
+                return json_encode(array('Tel' => $tel, 'Codigo' => 0, 'Mensaje' => 'Venta registrada'));
+            }
+        } catch (Exception $e) {
+            return json_encode($e->getMessage());
+        }
+    }
+
+    function ActivarNemi($tel){
+        $conn = new dbConnect();
+        $conn = $conn->connect();
+        $query = $conn->query("update nemi set Activada = 1 where NumNemi = {$tel}");
+    }
+
     function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones, $Carrier,$Tipo)
     {
         $this->mensajes = [];

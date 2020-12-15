@@ -11,7 +11,6 @@ class serviciosController
     public function recargaSaldo()
     {
         if (isset($_POST)) {
-            var_dump($_POST);
             $venta = new venta();
             echo $venta->InsertarRecarga(
                 $_POST['Name'],
@@ -29,6 +28,24 @@ class serviciosController
             );
         } else {
             echo json_encode('Datos no recibidos');
+        }
+    }
+
+    public function recargaNemi(){
+        if(isset($_POST)){
+            $venta = new venta();
+            echo $venta->recargaNemi(
+                $_POST['Name'],
+                $_POST['Vendedor'],
+                $_POST['Numeros'],
+                'Recarga de saldo',
+                $_POST['Operadora'],
+                $_POST['Monto'],
+                $_POST['PagoMxn'],
+                $_POST['PagoUsd'],
+                $_POST['Pagado'],
+                $_POST['Nota']
+            );
         }
     }
 

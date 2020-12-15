@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <thead>
                                 <tr>
                                     <th>Empleado</th>
-                                    <th>Cliente</th>
+                                    <th>Cliente</th> 
                                     <th>Teléfono</th>
                                     <th>Operadora</th>
                                     <th>Monto</th>
