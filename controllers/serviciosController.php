@@ -11,6 +11,7 @@ class serviciosController
     public function recargaSaldo()
     {
         if (isset($_POST)) {
+            var_dump($_POST);
             $venta = new venta();
             echo $venta->InsertarRecarga(
                 $_POST['Name'],
@@ -80,5 +81,12 @@ class serviciosController
     public function comprimirImagen(){
         $venta = new venta();
         $venta->comprimirImagen();
+    }
+
+    public function obtenerInfoNemi(){
+        if($_POST){
+            $nemi = new venta();
+            echo $nemi->obtenerInfoNemi($_POST['id']);
+        }
     }
 }

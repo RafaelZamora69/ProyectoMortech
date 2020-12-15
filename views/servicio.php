@@ -45,9 +45,9 @@ require_once 'views/layouts/sidenav.php';
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col s6">
+                        <div class="col s4">
                             <div class="input-field">
-                                <a class='dropdown-trigger btn' data-target='Operadoras' id="OperadorasTrigger">Unefon</a>
+                                <a class='dropdown-trigger btn' data-target='Operadoras' id="OperadorasTrigger">MT</a>
                                 <ul id="Operadoras" class="dropdown-content">
                                     <li><a>Unefon</a></li>
                                     <li><a>AT&T</a></li>
@@ -57,19 +57,20 @@ require_once 'views/layouts/sidenav.php';
                                 </ul>
                             </div>
                         </div>
-                        <div class="col s6 m6">
+                        <div class="col s4 m4">
                             <div class="input-field">
                                 <select name="Monto" id="Monto">
-                                    <option value="15">$ 15</option>
-                                    <option value="20">$ 20</option>
-                                    <option value="30">$ 30</option>
-                                    <option value="50">$ 50</option>
-                                    <option value="70">$ 70</option>
-                                    <option value="100" selected>$ 100</option>
-                                    <option value="150">$ 150</option>
-                                    <option value="200">$ 200</option>
-                                    <option value="300">$ 300</option>
+                                    <option value="100" selected>$ 50</option>
+                                    <option value="150">$ 99</option>
+                                    <option value="200">$ 199</option>
+                                    <option value="300">$ 299</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col s4 m4">
+                            <div class="input-field">
+                                <input type="text" id="idNemi" maxlength="5">
+                                <label for="idNemi">N° Serie Nemi</label>
                             </div>
                         </div>
                     </div>
@@ -233,7 +234,7 @@ require_once 'views/layouts/sidenav.php';
                     <div class="row">
                         <div class="col s12 m4">
                             <div class="input-field">
-                                <a class='dropdown-trigger btn' data-target='OperadorasExterna' id="OperadorasTriggerExterna">Unefon</a>
+                                <a class='dropdown-trigger btn' data-target='OperadorasExterna' id="OperadorasTriggerExterna">MT</a>
                                 <ul id="OperadorasExterna" class="dropdown-content">
                                     <li><a>Unefon</a></li>
                                     <li><a>AT&T</a></li>
@@ -246,15 +247,10 @@ require_once 'views/layouts/sidenav.php';
                         <div class="col s12 m4">
                             <div class="input-field">
                                 <select name="Monto" id="MontoExterna">
-                                    <option value="10">$ 10</option>
-                                    <option value="20">$ 20</option>
-                                    <option value="30">$30</option>
-                                    <option value="50">$ 50</option>
-                                    <option value="70">$ 70</option>
-                                    <option value="100" selected>$ 100</option>
-                                    <option value="150">$ 150</option>
-                                    <option value="200">$ 200</option>
-                                    <option value="300">$ 300</option>
+                                    <option value="100" selected>$ 50</option>
+                                    <option value="150">$ 99</option>
+                                    <option value="200">$ 199</option>
+                                    <option value="300">$ 299</option>
                                 </select>
                             </div>
                         </div>
@@ -343,5 +339,11 @@ require_once 'views/layouts/sidenav.php';
             </div>
         </div>
     </div>
+<div id="modalNemi" class="modal">
+    <div class="modal-content" id="modalNemiContent"></div>
+    <div class="modal-footer">
+        <a href="https://nemi.tel/mi-cuenta/activa/" target="_blank" id="ActivarNemi">Activar</a>
+    </div>
+</div>
 <script src="<?= base_url ?>js/servicios.js"></script>
 <?php include_once 'views/layouts/footer.php'; ?>

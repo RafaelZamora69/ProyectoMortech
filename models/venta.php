@@ -236,4 +236,15 @@ class venta
         }
         return json_encode($proveedores);
     }
+
+    function obtenerInfoNemi($NumSerie){
+        $param = "%{$NumSerie}%";
+        $query = $this->connection->prepare("select * from nemi where NumSerie like ?;");
+        $query->bind_param('s',$param);
+        if($query->execute()){
+            $result = $query->get_result();
+            $row = $result->fetch_assoc();
+            return json_encode(array('Serie' => $row['NumSerie'],'Tel'=>$row['NumNemi'],'Activada'=>$row['Activada']));
+        }
+    }
 }

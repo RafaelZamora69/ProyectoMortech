@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('OperadorasTrigger').value = 'Unefon';
+    var countNemi = 0;
     const elems = document.getElementById('modal2');
     const modal2 = M.Modal.init(elems);
     document.getElementById('NumeroBuscar').addEventListener('submit', (e) => {
@@ -72,7 +73,15 @@ document.addEventListener('DOMContentLoaded', function () {
     //Empleados
     const empleados = document.getElementById('empleadoExterno');
     const empleadosExterna = M.Autocomplete.init(empleados);
-    formSaldo.addEventListener('submit', RecargaSaldo);
+    formSaldo.addEventListener('submit', (e) => {
+        console.log(document.getElementById('idNemi').value.length)
+        if(document.getElementById('idNemi').value.length == 5){
+            e.preventDefault();
+            obtenerNumeroNemi(document.getElementById('idNemi').value);
+        } else {
+            RecargaSaldo(e);
+        }
+    });
     formServicio.addEventListener('submit', VentaServicio);
     chips.addEventListener('input', agregarNumero);
     document.getElementById('Agregar').addEventListener('click', () => {
@@ -133,6 +142,43 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
         }
     }
+
+    function obtenerNumeroNemi(id){
+        const data = new FormData();
+        data.append('id', id);
+        fetch('obtenerInfoNemi',{
+            body: data,
+            method: 'POST'
+        })
+            .then(res => res.json())
+            .then(res => {
+                RecargaNemi(res.Tel,'Nemi');
+                const modalNemiContent = document.getElementById('modalNemiContent');
+                modalNemiContent.innerHTML = `
+                    <h4>Verificar información</h4>
+                    <div class="row">
+                        <div class="col s12 m6">
+                            <ul class="collection">
+                                <li class="collection-item">N. Serie</li>
+                                <li class="collection-item">${res.Serie}</li>
+                            </ul>
+                        </div>
+                        <div class="col s12 m6">
+                            <ul class="collection">
+                            <li class="collection-item">N.Teléfono</li>
+                            <li class="collection-item">${res.Tel}</li>
+                            </ul> 
+                        </div>
+                    </div>
+                `;
+                const modal = M.Modal.init(document.getElementById('modalNemi')).open();
+                document.getElementById('ActivarNemi').addEventListener('click',() => {
+                    modal.close()
+                });
+                countNemi = 0;
+            }).catch((e) => {});
+    }
+
     function registrarCompra(e){
         e.preventDefault();
         document.getElementById('registrarCompra').disabled = true;
@@ -193,6 +239,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 value.value = '';
             }
         }
+    }
+
+    function RecargaNemi(Tel,Operadora){
+        console.log(Tel);
+        console.log(Operadora);
+        datos = new FormData(document.getElementById('FormSaldo'));
+        datos.append('Operadora', document.getElementById("OperadorasTrigger").value);
+        datos.append('Numeros',JSON.stringify(Tel));
+        datos.append('Vendedor', document.getElementById("Name").innerText);
+        datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTrigger").value));
+        document.getElementsByClassName('pagado')[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
+        datos.append('Tipo','Externa');
+        fetch('recargaSaldo',{
+            method: 'POST',
+            body: datos
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+            })
     }
 
     function RecargaSaldo(e) {
@@ -364,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 montos = M.FormSelect.init(select);
                 break;
             case 'MT':
-                const values = [99,199,299];
+                const values = [50,99,199,299];
                 for(i in values){
                     const opciones = Tipo == 'Externa' ? document.getElementById('MontoExterna') : document.getElementById('Monto');
                     opciones.innerHTML += `
