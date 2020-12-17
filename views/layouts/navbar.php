@@ -18,7 +18,7 @@ $api->setPassword($_SESSION['identity']['Password']);
     <nav class="red">
         <div class="nav-wrapper">
             <a href="#" data-target="menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <a href="#">Saldo: $<?= $api->saldoPlataforma() ?></a>
+            <!--<a href="#">Saldo: $< //$api->saldoPlataforma()></a> -->
             <a href="#"><?= $_SESSION['identity']['Nombre'] ?></a>
             <ul class="right hide-on-small-only">
                 <li></li>

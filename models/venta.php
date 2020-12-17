@@ -270,8 +270,12 @@ class venta
         $query->bind_param('s',$param);
         if($query->execute()){
             $result = $query->get_result();
-            $row = $result->fetch_assoc();
-            return json_encode(array('Serie' => $row['NumSerie'],'Tel'=>$row['NumNemi'],'Activada'=>$row['Activada']));
+            if($result->num_rows > 0){
+                $row = $result->fetch_assoc();
+                return json_encode(array('Serie' => $row['NumSerie'],'Tel'=>$row['NumNemi'],'Activada'=>$row['Activada']));
+            } else {
+                return json_encode(array('Serie'=>'null','Tel'=>'null','Activada'=>'null'));
+            }
         }
     }
 }

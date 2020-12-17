@@ -150,9 +150,10 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                const modalNemiContent = document.getElementById('modalNemiContent');
-                const modalNemiFooter = document.getElementById('modalNemiFooter');
-                modalNemiContent.innerHTML = `
+                if(res.Serie !== 'null') {
+                    const modalNemiContent = document.getElementById('modalNemiContent');
+                    const modalNemiFooter = document.getElementById('modalNemiFooter');
+                    modalNemiContent.innerHTML = `
                     <h4>Verificar información</h4>
                     <div class="row">
                         <div class="col s12 m6">
@@ -169,23 +170,26 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                     </div>
                 `;
-                res.Activada === 0 ?
-                    modalNemiFooter.innerHTML = `<a id="ActivarNemi" class="ActivarNemi">Activar</a>` :
-                    modalNemiFooter.innerHTML = `<a id="ActivarNemi" class="ActivarNemi">Confirmar</a>`
-                const modal = M.Modal.init(document.getElementById('modalNemi')).open();
-                document.getElementById('ActivarNemi').addEventListener('click',(e) => {
-                    e.stopPropagation();
-                    modal.close()
-                    RecargaNemi(res.Tel,'Nemi');
-                    document.getElementById('copy').innerHTML = `<input type="text" value="${res.Tel}" id="Nums">`;
-                    document.getElementById('Nums').select();
-                    document.execCommand('selectAll');
-                    if(document.execCommand('copy')){
-                        window.open('https://nemi.tel/mi-cuenta/activa/','_blank');
-                    }
-                    document.getElementById('copy').style.visibility = 'hidden';
-                    document.getElementById('FormSaldo').reset();
-                });
+                    res.Activada === 0 ?
+                        modalNemiFooter.innerHTML = `<a id="ActivarNemi" class="ActivarNemi">Activar</a>` :
+                        modalNemiFooter.innerHTML = `<a id="ActivarNemi" class="ActivarNemi">Confirmar</a>`
+                    const modal = M.Modal.init(document.getElementById('modalNemi')).open();
+                    document.getElementById('ActivarNemi').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        modal.close()
+                        RecargaNemi(res.Tel, 'Nemi');
+                        document.getElementById('copy').innerHTML = `<input type="text" value="${res.Tel}" id="Nums">`;
+                        document.getElementById('Nums').select();
+                        document.execCommand('selectAll');
+                        if (document.execCommand('copy')) {
+                            window.open('https://nemi.tel/mi-cuenta/activa/', '_blank');
+                        }
+                        document.getElementById('Nums').style.visibility = 'hidden';
+                        document.getElementById('FormSaldo').reset();
+                    });
+                } else {
+                    M.toast({ html: 'N° Serie no existe', classes: 'red white-text' });
+                }
             }).catch((e) => {});
     }
 
