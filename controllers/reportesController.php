@@ -75,4 +75,9 @@ class reportesController {
         $recargas = new reportes();
         echo $recargas->obtenerRecargasStel();
     }
+
+    public function reporteNemi(){
+        $Nemi = new reportes();
+        echo $Nemi->reporteNemi();
+    }
 }

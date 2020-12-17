@@ -152,4 +152,14 @@ class reportes
             return json_encode($recargas);
         }
     }
+
+    function reporteNemi(){
+        if($query = $this->connection->query("select right(NumSerie,6) As Serie, NumNemi, if(Activada = 1,'si','no') As Activadas from nemi order by Activada Asc;")){
+            $Nemi = [];
+            while($row = $query->fetch_assoc()){
+                $Nemi[] = array('Serie'=>$row['Serie'],'Num'=>$row['NumNemi'],'Activada'=>$row['Activadas']);
+            }
+            return json_encode($Nemi);
+        }
+    }
 }

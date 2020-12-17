@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     //Fechas
     var today = new Date();
     var elems = document.getElementById('Desde');
@@ -59,8 +59,40 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('facturaStel').addEventListener('click', () => {
         cargarDetalles();
     });
+    document.getElementById('NumsNemi').addEventListener('click', () => {
+       reporteNemi();
+    });
     obtenerEmpleados();
     obtenerClientes();
+
+    function reporteNemi(){
+        fetch('reporteNemi')
+            .then(res => res.json())
+            .then(res => {
+                document.getElementById('Tabla').innerHTML = `
+                    <table class="centered">
+                        <thead>
+                            <tr>
+                                <th>N° Serie</th>
+                                <th>N° Nemi</th>
+                                <th>Activada</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reporteNemiTable"></tbody>
+                    </table>
+                `;
+                const reporteNemiTable = document.getElementById('reporteNemiTable');
+                res.map(x => {
+                   reporteNemiTable.insertAdjacentHTML('beforeend',`
+                        <tr>
+                            <td>${x.Serie}</td>
+                            <td>${x.Num}</td>
+                            <td>${x.Activada}</td>
+                        </tr>
+                   `);
+                });
+            })
+    }
 
     function cargarDetalles(){
 
