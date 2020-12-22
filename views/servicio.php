@@ -60,10 +60,11 @@ require_once 'views/layouts/sidenav.php';
                         <div class="col s4 m4">
                             <div class="input-field">
                                 <select name="Monto" id="Monto">
-                                    <option value="50" selected>$ 50</option>
-                                    <option value="99">$ 99</option>
-                                    <option value="199">$ 199</option>
-                                    <option value="299">$ 299</option>
+                                    <option value="50" selected>$ 50 5+5G 7D</option>
+                                    <option value="100">$ 100 10+10G 14D</option>
+                                    <option value="150">$ 150 8G 30D</option>
+                                    <option value="200">$ 200</option>
+                                    <option value="300">$ 300 20+20G 30D</option>
                                 </select>
                             </div>
                         </div>
@@ -247,10 +248,11 @@ require_once 'views/layouts/sidenav.php';
                         <div class="col s12 m4">
                             <div class="input-field">
                                 <select name="Monto" id="MontoExterna">
-                                    <option value="100" selected>$ 50</option>
-                                    <option value="150">$ 99</option>
-                                    <option value="200">$ 199</option>
-                                    <option value="300">$ 299</option>
+                                    <option value="50" selected>$ 50 5+5G 7D</option>
+                                    <option value="100">$ 100 10+10G 14D</option>
+                                    <option value="150">$ 150 8G 30D</option>
+                                    <option value="200">$ 200</option>
+                                    <option value="300">$ 300 20+20G 30D</option>
                                 </select>
                             </div>
                         </div>

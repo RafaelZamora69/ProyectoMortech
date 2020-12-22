@@ -394,9 +394,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function cargarMonto(res, Tipo) {
         const Montos = Tipo == 'Externa' ? document.getElementById("MontoExterna") : document.getElementById('Monto');
-        while (Montos.firstChild) {
-            Montos.removeChild(Montos.firstChild);
-        }
+        Montos.innerHTML = '';
         switch (res) {
             case 'Telcel':
                 let telcel = [100, 150, 200, 300, 500];
@@ -443,16 +441,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 montos = M.FormSelect.init(select);
                 break;
             case 'MT':
-                const values = [50,99,199,299];
+                const values = [50,100,150,200,300];
+                const paquetes = ['5+5G 7D','10+10G 14D','8G 30D','','20+20G 30D'];
                 for(i in values){
                     const opciones = Tipo == 'Externa' ? document.getElementById('MontoExterna') : document.getElementById('Monto');
                     opciones.innerHTML += `
-                        <option value="${values[i]}">$ ${values[i]}</option>
+                        <option value="${values[i]}">$ ${values[i]} ${paquetes[i]}</option>
                     `;
                 }
                 montos = M.FormSelect.init(select);
-                break;
-            default:
                 break;
         }
     }
