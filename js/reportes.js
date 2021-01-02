@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         format: 'yyyy-mm-dd',
         maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
     });
+    const operadoraSelect = M.FormSelect.init(document.getElementById('Operadora'));
     //Inicializar componentes
     var elems = document.querySelectorAll('.collapsible');
     var instances = M.Collapsible.init(elems);
@@ -206,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function Consultar() {
+        console.log(document.getElementById('Operadora').value);
         const form = new FormData(document.getElementById('FormFiltro'));
         if(document.getElementById('Corte').checked){
             consultaCorte(form);

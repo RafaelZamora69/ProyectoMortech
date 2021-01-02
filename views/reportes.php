@@ -46,16 +46,59 @@ require_once 'views/layouts/sidenav.php';
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col s12 m6">
+                        <div class="col s12 m4">
                             <div class="input-field">
                                 <input type="text" name="Empleado" class="autocomplete" id="autocompleteEmpleado">
                                 <label for="Empleado">Empleado</label>
                             </div>
                         </div>
-                        <div class="col s12 m6">
+                        <div class="col s12 m4">
                             <div class="input-field">
                                 <input type="text" name="Cliente" class="autocomplete" id="autoCompleteClientes">
                                 <label for="Cliente">Cliente</label>
+                            </div>
+                        </div>
+                        <div class="col s12 m4">
+                            <div class="input-field">
+                                <select id="Operadora">
+                                    <optgroup label="MT">
+                                        <option value="MT 50">$50</option>
+                                        <option value="MT 100">$100</option>
+                                        <option value="MT 150">$150</option>
+                                        <option value="MT 200">$200</option>
+                                        <option value="MT 300">$300</option>
+                                    </optgroup>
+                                    <optgroup label="Telcel">
+                                        <option value="Telcel 100">$100</option>
+                                        <option value="Telcel 150">$150</option>
+                                        <option value="Telcel 200">$200</option>
+                                        <option value="Telcel 300">$300</option>
+                                        <option value="Telcel 500">$500</option>
+                                    </optgroup>
+                                    <optgroup label="Movistar">
+                                        <option value="Movistar 100">$100</option>
+                                        <option value="Movistar 150">$150</option>
+                                        <option value="Movistar 200">$200</option>
+                                    </optgroup>
+                                    <optgroup label="Unefon">
+                                        <option value="Unefon 15">$15</option>
+                                        <option value="Unefon 20">$20</option>
+                                        <option value="Unefon 30">$30</option>
+                                        <option value="Unefon 50">$50</option>
+                                        <option value="Unefon 70">$70</option>
+                                        <option value="Unefon 150">$150</option>
+                                        <option value="Unefon 200">$200</option>
+                                        <option value="Unefon 300">$300</option>
+                                    </optgroup>
+                                    <optgroup label="AT&T">
+                                        <option value="AT&T 50">$50</option>
+                                        <option value="AT&T 100">$100</option>
+                                        <option value="AT&T 200">$200</option>
+                                        <option value="AT&T 300">$300</option>
+                                        <option value="AT&T 500">$500</option>
+                                        <option value="AT&T 1000">$1000</option>
+                                    </optgroup>
+                                </select>
                             </div>
                         </div>
                     </div>
