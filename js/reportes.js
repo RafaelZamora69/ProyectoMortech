@@ -177,37 +177,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function filtrar(res, tipo) {
-        if (document.getElementById('autocompleteEmpleado').value != "") {
-            res = res.filter(x => x.Empleado == document.getElementById('autocompleteEmpleado').value);
+        if (document.getElementById('autocompleteEmpleado').value !== "") {
+            res = res.filter(x => x.Empleado === document.getElementById('autocompleteEmpleado').value);
         }
-        if (document.getElementById('autoCompleteClientes').value != "") {
-            res = res.filter(x => x.Cliente == document.getElementById('autoCompleteClientes').value);
+        if (document.getElementById('autoCompleteClientes').value !== "") {
+            res = res.filter(x => x.Cliente === document.getElementById('autoCompleteClientes').value);
         }
-        if(tipo == 'Corte'){
+        if(tipo === 'Corte'){
             mostrarDetalles(res,tipo);
             return res;
         }
         if(document.getElementById('Pagado').checked){
-            res = res.filter(x => x.Pagado == 'Si');
+            res = res.filter(x => x.Pagado === 'Si');
         } else if(document.getElementById('Credito').checked){
-            res = res.filter(x => x.Pagado == 'No');
+            res = res.filter(x => x.Pagado === 'No');
         }
         if(document.getElementById('Verificadas').checked){
-            res = res.filter(x => x.Verificada == 'Si');
+            res = res.filter(x => x.Verificada === 'Si');
         } else if(document.getElementById('NoVerificadas').checked){
-            res = res.filter(x => x.Verificada == 'No');
+            res = res.filter(x => x.Verificada === 'No');
         }
         if(document.getElementById('EnCorte').checked){
-            res = res.filter(x => x.Corte == 'Si');
+            res = res.filter(x => x.Corte === 'Si');
         } else if(document.getElementById('SinCorte').checked){
-            res = res.filter(x => x.Corte == 'No');
+            res = res.filter(x => x.Corte === 'No');
+        }
+        if(tipo === 'Saldo'){
+            const OperadoraValue = document.getElementById('Operadora').value;
+            if(OperadoraValue !== 'N/A'){
+                const values = OperadoraValue.split(" ");
+                res = res.filter(x => x.Operadora === values[0]);
+                if(values[1] !== 'ALL'){
+                    res = res.filter(x => x.Monto === parseInt(values[1]));
+                }
+            }
         }
         mostrarDetalles(res, tipo);
         return res;
     }
 
     function Consultar() {
-        console.log(document.getElementById('Operadora').value);
         const form = new FormData(document.getElementById('FormFiltro'));
         if(document.getElementById('Corte').checked){
             consultaCorte(form);

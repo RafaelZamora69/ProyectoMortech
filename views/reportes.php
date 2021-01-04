@@ -61,7 +61,11 @@ require_once 'views/layouts/sidenav.php';
                         <div class="col s12 m4">
                             <div class="input-field">
                                 <select id="Operadora">
+                                    <optgroup label="Sin filtro">
+                                        <option value="N/A" selected>N/A</option>
+                                    </optgroup>
                                     <optgroup label="MT">
+                                        <option value="MT ALL">Todos</option>
                                         <option value="MT 50">$50</option>
                                         <option value="MT 100">$100</option>
                                         <option value="MT 150">$150</option>
@@ -69,6 +73,7 @@ require_once 'views/layouts/sidenav.php';
                                         <option value="MT 300">$300</option>
                                     </optgroup>
                                     <optgroup label="Telcel">
+                                        <option value="Telcel ALL">Todos</option>
                                         <option value="Telcel 100">$100</option>
                                         <option value="Telcel 150">$150</option>
                                         <option value="Telcel 200">$200</option>
@@ -76,11 +81,13 @@ require_once 'views/layouts/sidenav.php';
                                         <option value="Telcel 500">$500</option>
                                     </optgroup>
                                     <optgroup label="Movistar">
+                                        <option value="Movistar ALL">Todos</option>
                                         <option value="Movistar 100">$100</option>
                                         <option value="Movistar 150">$150</option>
                                         <option value="Movistar 200">$200</option>
                                     </optgroup>
                                     <optgroup label="Unefon">
+                                        <option value="Unefon ALL">Todos</option>
                                         <option value="Unefon 15">$15</option>
                                         <option value="Unefon 20">$20</option>
                                         <option value="Unefon 30">$30</option>
@@ -91,6 +98,7 @@ require_once 'views/layouts/sidenav.php';
                                         <option value="Unefon 300">$300</option>
                                     </optgroup>
                                     <optgroup label="AT&T">
+                                        <option value="AT&T ALL">Todos</option>
                                         <option value="AT&T 50">$50</option>
                                         <option value="AT&T 100">$100</option>
                                         <option value="AT&T 200">$200</option>
@@ -99,6 +107,7 @@ require_once 'views/layouts/sidenav.php';
                                         <option value="AT&T 1000">$1000</option>
                                     </optgroup>
                                 </select>
+                                <label for="Operadora">Operadora</label>
                             </div>
                         </div>
                     </div>
