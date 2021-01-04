@@ -29,8 +29,8 @@ class corte
             $cortes = $this->conexion->query('select * from reportecorte');
             $result = [];
             while ($row = $cortes->fetch_array(MYSQLI_NUM)) {
-                $result[] = array('Nombre' => $row[0], 'Inicio' => $row[1], 'Fin' => $row[2], 'Usd' => $row[3], 'Mxn'
-                => $row[4], 'Comentarios' => $row[5]);
+                $result[] = array('Id' => $row[0], 'Nombre' => $row[1], 'Inicio' => $row[2], 'Fin' => $row[3], 'Usd' => $row[4], 'Mxn'
+                => $row[5], 'Comentarios' => $row[6]);
             }
             return $result;
         } catch (Exception $e) {

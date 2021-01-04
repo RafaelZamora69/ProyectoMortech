@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (i in res) {
                     var option = document.createElement("option");
                     option.value = res[i].Id;
-                    option.innerText = res[i].Nombre + ": $ " + res[i].Mxn + " Mxn, Credito: $ " + res[i].CreditoMxn + " mxn, $ " + res[i].Usd + " Usd, Credito: $ " + res[i].CreditoUsd + " usd";
+                    option.innerText = res[i].Nombre + ": $ " + parseFloat(res[i].Mxn).toFixed(2) + " Mxn, Credito: $ " + parseFloat(res[i].CreditoMxn).toFixed(2) + " mxn, $ " + parseFloat(res[i].Usd).toFixed(2) + " Usd, Credito: $ " + parseFloat(res[i].CreditoUsd).toFixed(2) + " usd";
                     elems.appendChild(option);
                 }
                 instances = M.FormSelect.init(elems);
@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (i in res) {
                     document.getElementById('TablaCortes').innerHTML += `
                         <tr>
+                            <td>${res[i].Id}</td>
                             <td>${res[i].Nombre}</td> 
                             <td>${res[i].Inicio}</td>
                             <td>${res[i].Fin}</td>
@@ -97,11 +98,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         document.getElementById('recargasPreeliminarBody').innerHTML += `
                             <tr>
                                 <td>${res[i].Cliente}</td>
-                                <td>${res[i].Monto}</td>
+                                <td>${parseFloat(res[i].Monto).toFixed(2)}</td>
                                 <td>${res[i].Telefono}</td>
                                 <td>${res[i].Operadora}</td>
-                                <td>${res[i].Usd}</td>
-                                <td>${res[i].Mxn}</td>
+                                <td>${parseFloat(res[i].Usd).toFixed(2)}</td>
+                                <td>${parseFloat(res[i].Mxn).toFixed(2)}</td>
                                 <td>${res[i].Fecha}</td>
                             </tr>
                         `;
@@ -146,8 +147,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             <tr>
                                 <td>${res[i].Cliente}</td>
                                 <td>${res[i].Servicio}</td>
-                                <td>${res[i].Usd}</td>
-                                <td>${res[i].Mxn}</td>
+                                <td>${parseFloat(res[i].Usd).toFixed(2)}</td>
+                                <td>${parseFloat(res[i].Mxn).toFixed(2)}</td>
                                 <td>${res[i].Fecha}</td>
                             </tr>
                         `;
@@ -199,37 +200,37 @@ document.addEventListener('DOMContentLoaded', function () {
             <tr id="saldoUsado">
                 <td>Saldo Utilizado</td>
                 <td>$ 0</td>
-                <td>$ ${res.SaldoVendido}</td>
+                <td>$ ${parseFloat(res.SaldoVendido).toFixed(2)}</td>
             </tr>
             <tr id="ventaSaldo">
                 <td>Saldo vendido</td>
-                <td>$ ${res.UsdSaldo}</td>
-                <td>$ ${res.MxnSaldo}</td>
+                <td>$ ${parseFloat(res.UsdSaldo).toFixed(2)}</td>
+                <td>$ ${parseFloat(res.MxnSaldo).toFixed(2)}</td>
             </tr>
             <tr id="saldoCredito">
                 <td>Venta de saldo en crédito</td>
-                <td>$ ${res.CreditoRecargasUsd}</td>
-                <td>$ ${res.CreditoRecargasMxn}</td>
+                <td>$ ${parseFloat(res.CreditoRecargasUsd).toFixed(2)}</td>
+                <td>$ ${parseFloat(res.CreditoRecargasMxn).toFixed(2)}</td>
             </tr>
             <tr id="ventaServicios">
                 <td>Venta de servicios</td>
-                <td>$ ${res.DolaresServicios}</td>
-                <td>$ ${res.PesosServicios}</td>
+                <td>$ ${parseFloat(res.DolaresServicios).toFixed(2)}</td>
+                <td>$ ${parseFloat(res.PesosServicios).toFixed(2)}</td>
             </tr>
             <tr id="ventasCredito">
                 <td>Venta de servicios en crédito</td>
-                <td>$ ${res.CreditoServiciosUsd}</td>
-                <td>$ ${res.CreditoServiciosMxn}</td>
+                <td>$ ${parseFloat(res.CreditoServiciosUsd).toFixed(2)}</td>
+                <td>$ ${parseFloat(res.CreditoServiciosMxn).toFixed(2)}</td>
             </tr>
             <tr id="pagosCredito">
                 <td>Total en crédito</td>
-                <td>$ ${res.CreditoUsd}</td>
-                <td>$ ${res.CreditoMxn}</td>
+                <td>$ ${parseFloat(res.CreditoUsd).toFixed(2)}</td>
+                <td>$ ${parseFloat(res.CreditoMxn).toFixed(2)}</td>
             </tr>
             <tr id="totalEfectivo">
                 <td>Total en efectivo</td>
-                <td id="Usd">$ ${res.Dolares}</td>
-                <td id="Mxn">$ ${res.Mxn}</td>
+                <td id="Usd">$ ${parseFloat(res.Dolares).toFixed(2)}</td>
+                <td id="Mxn">$ ${parseFloat(res.Mxn).toFixed(2)}</td>
             </tr>  
         `;
     }

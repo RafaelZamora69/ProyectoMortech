@@ -91,11 +91,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(res => res.json())
             .then(res => {
                 if(res.length > 0) {
-                    if(document.getElementById('autocompleteEmpleado').value != ''){
-                        res = res.filter(x => x.Nombre == document.getElementById('autocompleteEmpleado').value);
+                    if(document.getElementById('autocompleteEmpleado').value !== ''){
+                        res = res.filter(x => x.Nombre === document.getElementById('autocompleteEmpleado').value);
                     }
-                    if(document.getElementById('autocompleteProveedor').value != ''){
-                        res = res.filter(x => x.Proveedor == document.getElementById('autocompleteProveedor').value);
+                    if(document.getElementById('autocompleteProveedor').value !== ''){
+                        res = res.filter(x => x.Proveedor === document.getElementById('autocompleteProveedor').value);
                     }
                     document.getElementById('detallesCompras').innerHTML = `
                         <p>Registros: ${res.length}</p>
@@ -127,23 +127,24 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(res => res.json())
             .then(res => {
                 if(res.length > 0) {
-                    if(document.getElementById('autocompleteEmpleado').value != ''){
-                        res = res.filter(x => x.Nombre == document.getElementById('autocompleteEmpleado').value);
+                    if(document.getElementById('autocompleteEmpleado').value !== ''){
+                        res = res.filter(x => x.Nombre === document.getElementById('autocompleteEmpleado').value);
                     }
-                    if(document.getElementById('autocompleteProveedor').value != ''){
-                        res = res.filter(x => x.Proveedor == document.getElementById('autocompleteProveedor').value);
+                    if(document.getElementById('autocompleteProveedor').value !== ''){
+                        res = res.filter(x => x.Proveedor === document.getElementById('autocompleteProveedor').value);
                     }
                     if(!document.getElementById('Ambos').checked){
-                        document.getElementById('Efect').checked ? res = res.filter(x => x.Pagada == 'Efectivo') : res = res.filter(x => x.Pagada == 'Banco')
+                        document.getElementById('Efect').checked ? res = res.filter(x => x.Pagada === 'Efectivo') : res = res.filter(x => x.Pagada === 'Banco')
                     }
                     document.getElementById('detallesCompras').innerHTML = `
                         <p>Registros: ${res.length}</p>
-                        <p>Efectivo: $${total(res.filter(x => x.Pagada == 'Efectivo'))}</p>
-                        <p>Banco: $${total(res.filter(x => x.Pagada == 'Banco'))}</p>
+                        <p>Efectivo: $${total(res.filter(x => x.Pagada === 'Efectivo'))}</p>
+                        <p>Banco: $${total(res.filter(x => x.Pagada === 'Banco'))}</p>
                         <p>Total: $${total(res)}</p>
                     `;
                     document.getElementById('theadDetalleCompra').innerHTML = `
                         <tr>
+                            <th>ID</th>
                             <th>Empleado</th>
                             <th>Proveedor</th>
                             <th>Referencia</th>
@@ -187,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                     document.getElementById('theadDetalleCompra').innerHTML = `
                         <tr>
+                            <th>ID</th>
                             <th>Empleado</th>
                             <th>Proveedor</th>
                             <th>Referencia</th>
@@ -209,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
             res.map(x => {
                 tablaCompras.insertAdjacentHTML('beforeend',`
                     <tr>
+                        <td>${x.idCompra}</td>
                         <td>${x.Nombre}</td>
                         <td>${x.Proveedor}</td>
                         <td><p class="truncate">${x.Referencia}</p></td>
@@ -225,6 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
             res.map(x => {
                 tablaCompras.insertAdjacentHTML('beforeend',`
                     <tr>
+                        <td>${x.idCompra}</td>
                         <td>${x.Nombre}</td>
                         <td>${x.Proveedor}</td>
                         <td><p class="truncate">${x.Referencia}</p></td>
@@ -286,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(res => res.json())
             .then(res => {
-                res.Codigo == 0 ?
+                res.Codigo === 0 ?
                     M.toast({ html: res.Mensaje, classes: 'green white-text' }) :
                     M.toast({ html: 'Error ' + res.Mensaje, classes: 'red white-text' });
             });
@@ -301,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(res => res.json())
             .then(res => {
-                res.Codigo == 0 ?
+                res.Codigo === 0 ?
                     M.toast({ html: res.Mensaje, classes: 'green white-text' }) :
                     M.toast({ html: 'Error ' + res.Mensaje, classes: 'red white-text' });
             });

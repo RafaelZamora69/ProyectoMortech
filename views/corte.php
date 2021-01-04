@@ -27,6 +27,7 @@ require_once 'views/layouts/sidenav.php';
         <table class="striped centered highlight responsive-table">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Empleado</th>
                     <th>Iniciado el</th>
                     <th>Realizado el</th>
