@@ -33,6 +33,7 @@ $api->setPassword($_SESSION['identity']['Password']);
         <li><a class="waves-effect" href="<?= base_url ?>servicios/index">Venta de servicio</a></li>
         <li><a href="<?= base_url ?>cliente/index" class="waves-effect">Busqueda de cliente</a></li>
         <li><a href="<?= base_url ?>compra/usuario" class="waves-effect">Mis compras</a></li>
+        <li><a href="<?= base_url ?>servicios/usuarios" class="waves-effect">ventas</a></li>
         <?php if ($_SESSION['identity']['Jerarquia'] == 'Administrador') : ?>
             <li class="divider"></li>
             <li><a href="<?= base_url ?>compra/index" class="waves-effect">Compras</a></li>

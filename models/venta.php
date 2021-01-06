@@ -35,6 +35,11 @@ class venta
         }
     }
 
+    /***
+     * Obtiene el ID de un empleado dado el nombre
+     * @param $NombreEmpleado
+     * @return mixed
+     */
     public function getIdEmpleado($NombreEmpleado)
     {
         $id = $this->connection->prepare("select idEmpleado from empleado where Nombre = ?");
@@ -276,6 +281,62 @@ class venta
             } else {
                 return json_encode(array('Serie'=>'null','Tel'=>'null','Activada'=>'null'));
             }
+        }
+    }
+
+    function ventasUsuarios(){
+        $query = $this->connection->query('select * from ventasempleados;');
+        $ventas = [];
+        while($row = $query->fetch_assoc()){
+            $ventas[] = array('idVenta'=>$row['idVenta'],'Cliente'=>$row['Cliente'],'Empleado'=>$row['Empleado'],'Servicio'=>$row['NombreServicio'],'Telefono'=>$row['NumeroTelefono'],'Usd'=>$row['Usd'],'Mxn'=>$row['Mxn'],'Pagado'=>$row['Pagado']);
+        }
+        return json_encode($ventas);
+    }
+
+    /***
+     * Establecer el cliente de una venta a pendiente, esto es por garantias o devoluciones
+     */
+    function ventaPendiente($idVenta){
+        $query = $this->connection->prepare('update venta set idCliente = 33 and Pagado = 0 where idVenta = ?');
+        $query->bind_param('i',$idVenta);
+        if($query->execute()){
+            return json_encode(array('Code' => 0, 'Msg' => 'Venta actualizada'));
+        } else {
+            return json_encode(array('Code' => 1, 'Msg' => 'Error al actualizar'));
+        }
+    }
+
+    /***
+     * Cambiar el empleado de una venta
+     * @param $idVenta
+     * @param $idEmpleado
+     * @return array
+     */
+    function miVenta($idVenta, $Nombre){
+        $idEmpleado = $this->getIdEmpleado($Nombre);
+        $query = $this->connection->prepare('update venta set idEmpleado = ? where idVenta = ?;');
+        $query->bind_param('ii', $idEmpleado,$idVenta);
+        if($query->execute()){
+            return json_encode(array('Code' => 0, 'Msg' => 'Venta actualizada'));
+        } else {
+            return json_encode(array('Code' => 0, 'Msg' => 'Error al actualizar'));
+        }
+    }
+
+    /***
+     * Cambiar el estado de una venta a pagada
+     */
+    function pagada($idVenta){
+        $data = $this->connection->query("select Pagado from venta where idVenta = {$idVenta}");
+        $row = $data->fetch_assoc();
+        $pagada = $row['Pagado'] === 1 ? 0 : 1;
+        echo $pagada;
+        $query = $this->connection->prepare('update venta set Pagado = ? where idVenta = ?');
+        $query->bind_param('ii',$pagada,$idVenta);
+        if($query->execute()){
+            return json_encode(array('Code' => 0, 'Msg' => 'Venta actualizada'));
+        } else {
+            return json_encode(array('Code' => 1, 'Msg' => 'Error al actualizar'));
         }
     }
 }

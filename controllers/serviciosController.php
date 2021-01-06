@@ -8,6 +8,7 @@ class serviciosController
     {
         require_once 'views/servicio.php';
     }
+
     public function recargaSaldo()
     {
         if (isset($_POST)) {
@@ -29,6 +30,30 @@ class serviciosController
         } else {
             echo json_encode('Datos no recibidos');
         }
+    }
+
+    public function usuarios(){
+        require_once 'views/ventasUsuarios.php';
+    }
+
+    public function ventasUsuarios(){
+        $ventas = new venta();
+        echo $ventas->ventasUsuarios();
+    }
+
+    public function pendiente(){
+        $venta = new venta();
+        echo $venta->ventaPendiente($_POST['idVenta']);
+    }
+
+    public function miVenta(){
+        $venta = new venta();
+        echo $venta->miVenta($_POST['idVenta'], $_SESSION['identity']['Nombre']);
+    }
+
+    public function pagada(){
+        $venta = new venta();
+        echo $venta->pagada($_POST['idVenta']);
     }
 
     public function recargaNemi(){

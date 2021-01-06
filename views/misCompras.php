@@ -1,4 +1,7 @@
 <?php
+    if ($_SESSION['identity'] == null) {
+        header('Location: ' . base_url . 'login/index');
+    }
     require_once 'views/layouts/header.php';
     require_once 'views/layouts/navbar.php';
     require_once 'views/layouts/sidenav.php';
