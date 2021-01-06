@@ -120,6 +120,17 @@ class serviciosController
         echo $venta->getProveedores();
     }
 
+    public function obtenerClientes(){
+        $clientes = new user();
+        echo $clientes->obtenerClientes();
+    }
+
+    public function cambiarCliente(){
+        $venta = new venta();
+        $idCliente = $venta->getIdCliente($_POST['Cliente']);
+        echo $venta->actualizarCliente($_POST['idVenta'], $idCliente);
+    }
+
     public function comprimirImagen(){
         $venta = new venta();
         $venta->comprimirImagen();

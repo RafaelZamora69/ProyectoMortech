@@ -329,10 +329,25 @@ class venta
     function pagada($idVenta){
         $data = $this->connection->query("select Pagado from venta where idVenta = {$idVenta}");
         $row = $data->fetch_assoc();
-        $pagada = $row['Pagado'] === 1 ? 0 : 1;
-        echo $pagada;
+        $pagada = $row['Pagado'] == 1 ? 0 : 1;
         $query = $this->connection->prepare('update venta set Pagado = ? where idVenta = ?');
         $query->bind_param('ii',$pagada,$idVenta);
+        if($query->execute()){
+            return json_encode(array('Code' => 0, 'Msg' => 'Venta actualizada'));
+        } else {
+            return json_encode(array('Code' => 1, 'Msg' => 'Error al actualizar'));
+        }
+    }
+
+    /***
+     * Cambiar el cliente al que se le ha vendido
+     * @param $idVenta
+     * @param $idCliente
+     * @return array
+     */
+    function actualizarCliente($idVenta, $idCliente){
+        $query = $this->connection->prepare('update venta set idCliente = ? where idVenta = ?');
+        $query->bind_param('ii', $idCliente, $idVenta);
         if($query->execute()){
             return json_encode(array('Code' => 0, 'Msg' => 'Venta actualizada'));
         } else {
