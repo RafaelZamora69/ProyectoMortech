@@ -297,11 +297,12 @@ class venta
      * Establecer el cliente de una venta a pendiente, esto es por garantias o devoluciones
      */
     function ventaPendiente($idVenta){
-        $query = $this->connection->prepare('update venta set idCliente = 33 and Pagado = 0 where idVenta = ?');
+        $query = $this->connection->prepare('update venta set idCliente = 33, Pagado = 0 where idVenta = ?');
         $query->bind_param('i',$idVenta);
         if($query->execute()){
             return json_encode(array('Code' => 0, 'Msg' => 'Venta actualizada'));
         } else {
+            var_dump($query);
             return json_encode(array('Code' => 1, 'Msg' => 'Error al actualizar'));
         }
     }
