@@ -83,7 +83,7 @@ class user
                 $this->setUser = $UsuarioLinntae;
                 $this->setPassword = $PasswordPlataforma;
                 $this->setHerarchy = $Jerarquia;
-                $datos = array('Nombre' => $Nombre, 'Usuario' => $UsuarioLinntae, 'Password' => $Password, 'Jerarquia' => $Jerarquia);
+                $datos = array('id' => $idEmpleado, 'Nombre' => $Nombre, 'Usuario' => $UsuarioLinntae, 'Password' => $Password, 'Jerarquia' => $Jerarquia);
                 return $datos;
             } else {
                 return false;

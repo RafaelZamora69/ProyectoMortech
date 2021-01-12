@@ -11,10 +11,7 @@
     <thead>
         <tr>
             <th>Cliente</th>
-            <th>Empleado</th>
-            <th>Servicio</th>
             <th>Teléfono</th>
-            <th>Venta</th>
             <th>Pagado</th>
             <th>Acciones</th>
         </tr>
@@ -32,6 +29,13 @@
         </div>
     </div>
     <div class="modal-footer" id="modalFooter"></div>
+</div>
+<div id="modalConfirmar" class="modal bottom-sheet">
+    <div class="modal-content">
+        <h4>Confirmar</h4>
+        <div id="confirmationContent"></div>
+    </div>
+    <div class="modal-footer" id="footerConfirmar"></div>
 </div>
 <script src="<?= base_url ?>js/ventasUsuarios.js"></script>
 <?php include_once 'views/layouts/footer.php'; ?>

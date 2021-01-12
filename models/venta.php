@@ -284,13 +284,17 @@ class venta
         }
     }
 
-    function ventasUsuarios(){
-        $query = $this->connection->query('select * from ventasempleados;');
-        $ventas = [];
-        while($row = $query->fetch_assoc()){
-            $ventas[] = array('idVenta'=>$row['idVenta'],'Cliente'=>$row['Cliente'],'Empleado'=>$row['Empleado'],'Servicio'=>$row['NombreServicio'],'Telefono'=>$row['NumeroTelefono'],'Usd'=>$row['Usd'],'Mxn'=>$row['Mxn'],'Pagado'=>$row['Pagado']);
+    function ventasUsuarios($idUsuario){
+        $query = $this->connection->prepare('call VentasUsuario(?);');
+        $query->bind_param('i',$idUsuario);
+        if($query->execute()){
+            $ventas = [];
+            $result = $query->get_result();
+            while($row = $result->fetch_assoc()){
+                $ventas[] = array('idVenta'=>$row['idVenta'],'Cliente'=>$row['Cliente'],'Telefono'=>$row['NumeroTelefono'],'Pagado'=>$row['Pagado']);
+            }
+            return json_encode($ventas);
         }
-        return json_encode($ventas);
     }
 
     /***

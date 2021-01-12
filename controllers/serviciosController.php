@@ -38,7 +38,7 @@ class serviciosController
 
     public function ventasUsuarios(){
         $ventas = new venta();
-        echo $ventas->ventasUsuarios();
+        echo $ventas->ventasUsuarios($_SESSION['identity']['id']);
     }
 
     public function pendiente(){
