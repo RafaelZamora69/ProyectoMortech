@@ -1,9 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
+    let ventas;
+    cargarVentas();
+    obtenerClientes();
     const modal = M.Modal.init(document.getElementById('modalCliente'));
     const confirmacion = M.Modal.init(document.getElementById('modalConfirmar'));
     const clientes = M.Autocomplete.init(document.getElementById('cliente'));
-    obtenerClientes();
-    cargarVentas();
+    const numeros = M.Autocomplete.init(document.getElementById('Telefono'),{
+        onAutocomplete: (e) => {
+            mostrarVentas(ventas.filter(x => x.Telefono === document.getElementById('Telefono').value));
+        }
+    });
+    const clientesFiltro = M.Autocomplete.init(document.getElementById('clienteFiltro'),{
+        onAutocomplete: (e) => {
+            mostrarVentas(ventas.filter(x => x.Cliente === document.getElementById('clienteFiltro').value));
+        }
+    });
     document.addEventListener('click',(e) => {
         if(e.target.classList.contains('confirmarPendiente')){
             document.getElementById('confirmationContent').innerHTML = `
@@ -54,6 +65,21 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
     });
+    document.getElementById('eliminarFiltro').addEventListener('click', (e) => {
+        document.getElementById('clienteFiltro').value = '';
+        document.getElementById('Telefono').value = '';
+        mostrarVentas(ventas);
+    });
+    document.getElementById('clienteFiltro').addEventListener('keydown', (e) => {
+        if(e.code === 'Enter'){
+            mostrarVentas(ventas.filter(x => x.Cliente === document.getElementById('clienteFiltro').value));
+        }
+    });
+    document.getElementById('Telefono').addEventListener('keydown', (e) => {
+        if(e.code === 'Enter'){
+            mostrarVentas(ventas.filter(x => x.Telefono === document.getElementById('Telefono').value));
+        }
+    });
 
     function pendiente(idVenta){
         const data = new FormData();
@@ -67,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 confirmacion.close();
                 if(res.Code === 0){
                     M.toast({ html: res.Msg, classes: 'green white-text' });
+                    cargarVentas();
                 } else {
                     M.toast({ html: res.Msg, classes: 'red white-text' });
                 }
@@ -85,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(res => {
                 if(res.Code === 0){
                     M.toast({ html: res.Msg, classes: 'green white-text' });
+                    cargarVentas();
                 } else {
                     M.toast({ html: res.Msg, classes: 'red white-text' });
                 }
@@ -110,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 confirmacion.close();
                 if(res.Code === 0){
                     M.toast({ html: res.Msg, classes: 'green white-text' });
+                    cargarVentas();
                 } else {
                     M.toast({ html: res.Msg, classes: 'red white-text' });
                 }
@@ -128,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 confirmacion.close();
                 if(res.Code === 0){
                     M.toast({ html: res.Msg, classes: 'green white-text' });
+                    cargarVentas();
                 } else {
                     M.toast({ html: res.Msg, classes: 'red white-text' });
                 }
@@ -138,22 +168,16 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('ventasUsuarios')
             .then(res => res.json())
             .then(res => {
-                const tableVentas = document.getElementById('tableVentas');
+                ventas = res;
+                mostrarVentas(res);
+                const dataNumeros = {};
+                const dataClientes = {};
                 res.forEach(x => {
-                   tableVentas.insertAdjacentHTML('beforeend',`
-                        <tr>
-                            <td id="TableCliente-${x.idVenta}">${x.Cliente}</td>
-                            <td>${x.Telefono == null ? '- - -' : x.Telefono}</td>
-                            <td id="TablePagada-${x.idVenta}">${x.Pagado === 1 ? '<span class="green-text">Si</span>' : '<span class="red-text">No</span>'}</td>
-                            <td>
-                                <a id="pendiente-${x.idVenta}" class="btn waves-effect waves-light purple darken-1 white-text confirmarPendiente">Pendiente</a>
-                                <button id="cliente-${x.idVenta}" class="btn waves-effect waves-light yellow black-text abrirModal" data-target="modalCliente">Cliente</button>
-                                <a id="yo-${x.idVenta}" class="btn waves-effect waves-light grey black-text confirmarParaMi">P.M</a>
-                                <a id="pagada-${x.idVenta}" class="btn waves-effect waves-light green black-text confirmarPagada">Pagada</a>
-                            </td>
-                        </tr>
-                   `);
+                    dataClientes[x.Cliente] = null;
+                    dataNumeros[x.Telefono] = null;
                 });
+                numeros.updateData(dataNumeros);
+                clientesFiltro.updateData(dataClientes);
             });
     }
 
@@ -167,5 +191,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 clientes.updateData(data);
             })
+    }
+
+    function mostrarVentas(res){
+        const tableVentas = document.getElementById('tableVentas');
+        tableVentas.innerHTML = '';
+        res.forEach(x => {
+            tableVentas.insertAdjacentHTML('beforeend',`
+                        <tr>
+                            <td id="TableCliente-${x.idVenta}">${x.Cliente}</td>
+                            <td>${x.Telefono == null ? '- - -' : x.Telefono}</td>
+                            <td id="TablePagada-${x.idVenta}">${x.Pagado === 1 ? '<span class="green-text">Si</span>' : '<span class="red-text">No</span>'}</td>
+                            <td>
+                                <div class="row"><div class="col s12"><a id="pendiente-${x.idVenta}" class="btn waves-effect waves-light purple darken-1 white-text confirmarPendiente">Pendiente</a></div></div>
+                                <div class="row"><div class="col s12"><button id="cliente-${x.idVenta}" class="btn waves-effect waves-light yellow black-text abrirModal" data-target="modalCliente">Cliente</button></div></div>
+                                <div class="row"><div class="col s12"><a id="yo-${x.idVenta}" class="btn waves-effect waves-light grey black-text confirmarParaMi">P.M</a></div></div>
+                                <div class="row"><div class="col s12"><a id="pagada-${x.idVenta}" class="btn waves-effect waves-light green black-text confirmarPagada">Pagada</a></div></div>
+                            </td>
+                        </tr>
+                   `);
+        });
     }
 });
