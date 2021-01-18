@@ -315,11 +315,11 @@ class venta
      * Cambiar el empleado de una venta
      * @param $idVenta
      * @param $idEmpleado
-     * @return array
+     * @return array|false|string
      */
     function miVenta($idVenta, $Nombre){
         $idEmpleado = $this->getIdEmpleado($Nombre);
-        $query = $this->connection->prepare('update venta set idEmpleado = ? where idVenta = ?;');
+        $query = $this->connection->prepare('update venta set idEmpleado = ?, Pagado = 1 where idVenta = ?;');
         $query->bind_param('ii', $idEmpleado,$idVenta);
         if($query->execute()){
             return json_encode(array('Code' => 0, 'Msg' => 'Venta actualizada'));
