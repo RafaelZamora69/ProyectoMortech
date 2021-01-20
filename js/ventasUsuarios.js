@@ -62,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if(e.target.classList.contains('cambiarPagada')){
             pagada(e.target.id.replace('pagada-',''));
-            return;
         }
     });
     document.getElementById('eliminarFiltro').addEventListener('click', (e) => {
@@ -146,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function pagada(idVenta){
+        cambiarCliente(idVenta);
         const data = new FormData();
         data.append('idVenta', idVenta);
         fetch('pagada',{
@@ -203,13 +203,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td>${x.Telefono == null ? '- - -' : x.Telefono}</td>
                             <td id="TablePagada-${x.idVenta}">${x.Pagado === 1 ? '<span class="green-text">Si</span>' : '<span class="red-text">No</span>'}</td>
                             <td>
-                                <div class="row"><div class="col s12"><a id="pendiente-${x.idVenta}" class="btn waves-effect waves-light purple darken-1 white-text confirmarPendiente">Pendiente</a></div></div>
-                                <div class="row"><div class="col s12"><button id="cliente-${x.idVenta}" class="btn waves-effect waves-light yellow black-text abrirModal" data-target="modalCliente">Cliente</button></div></div>
-                                <div class="row"><div class="col s12"><a id="yo-${x.idVenta}" class="btn waves-effect waves-light grey black-text confirmarParaMi">P.M</a></div></div>
-                                <div class="row"><div class="col s12"><a id="pagada-${x.idVenta}" class="btn waves-effect waves-light green black-text confirmarPagada">Pagada</a></div></div>
+                                ${x.Cliente !== 'PENDIENTE' ? `<div class="row"><div class="col s12"><a id="pendiente-${x.idVenta}" class="btn waves-effect waves-light purple darken-1 white-text confirmarPendiente">Pendiente</a></div></div>` : ''}
+                                <div class="row"><div class="col s12"><button id="cliente-${x.idVenta}" class="btn waves-effect waves-light yellow black-text abrirModal ${x.Propia === 0 ? 'disabled' : ''}" data-target="modalCliente">Cliente</button></div></div>
+                                ${x.Propia === 0 ? `<div class="row"><div class="col s12"><a id="yo-${x.idVenta}" class="btn waves-effect waves-light grey black-text confirmarParaMi">P.M</a></div></div>` : ''}
+                                <div class="row"><div class="col s12"><a id="pagada-${x.idVenta}" class="btn waves-effect waves-light ${x.Pagado === 0 ? 'green white-text' : 'red white-text'} confirmarPagada">${x.Pagado === 0 ? 'Pagada' : 'Sin pagar'}</a></div></div>
                             </td>
                         </tr>
-                   `);
+            `);
         });
     }
 });

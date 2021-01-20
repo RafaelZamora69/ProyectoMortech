@@ -291,7 +291,7 @@ class venta
             $ventas = [];
             $result = $query->get_result();
             while($row = $result->fetch_assoc()){
-                $ventas[] = array('idVenta'=>$row['idVenta'],'Cliente'=>$row['Cliente'],'Telefono'=>$row['NumeroTelefono'],'Pagado'=>$row['Pagado']);
+                $ventas[] = array('idVenta'=>$row['idVenta'],'Cliente'=>$row['Cliente'],'Telefono'=>$row['NumeroTelefono'],'Pagado'=>$row['Pagado'],'Propia'=>$row['Propia']);
             }
             return json_encode($ventas);
         }
