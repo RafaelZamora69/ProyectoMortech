@@ -1,6 +1,5 @@
 <!-- sideNav -->
-<div class="">
-    <ul class="sidenav sidenav-fixed" id="menu">
+    <ul class="sidenav" id="menu">
         <li>
             <div class="user-view">
                 <div class="background">
@@ -36,6 +35,8 @@
                         <div class="collapsible-body">
                             <ul>
                                 <li><a href="<?= base_url ?>verificar/index" class="waves-effect">Verificar servicios <i class="material-icons">done_all</i></a></li>
+                                <li><a href="<?= base_url ?>almacen/index" class="waves-effect">Almacen <i class="material-icons">inventory</i></a></li>
+                                <li><a href="<?= base_url ?>almacen/index" class="waves-effect">Movimientos <i class="material-icons">compare_arrows</i></a></li>
                             </ul>
                         </div>
                     </li>
@@ -72,4 +73,3 @@
             </li>
         <?php endif ?>
     </ul>
-</div>
