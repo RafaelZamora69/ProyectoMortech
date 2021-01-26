@@ -27,10 +27,10 @@
             <li><a href="<?= base_url ?>compra/index" class="waves-effect">Compras</a></li>
             <li><a href="<?= base_url ?>reportes/index" class="waves-effect">Reportes <i class="material-icons">plagiarism</i></a></li>
             <li><a href="<?= base_url ?>corte/index" class="waves-effect">Corte <i class="material-icons">content_cut</i></a></li>
-            <!-- Herramientas -->
             <li class="no-padding">
                 <ul class="collapsible collapsible-accordion">
-                    <li>
+                    <!-- Herramientas -->
+                    <li class="bold">
                         <a class="collapsible-header">Herramientas <i class="material-icons">construction</i></a>
                         <div class="collapsible-body">
                             <ul>
@@ -40,12 +40,8 @@
                             </ul>
                         </div>
                     </li>
-                </ul>
-            </li>
-            <!-- Nemi -->
-            <li class="no-padding">
-                <ul class="collapsible collapsible-accordion">
-                    <li>
+                    <!-- Nemi -->
+                    <li class="bold">
                         <a class="collapsible-header">NEMI <i class="material-icons">call</i></a>
                         <div class="collapsible-body">
                             <ul>
@@ -53,13 +49,9 @@
                                 <li><a href="<?= base_url ?>utilidad/index">Reporte sims <i class="material-icons">format_list_numbered</i></a></li>
                             </ul>
                         </div>
-                    </li>
-                </ul>
-            </li>
-            <!-- STEL Order -->
-            <li class="no-padding">
-                <ul class="collapsible collapsible-accordion">
-                    <li>
+                    </li >
+                    <!-- STEL Order -->
+                    <li class="bold">
                         <a class="collapsible-header">STEL Order <i class="material-icons">wysiwyg</i></a>
                         <div class="collapsible-body">
                             <ul>

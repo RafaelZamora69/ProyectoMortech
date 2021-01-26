@@ -16,4 +16,14 @@ class almacenController {
         $operadoras = new operadora();
         echo $operadoras->datosOperadoras();
     }
+
+    public function detallesOperadoras(){
+        $planes = new operadora();
+        echo $planes->planesAlmacen();
+    }
+
+    public function modificar(){
+        $agregar = new operadora();
+        echo $agregar->Modificar($_POST['Plan'], $_POST['Cantidad'],$_POST['Metodo']);
+    }
 }
