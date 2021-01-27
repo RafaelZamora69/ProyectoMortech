@@ -1,4 +1,5 @@
 <?php
+include_once 'models/operadora.php';
 class venta
 {
     private $NombreCliente, $NombreEmpleado, $NumTel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones, $connection, $api, $mensajes = [];
@@ -19,6 +20,11 @@ class venta
         $registro->bind_param("s", $NombreCliente);
         $registro->execute();
         return $this->getIdCliente($NombreCliente);
+    }
+
+    private function obtenerOperadora($idPlan){
+        $operadora = new operadora();
+        return $operadora->obtenerOperadora($idPlan);
     }
 
     public function getIdCliente($NombreCliente)
@@ -55,6 +61,11 @@ class venta
         $respuesta = $this->api->recargaTae($Carrier, $Telefono, $Monto);
         $this->mensajes[] = array('Tel' => $Telefono, 'Codigo' => $respuesta[0], 'Mensaje' => $respuesta[1]);
         return strcmp($respuesta[0], '0') == 0 ? true : false;
+    }
+
+    private function descontar($idPlan){
+        $plan = new operadora();
+        $plan->descontar($idPlan);
     }
 
     private function limpiarEspacios($Observaciones){
@@ -157,31 +168,35 @@ class venta
         $query = $conn->query("update nemi set Activada = 1 where NumNemi = {$tel}");
     }
 
-    function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones, $Carrier,$Tipo)
+    function InsertarRecarga($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Plan, $Mxn, $Usd, $Pagado, $Recarga, $Observaciones,$Tipo)
     {
         $this->mensajes = [];
         $NombreCliente = $this->limpiarEspacios($NombreCliente);
         $arr = json_decode($telefonos, true);
+        $Operadora = $this->obtenerOperadora($Plan);
         try {
             for ($i = 0; $i < count($arr); $i++) {
                 $tel = $arr[$i]['tag'];
                 //Si se realiza la recarga
-                if(strcmp('Externa', $Tipo) == 0 || strcmp($Operadora, 'MT') == 0) {
+                if(strcmp('Externa', $Tipo) == 0 || strcmp($Operadora['Operadora'], 'Nemi') == 0 || strcmp($Operadora['Operadora'], 'Space') == 0) {
                     goto insertar;
                 }
-                if ($this->recarga($Carrier, $tel, $Monto)) {
+                if ($this->recarga($Operadora['idOperadora'], $tel, $Operadora['Costo'])) {
                     insertar:
                     $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha, Verificada) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 2 hour ),?);");
                     $idCliente = $this->getIdCliente($NombreCliente);
                     $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
-                    $Utilidad = $this->getUtilidad($Monto, $Usd, $Mxn);
+                    $Utilidad = $this->getUtilidad($Operadora['Costo'], $Usd, $Mxn);
                     $Verificado = $Utilidad <= 0 ? 0 : 1;
-                    $venta->bind_param("iisssddddisi", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado);
+                    $venta->bind_param("iisssddddisi", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora['Operadora'], $Operadora['Costo'], $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado);
                     if (!$venta->execute()) {
                         return json_encode('Error en la inserción ' . $venta->error);
                     }
-                    if(strcmp($Operadora, 'MT') == 0){
+                    if(strcmp($Operadora['Operadora'], 'Nemi') == 0 || strcmp($Operadora['Operadora'], 'Space') == 0){
                         $this->mensajes[] = array('Tel' => $tel, 'Codigo' => 0, 'Mensaje' => 'Recarga exitosa');
+                        if(strcmp($Recarga, 0) == 0){
+                            $this->descontar($Plan);
+                        }
                     }
                 }
             }

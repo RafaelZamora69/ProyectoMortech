@@ -1,6 +1,7 @@
 <?php
 require_once 'models/venta.php';
 require_once 'models/user.php';
+require_once 'models/operadora.php';
 class serviciosController
 {
 
@@ -18,13 +19,12 @@ class serviciosController
                 $_POST['Vendedor'],
                 $_POST['Numeros'],
                 'Recarga de saldo',
-                $_POST['Operadora'],
-                $_POST['Monto'],
+                $_POST['Plan'],
                 $_POST['PagoMxn'],
                 $_POST['PagoUsd'],
                 $_POST['Pagado'],
+                $_POST['Recarga'],
                 $_POST['Nota'],
-                $_POST['Carrier'],
                 $_POST['Tipo']
             );
         } else {
@@ -141,5 +141,10 @@ class serviciosController
             $nemi = new venta();
             echo $nemi->obtenerInfoNemi($_POST['id']);
         }
+    }
+
+    public function obtenerPlanes(){
+        $planes = new operadora();
+        echo $planes->All();
     }
 }

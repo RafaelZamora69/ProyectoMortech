@@ -53,6 +53,18 @@ class operadora {
         }
     }
 
+    public function obtenerOperadora($idPlan){
+        $query = $this->connection->query("call infoPlan({$idPlan});");
+        $row = $query->fetch_assoc();
+        return array('idPlan' => $row['idPlan'],'idOperadora' => $row['idOperadora'], 'Operadora' => $row['Nombre'], 'Costo' => $row['costo']);
+    }
+
+    public function descontar($idPlan){
+        $inventario = intval($this->obtenerSimsOperadora($idPlan)) - 1;
+        echo $inventario;
+        $this->connection->query("update planes set inventario = {$inventario} where idPlan = {$idPlan}");
+    }
+
     //private
     private function obtenerSimsOperadora($idPlan){
         if($query = $this->connection->query("select sum(inventario) As inventario from planes where idPlan = {$idPlan}")){

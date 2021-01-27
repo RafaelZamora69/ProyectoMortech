@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('OperadorasTrigger').value = 'MT';
     const elems = document.getElementById('modal2');
     const modal2 = M.Modal.init(elems);
     document.getElementById('NumeroBuscar').addEventListener('submit', (e) => {
@@ -32,16 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
     document.getElementById("progress").style.visibility = "hidden";
-    //Seleccionar operadoras
-    var drop = document.getElementById('OperadorasTrigger');
-    var operadoras = M.Dropdown.init(drop);
-    const dropExterna = document.getElementById('OperadorasTriggerExterna');
-    const operadorasExterna = M.Dropdown.init(dropExterna);
-    document.getElementById('Operadoras').addEventListener('click', (e) => {
-        document.getElementById('OperadorasTrigger').value = e.target.text;
-        drop.textContent = e.target.text;
-       cargarMonto(e.target.text, 'normal');
-    });
+    M.FormSelect.init(document.getElementById('Operadora'));
+    obtenerPlanes();
     //Proveedores
     const autoPro = document.getElementById('autocompleteProveedores');
     const Proveedores = M.Autocomplete.init(autoPro);
@@ -65,8 +56,6 @@ document.addEventListener('DOMContentLoaded', function () {
     //Números de teléfono
     const value = document.getElementById('numeros');
     //Monto a pagar
-    var select = document.querySelectorAll('select');
-    var montos = M.FormSelect.init(select);
     let formSaldo = document.getElementById('FormSaldo');
     let formServicio = document.getElementById('FormServicio');
     //Empleados
@@ -291,11 +280,11 @@ document.addEventListener('DOMContentLoaded', function () {
         else {
             document.getElementById("progress").style.visibility = "visible";
             datos = new FormData(document.getElementById('FormSaldo'));
-            datos.append('Operadora', document.getElementById("OperadorasTrigger").value);
             datos.append('Numeros', JSON.stringify(document.getElementsByClassName('chips')[0].M_Chips.chipsData));
             datos.append('Vendedor', document.getElementById("Name").innerText);
-            datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTrigger").value));
+            datos.append('Plan', document.getElementById('Operadora').value);
             document.getElementsByClassName('pagado')[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
+            document.getElementsByClassName('recarga')[0].checked ? datos.append('Recarga', 1) : datos.append('Recarga', 0);
             datos.append('Tipo', 'Local');
         }
         fetch('recargaSaldo', {
@@ -377,80 +366,69 @@ document.addEventListener('DOMContentLoaded', function () {
         form.reset();
     }
 
-    function getCarrierId(carrier) {
-        switch (carrier) {
-            case "Telcel":
-                return 1;
-            case "Movistar":
-                return 2;
-            case "Unefon":
-                return 3;
-            case "AT&T":
-                return 4;
-            case "MT":
-                return 101;
-        }
-    }
-
-    function cargarMonto(res, Tipo) {
-        const Montos = Tipo == 'Externa' ? document.getElementById("MontoExterna") : document.getElementById('Monto');
-        Montos.innerHTML = '';
-        switch (res) {
-            case 'Telcel':
-                let telcel = [100, 150, 200, 300, 500];
-                for (i in telcel) {
-                    const opciones = Tipo == 'Externa' ? document.getElementById("MontoExterna") : document.getElementById('Monto');
-                    let opcion = document.createElement("option");
-                    opcion.value = telcel[i];
-                    opcion.text = '$ ' + telcel[i];
-                    opciones.appendChild(opcion);
-                }
-                var montos = M.FormSelect.init(select);
-                break;
-            case 'Movistar':
-                let movistar = [100, 150, 200];
-                for (i in movistar) {
-                    const opciones = Tipo == 'Externa' ? document.getElementById("MontoExterna") : document.getElementById('Monto');
-                    let opcion = document.createElement("option");
-                    opcion.value = movistar[i];
-                    opcion.text = '$ ' + movistar[i];
-                    opciones.appendChild(opcion);
-                }
-                montos = M.FormSelect.init(select);
-                break;
-            case 'Unefon':
-                let unefon = [100, 15, 20, 30, 50, 70, 150, 200, 300];
-                for (i in unefon) {
-                    const opciones = Tipo == 'Externa' ? document.getElementById("MontoExterna") : document.getElementById('Monto');
-                    let opcion = document.createElement("option");
-                    opcion.value = unefon[i];
-                    opcion.text = '$ ' + unefon[i];
-                    opciones.appendChild(opcion);
-                }
-                montos = M.FormSelect.init(select);
-                break;
-            case 'AT&T':
-                let at = [50,100, 150, 200, 300, 500, 1000];
-                for (i in at) {
-                    const opciones = Tipo == 'Externa' ? document.getElementById("MontoExterna") : document.getElementById('Monto');
-                    let opcion = document.createElement("option");
-                    opcion.value = at[i];
-                    opcion.text = '$ ' + at[i];
-                    opciones.appendChild(opcion);
-                }
-                montos = M.FormSelect.init(select);
-                break;
-            case 'MT':
-                const values = [50,100,150,200,300];
-                const paquetes = ['5+5G 7D','10+10G 14D','8G 30D','','20+20G 30D'];
-                for(i in values){
-                    const opciones = Tipo == 'Externa' ? document.getElementById('MontoExterna') : document.getElementById('Monto');
-                    opciones.innerHTML += `
-                        <option value="${values[i]}">$ ${values[i]} ${paquetes[i]}</option>
-                    `;
-                }
-                montos = M.FormSelect.init(select);
-                break;
-        }
+    function obtenerPlanes(){
+        fetch('obtenerPlanes')
+            .then(res => res.json())
+            .then(res => {
+                //Dios perdoname por lo que estoy haciendo, prometo arreglar esta mierda
+                const optionOperadora = document.getElementById('Operadora');
+                const optionOperadoraExt = document.getElementById('OperadoraExterna');
+                let filter = res.filter(x => x.Operadora === 'Nemi');
+                optionOperadora.insertAdjacentHTML('beforeend','<optgroup label="Nemi">')
+                optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Nemi">');
+                filter.forEach(x => {
+                    optionOperadora.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                });
+                optionOperadora.insertAdjacentHTML('beforeend','</optgroup>');
+                optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                filter = res.filter(x => x.Operadora === 'Space');
+                optionOperadora.insertAdjacentHTML('beforeend','<optgroup label="Space">');
+                optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Space">');
+                filter.forEach(x => {
+                    optionOperadora.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                });
+                optionOperadora.insertAdjacentHTML('beforeend','</optgroup>');
+                optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                filter = res.filter(x => x.Operadora === 'AT&T');
+                optionOperadora.insertAdjacentHTML('beforeend','<optgroup label="AT&T">');
+                optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="AT&T">');
+                filter.forEach(x => {
+                    optionOperadora.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                });
+                optionOperadora.insertAdjacentHTML('beforeend','</optgroup>');
+                optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                filter = res.filter(x => x.Operadora === 'Movistar');
+                optionOperadora.insertAdjacentHTML('beforeend','<optgroup label="Movistar">');
+                optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Movistar">');
+                filter.forEach(x => {
+                    optionOperadora.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                });
+                optionOperadora.insertAdjacentHTML('beforeend','</optgroup>');
+                optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                filter = res.filter(x => x.Operadora === 'Telcel');
+                optionOperadora.insertAdjacentHTML('beforeend','<optgroup label="Telcel">');
+                optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Telcel">');
+                filter.forEach(x => {
+                    optionOperadora.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                });
+                optionOperadora.insertAdjacentHTML('beforeend','</optgroup>');
+                optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                filter = res.filter(x => x.Operadora === 'Unefon');
+                optionOperadora.insertAdjacentHTML('beforeend','<optgroup label="Unefon">');
+                optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Unefon">');
+                filter.forEach(x => {
+                    optionOperadora.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                });
+                optionOperadora.insertAdjacentHTML('beforeend','</optgroup>');
+                optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                M.FormSelect.init(document.getElementById('Operadora'));
+                M.FormSelect.init(document.getElementById('OperadoraExterna'));
+            });
     }
 });

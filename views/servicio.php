@@ -25,6 +25,7 @@ require_once 'views/layouts/sidenav.php';
                 <?php endif ?>
             </ul>
         </div>
+        <!-- Recargas -->
         <div id="saldo" class="col s12">
             <form method="post" id="FormSaldo">
                 <div class="card-panel">
@@ -45,34 +46,26 @@ require_once 'views/layouts/sidenav.php';
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col s4">
+                        <div class="col s6 m6">
                             <div class="input-field">
-                                <a class='dropdown-trigger btn' data-target='Operadoras' id="OperadorasTrigger">MT</a>
-                                <ul id="Operadoras" class="dropdown-content">
-                                    <li><a>Unefon</a></li>
-                                    <li><a>AT&T</a></li>
-                                    <li><a>Telcel</a></li>
-                                    <li><a>Movistar</a></li>
-                                    <li><a>MT</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col s4 m4">
-                            <div class="input-field">
-                                <select name="Monto" id="Monto">
-                                    <option value="50" selected>$ 50 5+5G 7D</option>
-                                    <option value="100">$ 100 10+10G 14D</option>
-                                    <option value="150">$ 150 8G 30D</option>
-                                    <option value="200">$ 200</option>
-                                    <option value="300">$ 300 20+20G 30D</option>
+                                <select name="Operadora" id="Operadora">
+                                    <option value="0">- Plan -</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col s4 m4">
+                        <div class="col s6 m3">
                             <div class="input-field">
                                 <input type="text" id="idNemi" maxlength="5">
                                 <label for="idNemi">N° Serie Nemi</label>
                             </div>
+                        </div>
+                        <div class="col s3 m3">
+                            <p>
+                                <label>
+                                    <input type="checkbox" class="recarga">
+                                    <span>Recarga</span>
+                                </label>
+                            </p>
                         </div>
                     </div>
                     <div class="row">
@@ -118,6 +111,7 @@ require_once 'views/layouts/sidenav.php';
                 </div>
             </form>
         </div>
+        <!-- Servicios -->
         <div id="otro" class="col s12">
             <form action="" method="post" id="FormServicio">
                 <div class="card-panel">
@@ -233,35 +227,28 @@ require_once 'views/layouts/sidenav.php';
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col s12 m4">
+                        <div class="col s6 m6">
                             <div class="input-field">
-                                <a class='dropdown-trigger btn' data-target='OperadorasExterna' id="OperadorasTriggerExterna">MT</a>
-                                <ul id="OperadorasExterna" class="dropdown-content">
-                                    <li><a>Unefon</a></li>
-                                    <li><a>AT&T</a></li>
-                                    <li><a>Telcel</a></li>
-                                    <li><a>Movistar</a></li>
-                                    <li><a>MT</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col s12 m4">
-                            <div class="input-field">
-                                <select name="Monto" id="MontoExterna">
-                                    <option value="50" selected>$ 50 5+5G 7D</option>
-                                    <option value="100">$ 100 10+10G 14D</option>
-                                    <option value="150">$ 150 8G 30D</option>
-                                    <option value="200">$ 200</option>
-                                    <option value="300">$ 300 20+20G 30D</option>
+                                <select name="OperadoraExterna" id="OperadoraExterna">
+                                    <option value="0">- Plan -</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col s12 m4">
+                        <div class="col s12 m6">
                             <div class="input-field">
                                 <input type="text" id="empleadoExterno" class="autocomplete">
                                 <label for="empleadoExterno">Empleado</label>
                             </div>
                         </div>
+                        <div class="col s6 m3">
+                            <p>
+                                <label>
+                                    <input type="checkbox" class="recargaExterna">
+                                    <span>Recarga</span>
+                                </label>
+                            </p>
+                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col s4 m4">
