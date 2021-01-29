@@ -64,12 +64,11 @@ class serviciosController
                 $_POST['Vendedor'],
                 $_POST['Numeros'],
                 'Recarga de saldo',
-                $_POST['Operadora'],
-                $_POST['Monto'],
                 $_POST['PagoMxn'],
                 $_POST['PagoUsd'],
                 $_POST['Pagado'],
-                $_POST['Nota']
+                $_POST['Nota'],
+                $_POST['Plan']
             );
         }
     }

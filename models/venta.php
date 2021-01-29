@@ -2,7 +2,7 @@
 include_once 'models/operadora.php';
 class venta
 {
-    private $NombreCliente, $NombreEmpleado, $NumTel, $Operadora, $Monto, $PrecioVenta, $Pagado, $Observaciones, $connection, $api, $mensajes = [];
+    private $connection, $api, $mensajes = [];
 
     function __construct()
     {
@@ -141,20 +141,22 @@ class venta
         }
     }
 
-    function recargaNemi($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Operadora, $Monto, $Mxn, $Usd, $Pagado, $Observaciones){
+    function recargaNemi($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Mxn, $Usd, $Pagado, $Observaciones, $Plan){
         $NombreCliente = $this->limpiarEspacios($NombreCliente);
+        $Operadora = $this->obtenerOperadora($Plan);
         try{
             $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha, Verificada) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 2 hour ),?);");
             $idCliente = $this->getIdCliente($NombreCliente);
             $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
-            $Utilidad = $this->getUtilidad($Monto, $Usd, $Mxn);
+            $Utilidad = $this->getUtilidad($Operadora['Costo'], $Usd, $Mxn);
             $Verificado = $Utilidad <= 0 ? 0 : 1;
             $tel = json_decode($telefonos,true);
-            $venta->bind_param("iisssddddisi", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora, $Monto, $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado);
+            $venta->bind_param("iisssddddisi", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora['Operadora'], $Monto, $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado);
             if (!$venta->execute()) {
                 return json_encode('Error en la inserción ' . $venta->error);
             } else {
                 $this->ActivarNemi($tel);
+                $this->descontar($Plan);
                 return json_encode(array('Tel' => $tel, 'Codigo' => 0, 'Mensaje' => 'Venta registrada'));
             }
         } catch (Exception $e) {

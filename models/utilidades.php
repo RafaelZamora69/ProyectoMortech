@@ -2,28 +2,37 @@
 
 class utilidades {
 
-    private $connection;
+    private $connection, $connectionAux;
 
     function __construct() {
         $connect = new dbConnect();
         $this->connection = $connect->connect();
+        $this->connectionAux = $connect->connect();
     }
 
     public function cargarNemi($Archivo){
         if(($gestor = fopen($Archivo,"r")) != false){
             $query = "insert into nemi(NumSerie,NumNemi)values";
-            $datos = fgetcsv($gestor,10000,",");
-            $query .= "('{$datos[0]}','{$datos[1]}')";
             while(($datos = fgetcsv($gestor,10000,",")) != false){
-                $query .= ',';
-                $query .= "('{$datos[0]}','{$datos[1]}')";
+                if(!$this->existeSim($datos[0])){
+                    $query .= "('{$datos[0]}','{$datos[1]}'),";
+                }
             }
-            $query .= ';';
+            $query = substr_replace($query,";",-1);
             if($result = $this->connection->query($query)){
                 return json_encode(array('Code'=>0,'Mensaje'=>'Datos registrados'));
             } else {
                 return json_encode(array('Code'=>1,'Mensaje'=>'Error al insertar'));
             }
+        }
+    }
+
+    private function existeSim($numSerie){
+        $query = $this->connectionAux->prepare("select * from nemi where NumSerie = ?");
+        $query->bind_param('s',$numSerie);
+        if($query->execute()){
+            $result = $query->get_result();
+            return $result->num_rows > 0;
         }
     }
 }

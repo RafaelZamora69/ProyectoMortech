@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded',(e) => {
                 res.Code === 0 ? M.toast({ html: res.Mensaje, classes: 'green white-text' }) :
                     M.toast({ html: 'Error ' + res.Mensaje, classes: 'red white-text' });
                 document.getElementById('progress').style.visibility = 'hidden';
-            });
+            }).catch((e) => {
+                document.getElementById('progress').style.visibility = 'hidden';
+        });
    }
 });

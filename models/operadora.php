@@ -61,7 +61,6 @@ class operadora {
 
     public function descontar($idPlan){
         $inventario = intval($this->obtenerSimsOperadora($idPlan)) - 1;
-        echo $inventario;
         $this->connection->query("update planes set inventario = {$inventario} where idPlan = {$idPlan}");
     }
 

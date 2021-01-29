@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const externa = document.getElementById('exterior');
     const elems = document.getElementById('modal2');
     const modal2 = M.Modal.init(elems);
     document.getElementById('NumeroBuscar').addEventListener('submit', (e) => {
@@ -166,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('ActivarNemi').addEventListener('click', (e) => {
                         e.stopPropagation();
                         modal.close()
-                        RecargaNemi(res.Tel, 'Nemi');
+                        RecargaNemi(res.Tel);
                         document.getElementById('copy').innerHTML = `<input type="text" value="${res.Tel}" id="Nums">`;
                         document.getElementById('Nums').select();
                         document.execCommand('selectAll');
@@ -225,7 +226,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 clientesSaldo.updateData(data);
                 clientesServicio.updateData(data);
-                clientesSaldoExterna.updateData(data);
+                if(externa != undefined) {
+                    clientesSaldoExterna.updateData(data);
+                }
             })
             .catch(function (e) {
             });
@@ -244,12 +247,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function RecargaNemi(Tel,Operadora){
+    function RecargaNemi(Tel){
         datos = new FormData(document.getElementById('FormSaldo'));
-        datos.append('Operadora', document.getElementById("OperadorasTrigger").value);
         datos.append('Numeros',Tel);
         datos.append('Vendedor', document.getElementById("Name").innerText);
-        datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTrigger").value));
+        datos.append('Plan', document.getElementById('Operadora').value);
         document.getElementsByClassName('pagado')[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
         fetch('recargaNemi',{
             method: 'POST',
@@ -300,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (res.Codigo == 0) {
                         document.getElementById('RecargaExterna').reset();
                     } else {
-                        document.getElementById('RecargaExterna').data
+                        document.getElementById('RecargaExterna').data;
                     }
                 } else {
                     while (table.firstChild) {
@@ -371,64 +373,105 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 //Dios perdoname por lo que estoy haciendo, prometo arreglar esta mierda
+                let optionOperadoraExt = undefined;
                 const optionOperadora = document.getElementById('Operadora');
-                const optionOperadoraExt = document.getElementById('OperadoraExterna');
+                if(document.getElementById('OperadoraExterna') != undefined){
+                    optionOperadoraExt = document.getElementById('OperadoraExterna');
+                }
                 let filter = res.filter(x => x.Operadora === 'Nemi');
                 optionOperadora.insertAdjacentHTML('beforeend','<optgroup label="Nemi">')
-                optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Nemi">');
+                if(optionOperadoraExt != undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Nemi">');
+                }
                 filter.forEach(x => {
                     optionOperadora.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
-                    optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    if(optionOperadoraExt != undefined){
+                        optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    }
                 });
                 optionOperadora.insertAdjacentHTML('beforeend','</optgroup>');
-                optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                if(optionOperadoraExt != undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                }
                 filter = res.filter(x => x.Operadora === 'Space');
                 optionOperadora.insertAdjacentHTML('beforeend','<optgroup label="Space">');
-                optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Space">');
+                if(optionOperadoraExt != undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Space">');
+                }
                 filter.forEach(x => {
                     optionOperadora.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
-                    optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    if(optionOperadoraExt != undefined){
+                        optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    }
                 });
                 optionOperadora.insertAdjacentHTML('beforeend','</optgroup>');
-                optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                if(optionOperadoraExt != undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                }
                 filter = res.filter(x => x.Operadora === 'AT&T');
                 optionOperadora.insertAdjacentHTML('beforeend','<optgroup label="AT&T">');
-                optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="AT&T">');
+                if(optionOperadoraExt != undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="AT&T">');
+                }
                 filter.forEach(x => {
                     optionOperadora.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
-                    optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    if(optionOperadoraExt != undefined){
+                        optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    }
                 });
                 optionOperadora.insertAdjacentHTML('beforeend','</optgroup>');
-                optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                if(optionOperadoraExt != undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                }
                 filter = res.filter(x => x.Operadora === 'Movistar');
                 optionOperadora.insertAdjacentHTML('beforeend','<optgroup label="Movistar">');
-                optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Movistar">');
+                if(optionOperadoraExt != undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Movistar">');
+                }
                 filter.forEach(x => {
                     optionOperadora.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
-                    optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    if(optionOperadoraExt != undefined){
+                        optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    }
                 });
                 optionOperadora.insertAdjacentHTML('beforeend','</optgroup>');
-                optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                if(optionOperadoraExt != undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                }
                 filter = res.filter(x => x.Operadora === 'Telcel');
                 optionOperadora.insertAdjacentHTML('beforeend','<optgroup label="Telcel">');
-                optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Telcel">');
+                if(optionOperadoraExt != undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Telcel">');
+                }
                 filter.forEach(x => {
                     optionOperadora.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
-                    optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    if(optionOperadoraExt != undefined){
+                        optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    }
                 });
                 optionOperadora.insertAdjacentHTML('beforeend','</optgroup>');
-                optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                if(optionOperadoraExt != undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                }
                 filter = res.filter(x => x.Operadora === 'Unefon');
                 optionOperadora.insertAdjacentHTML('beforeend','<optgroup label="Unefon">');
-                optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Unefon">');
+                if(optionOperadoraExt != undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend','<optgroup label="Unefon">');
+                }
                 filter.forEach(x => {
                     optionOperadora.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
-                    optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    if(optionOperadoraExt != undefined){
+                        optionOperadoraExt.insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.Plan}</option>`);
+                    }
                 });
                 optionOperadora.insertAdjacentHTML('beforeend','</optgroup>');
-                optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                if(optionOperadoraExt != undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend','</optgroup>');
+                }
                 M.FormSelect.init(document.getElementById('Operadora'));
-                M.FormSelect.init(document.getElementById('OperadoraExterna'));
+                if(optionOperadoraExt != undefined){
+                    M.FormSelect.init(document.getElementById('OperadoraExterna'));
+                }
             });
     }
 });
