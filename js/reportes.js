@@ -300,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <th>Empleado</th>
                                     <th>Cliente</th> 
                                     <th>Teléfono</th>
+                                    <th># Serie</th>
                                     <th>Operadora</th>
                                     <th>Monto</th>
                                     <th>Venta</th>
@@ -327,6 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td>${i.Empleado}</td>
                                 <td>${i.Cliente}</td>
                                 <td>${i.Telefono}</td>
+                                <td>${i.Serie == null ? '- - -' : i.Serie.slice(i.Serie.length - 6, i.Serie.length)}</td>
                                 <td>${i.Operadora}</td>
                                 <td>${i.Monto}</td>
                                 <td>${i.Venta}</td>

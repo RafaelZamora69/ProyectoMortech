@@ -168,11 +168,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         e.stopPropagation();
                         modal.close()
                         RecargaNemi(res.Tel);
-                        document.getElementById('copy').innerHTML = `<input type="text" value="${res.Tel}" id="Nums">`;
+                        document.getElementById('copy').innerHTML = `<input type="text" value="${res.Serie}" id="Nums">`;
                         document.getElementById('Nums').select();
                         document.execCommand('selectAll');
                         if (document.execCommand('copy')) {
-                            window.open('https://nemi.tel/mi-cuenta/activa/', '_blank');
+                            window.open('https://admin.nemi.tel/recargaNewClientExist', '_blank');
                         }
                         document.getElementById('Nums').style.visibility = 'hidden';
                         document.getElementById('FormSaldo').reset();

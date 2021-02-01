@@ -104,7 +104,7 @@ class reportes
                     $Ventas[] = array('idVenta' => $row['idVenta'], 'Empleado' => $row['Vendedor'], 'Cliente' =>
                         $row['Cliente'], 'Telefono' => $row['NumeroTelefono'], 'Operadora' => $row['Operadora'],
                         'Monto' => $row['Monto'], 'Venta' => $row['Venta'], 'Utilidad' => $row['Utilidad'],
-                        'Verificada' => $row['Verificada'], 'Pagado' => $row['Pagado'], 'Corte' => $row['Corte'], 'Fecha' => $row['fecha']);
+                        'Verificada' => $row['Verificada'], 'Pagado' => $row['Pagado'], 'Corte' => $row['Corte'], 'Fecha' => $row['fecha'],'Serie'=>$row['Serie']);
                 }
                 return json_encode($Ventas);
             }
