@@ -10,6 +10,16 @@ class utilidades {
         $this->connectionAux = $connect->connect();
     }
 
+    public function cargarNumeros($Archivo){
+        if(($gestor = fopen($Archivo,"r")) != false){
+            $query = '';
+            while(($datos = fgetcsv($gestor,10000,",")) != false){
+                $query = "update venta set NumeroTelefono = '{$datos[2]}', Operadora = '{$datos[1]}' where fecha = date_add('{$datos[0]}', interval 1 hour);";
+                echo $query . '<br>';
+            }
+        }
+    }
+
     public function cargarNemi($Archivo){
         if(($gestor = fopen($Archivo,"r")) != false){
             $query = "insert into nemi(NumSerie,NumNemi)values";

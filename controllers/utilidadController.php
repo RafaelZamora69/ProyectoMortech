@@ -10,4 +10,9 @@ require_once 'models/utilidades.php';
             $carga = new utilidades();
             echo $carga->cargarNemi($_FILES['Archivo']['tmp_name']);
         }
+
+        public function cargarNumeros(){
+            $cargar = new utilidades();
+            echo $cargar->cargarNumeros($_FILES['Numeros']['tmp_name']);
+        }
     }
