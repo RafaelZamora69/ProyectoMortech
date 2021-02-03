@@ -144,6 +144,6 @@ class serviciosController
 
     public function obtenerPlanes(){
         $planes = new operadora();
-        echo $planes->All();
+        echo $planes->obtenerPlanes();
     }
 }

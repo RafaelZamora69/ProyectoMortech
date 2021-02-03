@@ -63,9 +63,9 @@ class venta
         return strcmp($respuesta[0], '0') == 0 ? true : false;
     }
 
-    private function descontar($idPlan){
+    private function descontar($idOperadora){
         $plan = new operadora();
-        $plan->descontar($idPlan);
+        $plan->descontar($idOperadora);
     }
 
     private function limpiarEspacios($Observaciones){
@@ -151,12 +151,12 @@ class venta
             $Utilidad = $this->getUtilidad($Operadora['Costo'], $Usd, $Mxn);
             $Verificado = $Utilidad <= 0 ? 0 : 1;
             $tel = json_decode($telefonos,true);
-            $venta->bind_param("iisssddddisi", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora['Operadora'], $Monto, $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado);
+            $venta->bind_param("iisssddddisi", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora['Operadora'], $Operadora['Costo'], $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado);
             if (!$venta->execute()) {
                 return json_encode('Error en la inserción ' . $venta->error);
             } else {
                 $this->ActivarNemi($tel);
-                $this->descontar($Plan);
+                $this->descontar($Operadora['idOperadora']);
                 return json_encode(array('Tel' => $tel, 'Codigo' => 0, 'Mensaje' => 'Venta registrada'));
             }
         } catch (Exception $e) {

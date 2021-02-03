@@ -11,12 +11,9 @@ require_once  'views/layouts/sidenav.php';
         <div class="col s12 m3">
             <div class="card deep-purple darken-1">
                 <div class="card-content white-text">
-                    <span class="card-title activator">Nemi</span>
-                    <p id="restantes-Nemi"></p>
-                    <p id="vendidas-Nemi"></p>
-                </div>
-                <div class="card-reveal" id="detalles-Nemi">
-
+                    <span class="card-title">Nemi</span>
+                    <p id="restantes-MT"></p>
+                    <p id="vendidas-MT"></p>
                 </div>
             </div>
         </div>
@@ -50,12 +47,9 @@ require_once  'views/layouts/sidenav.php';
         <div class="col s12 m3">
             <div class="card black">
                 <div class="card-content white-text">
-                    <span class="card-title activator">Space</span>
+                    <span class="card-title">Space</span>
                     <p id="restantes-Space"></p>
                     <p id="vendidas-Space"></p>
-                </div>
-                <div class="card-reveal" id="detalles-Space">
-
                 </div>
             </div>
         </div>

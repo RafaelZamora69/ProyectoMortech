@@ -49,7 +49,6 @@ require_once 'views/layouts/sidenav.php';
                         <div class="col s6 m6">
                             <div class="input-field">
                                 <select name="Operadora" id="Operadora">
-                                    <option value="0">- Plan -</option>
                                 </select>
                             </div>
                         </div>
@@ -230,7 +229,6 @@ require_once 'views/layouts/sidenav.php';
                         <div class="col s6 m6">
                             <div class="input-field">
                                 <select name="OperadoraExterna" id="OperadoraExterna">
-                                    <option value="0">- Plan -</option>
                                 </select>
                             </div>
                         </div>
