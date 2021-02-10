@@ -59,8 +59,12 @@ class venta
     private function recarga($Carrier, $Telefono, $Monto)
     {
         $respuesta = $this->api->recargaTae($Carrier, $Telefono, $Monto);
-        $this->mensajes[] = array('Tel' => $Telefono, 'Codigo' => $respuesta[0], 'Mensaje' => $respuesta[1]);
-        return strcmp($respuesta[0], '0') == 0 ? true : false;
+        $this->addMessage($Telefono,$respuesta[0],$respuesta[1]);
+        return strcmp($respuesta[0], '0') == 0;
+    }
+
+    private function addMessage($Tel, $Code, $Msg){
+        $this->mensajes[] = array('Tel' => $Tel, 'Codigo' => $Code, 'Mensaje' => $Msg);
     }
 
     private function descontar($idOperadora){
@@ -180,7 +184,8 @@ class venta
             for ($i = 0; $i < count($arr); $i++) {
                 $tel = $arr[$i]['tag'];
                 //Si se realiza la recarga
-                if(strcmp('Externa', $Tipo) == 0 || strcmp($Operadora['Operadora'], 'Nemi') == 0 || strcmp($Operadora['Operadora'], 'Space') == 0) {
+                if(strcmp('Externa', $Tipo) == 0 || strcmp($Operadora['Operadora'], 'MT') == 0 || strcmp($Operadora['Operadora'], 'Space') == 0) {
+                    $this->addMessage($tel,'0','Registrada correctamente');
                     goto insertar;
                 }
                 if ($this->recarga($Operadora['idOperadora'], $tel, $Operadora['Costo'])) {
@@ -196,9 +201,9 @@ class venta
                     }
                     if(strcmp($Operadora['Operadora'], 'Nemi') == 0 || strcmp($Operadora['Operadora'], 'Space') == 0){
                         $this->mensajes[] = array('Tel' => $tel, 'Codigo' => 0, 'Mensaje' => 'Recarga exitosa');
-                        if(strcmp($Recarga, 0) == 0){
-                            $this->descontar($Plan);
-                        }
+                    }
+                    if(strcmp($Recarga, 0) == 0){
+                        $this->descontar($Operadora['idOperadora']);
                     }
                 }
             }

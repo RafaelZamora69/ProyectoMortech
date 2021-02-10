@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.getElementById('facturaStel').addEventListener('click', () => {
         mostrarCompras();
-    })
+    });
     document.getElementById('registrarCompras').addEventListener('click', () => {
        registrarComprasStel();
     });
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(document.getElementById('Pend').checked){
             cargarComprasPendientes(data);
         } else if(document.getElementById('Pagada').checked){
-            cargarComprasPagadas(data);1
+            cargarComprasPagadas(data);
         } else {
             cargarAmbasCompras(data);
         }
@@ -170,14 +170,22 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(res => res.json())
             .then(res => {
                 if(res.length > 0) {
-                    if(document.getElementById('autocompleteEmpleado').value != ''){
-                        res = res.filter(x => x.Nombre == document.getElementById('autocompleteEmpleado').value);
+                    if(document.getElementById('autocompleteEmpleado').value !== ''){
+                        res = res.filter(x => x.Nombre === document.getElementById('autocompleteEmpleado').value);
                     }
-                    if(document.getElementById('autocompleteProveedor').value != ''){
-                        res = res.filter(x => x.Proveedor == document.getElementById('autocompleteProveedor').value);
+                    if(document.getElementById('autocompleteProveedor').value !== ''){
+                        res = res.filter(x => x.Proveedor === document.getElementById('autocompleteProveedor').value);
                     }
                     if(!document.getElementById('Ambos').checked){
-                        document.getElementById('Efect').checked ? res = res.filter(x => x.Pagada == 'Efectivo') : res = res.filter(x => x.Pagada == 'Banco');
+                        if(document.getElementById('Efect').checked){
+                            res = res.filter(x => x.Pagada === 'Efectivo');
+                        } else if(document.getElementById('Banco').checked){
+                            res = res.filter(x => x.Pagada !== 'Efectivo');
+                        } else if(document.getElementById('Banorte').checked){
+                            res = res.filter(x => x.Pagada === 'Banorte');
+                        } else if(document.getElementById('Azteca').checked){
+                            res = res.filter(x => x.Pagada === 'Azteca');
+                        }
                     }
                     document.getElementById('detallesCompras').innerHTML = `
                         <p>Registros: ${res.length}</p>
@@ -246,7 +254,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('tablaCompras').insertAdjacentHTML('beforeend',`
             <ul id='metodosPago' class='dropdown-content'>
                 <li><a class="metodosPago">Efectivo</a></li>
-                <li><a class="metodosPago">Banco</a></li>
+                <li class="divider" tabindex="-1"></li>
+                <li><a class="metodosPago">Banorte</a></li>
+                <li><a class="metodosPago">Azteca</a></li>
                 <li class="divider" tabindex="-1"></li>
                 <li><a class="metodosPago">Sin pagar</a></li>
             </ul>
@@ -356,7 +366,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function registrarComprasStel(){
         const Efectivo = Compras.filter(x => x.Pagada === 'Efectivo');
-        const Bancario = Compras.filter(x => x.Pagada === 'Banco');
+        const Banorte = Compras.filter(x => x.Pagada === 'Banorte');
+        const Azteca = Compras.filter(x => x.Pagada === 'Azteca');
         const url = 'https://app.stelorder.com/app/purchaseInvoices?APIKEY=n5biArG4wjqpL5hP74wMqBYLunuQddWwn8OhHlva'
         const comprasStel = {
             "account-id": 2381072,
@@ -374,11 +385,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 "item-base-price": total
             });
         }
-        if(Bancario.length > 0){
+        if(Banorte.length > 0){
             let total = 0;
-            Bancario.map(i => total += parseFloat(i.Total));
-            let compras = 'Transferencia: ';
-            Bancario.map(i => compras += '#' + i.idCompra +',');
+            Banorte.map(i => total += parseFloat(i.Total));
+            let compras = 'Banorte: ';
+            Banorte.map(i => compras += '#' + i.idCompra +',');
+            comprasStel.lines.push({
+                "line-type": "ITEM",
+                "item-id": 7435287,
+                "item-description": compras,
+                "item-base-price": total
+            });
+        }
+        if(Azteca.length > 0){
+            let total = 0;
+            Azteca.map(i => total += parseFloat(i.Total));
+            let compras = 'Banco Azteca: ';
+            Azteca.map(i => compras += '#' + i.idCompra +',');
             comprasStel.lines.push({
                 "line-type": "ITEM",
                 "item-id": 7435287,

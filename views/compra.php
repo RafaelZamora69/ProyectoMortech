@@ -34,7 +34,9 @@ require_once  'views/layouts/sidenav.php';
                 <div class="col s12 m3">
                     <p><label><input type="radio" name="Tipo" id="Ambos" checked><span>Ambos</span></label></p>
                     <p><label><input type="radio" name="Tipo" id="Efect"><span>Efectivo</span></label></p>
-                    <p><label><input type="radio" name="Tipo" id="Depos"><span>Banco</span></label></p>
+                    <p><label><input type="radio" name="Tipo" id="Banco"><span>Banco</span></label></p>
+                    <p><label><input type="radio" name="Tipo" id="Banorte"><span>Banorte</span></label></p>
+                    <p><label><input type="radio" name="Tipo" id="Azteca"><span>Banco Azteca</span></label></p>
                 </div>
                 <div class="col s12 m3">
                     <p><label><input type="radio" name="Estado" id="Todas"><span>Ambas</span></label></p>

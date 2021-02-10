@@ -84,20 +84,13 @@ document.addEventListener('DOMContentLoaded', function () {
     ObtenerClientes();
     obtenerProveedores();
     var chipsExterna, telefonosExterna;
-    if(document.getElementById('OperadorasTriggerExterna')){
+    if(document.getElementById('exterior')){
         obtenerEmpleados();
         const numeroExterno = document.getElementById('numeroExterno');
-        document.getElementById('OperadorasTriggerExterna').value = 'Unefon';
         chipsExterna = document.getElementById('chipsExterna');
         telefonosExterna = M.Chips.init(chipsExterna, {
             placeholder: "Numeros",
             secondaryPlaceholder: "+Numero"
-        });
-        document.getElementById('OperadorasExterna').addEventListener('click',(e)=>{
-            console.log('click')
-            document.getElementById('OperadorasTriggerExterna').value = e.target.text;
-            dropExterna.textContent = e.target.text;
-            cargarMonto(e.target.text, 'Externa');
         });
         document.getElementById('RecargaExterna').addEventListener('submit',RecargaSaldo);
         document.getElementById('AgregarExterna').addEventListener('click', () => {
@@ -262,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(res.Codigo === 0){
                     M.toast({ html: res.Mensaje, classes: 'green white-text' });
                 }
-            })
+            });
     }
 
     function RecargaSaldo(e) {
@@ -272,10 +265,8 @@ document.addEventListener('DOMContentLoaded', function () {
         let datos;
         if(e.target.classList.contains('Externa')){
             datos = new FormData(document.getElementById('RecargaExterna'));
-            datos.append('Operadora', document.getElementById('OperadorasTriggerExterna').value);
             datos.append('Numeros', JSON.stringify(document.getElementsByClassName('chips')[1].M_Chips.chipsData));
             datos.append('Vendedor', document.getElementById('empleadoExterno').value);
-            datos.append('Carrier', getCarrierId(document.getElementById("OperadorasTriggerExterna").value));
             document.getElementById('pagadoExterna').checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
             datos.append('Tipo', 'Externa');
         }
