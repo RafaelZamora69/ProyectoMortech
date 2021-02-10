@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
     });
     const autocompleteEmp = M.Autocomplete.init(document.getElementById('autocompleteEmpleado'));
-    M.Modal.init(document.getElementById('modalCompras'));
+    const modalCompras = M.Modal.init(document.getElementById('modalCompras'));
     const autocompleteProv = M.Autocomplete.init(document.getElementById('autocompleteProveedor'));
     let Compras = null;
     initComponents();
