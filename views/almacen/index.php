@@ -56,33 +56,41 @@ require_once  'views/layouts/sidenav.php';
     </div>
     <div class="row">
         <h5>Agregar sims</h5>
-        <div class="input-field col s12 m4">
+        <div class="input-field col s12 m3">
             <select id="operadoraAgregar">
                 <option value="0">--- seleccione ---</option>
             </select>
             <label for="operadoraAgregar">Operadora</label>
         </div>
-        <div class="input-field col s12 m4">
+        <div class="input-field col s12 m3">
             <input type="number" id="cantidadAgregar">
             <label for="cantidadAgregar">Cantidad</label>
         </div>
-        <div class="input-field col s12 m4">
+        <div class="input-field col s12 m3">
+            <textarea id="observacionesAgregar" class="materialize-textarea"></textarea>
+            <label for="observacionesAgregar">Observaciones</label>
+        </div>
+        <div class="input-field col s12 m3">
             <a id="agregarSims" class="btn waves-effect waves-light white-text">Agregar</a>
         </div>
     </div>
 <div class="row">
     <h5>Quitar sims</h5>
-    <div class="input-field col s12 m4">
+    <div class="input-field col s12 m3">
         <select id="operadoraQuitar">
             <option value="0">--- seleccione ---</option>
         </select>
         <label for="operadoraQuitar">Operadora</label>
     </div>
-    <div class="input-field col s12 m4">
+    <div class="input-field col s12 m3">
         <input type="number" id="cantidadQuitar">
         <label for="cantidadQuitar">Cantidad</label>
     </div>
-    <div class="input-field col s12 m4">
+    <div class="input-field col s12 m3">
+        <textarea id="observacionesQuitar" class="materialize-textarea"></textarea>
+        <label for="observacionesQuitar">Observaciones</label>
+    </div>
+    <div class="input-field col s12 m3">
         <a id="quitarSims" class="btn red waves-effect waves-light white-text">Quitar</a>
     </div>
 </div>

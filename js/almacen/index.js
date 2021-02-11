@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         data.append('Operadora',document.getElementById('operadoraAgregar').value);
         data.append('Cantidad', document.getElementById('cantidadAgregar').value);
         data.append('Metodo', 'Agregar');
+        data.append('Comentarios',document.getElementById('observacionesAgregar').value);
         fetch('modificar',{
             method: 'POST',
             body: data

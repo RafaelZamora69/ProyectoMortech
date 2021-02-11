@@ -1,11 +1,12 @@
 <?php
-
+require_once './helpers/Observer.php';
 class operadora {
-    private $connection;
+    private $connection, $observer;
 
     function __construct() {
         $connect = new dbConnect();
         $this->connection = $connect->connect();
+        $this->observer = new Observer();
     }
 
     public function datosOperadoras(){
@@ -38,7 +39,8 @@ class operadora {
         }
     }
 
-    public function Modificar($idOperadora, $Cantidad, $Accion){
+    public function Modificar($idOperadora, $Cantidad, $Accion, $Comentarios){
+
         if(strcmp($Accion,'Agregar') == 0){
             $inventario = intval($this->obtenerSimsOperadora($idOperadora)) + intval($Cantidad);
         } else {
@@ -47,6 +49,8 @@ class operadora {
         $query = $this->connection->prepare("update operadoras set Almacen = ? where idOperadora = ?");
         $query->bind_param('ii', $inventario, $idOperadora);
         if($query->execute()){
+            var_dump($_SESSION['identity']['id']);
+            $this->observer->NotificarIngresoAlmacen($_SESSION['identity']['id'],$this->obtenerNombreOperadora($idOperadora),$Cantidad,$Comentarios);
             return json_encode(array('Code'=>0,'Msg'=>'Almacén actualizado'));
         } else {
             return json_encode(array('Code'=>1,'Msg'=>'Error al actualizar: ' . $query->error_list));
@@ -57,6 +61,14 @@ class operadora {
         $query = $this->connection->query("call infoPlan({$idPlan});");
         $row = $query->fetch_assoc();
         return array('idPlan' => $row['idPlan'],'idOperadora' => $row['idOperadora'], 'Operadora' => $row['Nombre'], 'Costo' => $row['costo']);
+    }
+
+    public function obtenerNombreOperadora($idOperadora){
+        $query = "select Nombre from operadora where idOperadora = {$idOperadora}";
+        if($result = $this->connection->query($query)){
+            $row = $result->fetch_row();
+            return $row['Nombre'];
+        }
     }
 
     public function descontar($idOperadora){

@@ -19,6 +19,6 @@ class almacenController {
 
     public function modificar(){
         $agregar = new operadora();
-        echo $agregar->Modificar($_POST['Operadora'], $_POST['Cantidad'],$_POST['Metodo']);
+        echo $agregar->Modificar($_POST['Operadora'], $_POST['Cantidad'],$_POST['Metodo'],$_POST['Comentarios']);
     }
 }
