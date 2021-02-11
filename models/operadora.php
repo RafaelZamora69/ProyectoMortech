@@ -40,17 +40,11 @@ class operadora {
     }
 
     public function Modificar($idOperadora, $Cantidad, $Accion, $Comentarios){
-
-        if(strcmp($Accion,'Agregar') == 0){
-            $inventario = intval($this->obtenerSimsOperadora($idOperadora)) + intval($Cantidad);
-        } else {
-            $inventario = intval($this->obtenerSimsOperadora($idOperadora)) - intval($Cantidad);
-        }
+        strcmp($Accion, 'Agregar') == 0 ? $inventario = intval($this->obtenerSimsOperadora($idOperadora)) + intval($Cantidad) : $inventario = intval($this->obtenerSimsOperadora($idOperadora)) - intval($Cantidad);
         $query = $this->connection->prepare("update operadoras set Almacen = ? where idOperadora = ?");
         $query->bind_param('ii', $inventario, $idOperadora);
         if($query->execute()){
-            var_dump($_SESSION['identity']['id']);
-            $this->observer->NotificarIngresoAlmacen($_SESSION['identity']['id'],$this->obtenerNombreOperadora($idOperadora),$Cantidad,$Comentarios);
+            strcmp($Accion, 'Agregar') == 0 ? $this->observer->NotificarIngresoAlmacen($_SESSION['identity']['id'],$this->obtenerNombreOperadora($idOperadora),$Cantidad,$Comentarios) : $this->observer->NotificarSalidaAlmacen($_SESSION['identity']['id'],$this->obtenerNombreOperadora($idOperadora),$Cantidad,$Comentarios);
             return json_encode(array('Code'=>0,'Msg'=>'Almacén actualizado'));
         } else {
             return json_encode(array('Code'=>1,'Msg'=>'Error al actualizar: ' . $query->error_list));
@@ -64,9 +58,9 @@ class operadora {
     }
 
     public function obtenerNombreOperadora($idOperadora){
-        $query = "select Nombre from operadora where idOperadora = {$idOperadora}";
+        $query = "select Nombre from operadoras where idOperadora = {$idOperadora}";
         if($result = $this->connection->query($query)){
-            $row = $result->fetch_row();
+            $row = $result->fetch_assoc();
             return $row['Nombre'];
         }
     }
@@ -74,6 +68,16 @@ class operadora {
     public function descontar($idOperadora){
         $inventario = intval($this->obtenerSimsOperadora($idOperadora)) - 1;
         $this->connection->query("update operadoras set Almacen = {$inventario} where idOperadora = {$idOperadora}");
+    }
+
+    public function obtenerMovimientos(){
+        if($query = $this->connection->query('select * from movimientos where Tabla = "Operadoras" order by Fecha desc')){
+            $data = [];
+            while($row = $query->fetch_assoc()){
+                $data[] = array('Mensaje'=>$row['Descripcion'],'Observaciones'=>$row['Comentarios'],'Fecha'=>$row['Fecha']);
+            }
+            return json_encode($data);
+        }
     }
 
     //private

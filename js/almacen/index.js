@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     obtenerOperadoras();
     document.getElementById('agregarSims').addEventListener('click', (e) => agregarSims());
     document.getElementById('quitarSims').addEventListener('click', (e) => quitarSims());
+    cargarMovimientos();
 
     function datosOperadoras(){
         fetch('datosOperadoras')
@@ -46,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     M.toast({ html: res.Msg, classes: 'green white-text' });
                     datosOperadoras();
                     document.getElementById('cantidadAgregar').value = '';
+                    document.getElementById('observacionesAgregar').value = '';
+                    cargarMovimientos();
                 } else {
                     M.toast({ html: res.Msg, classes: 'red white-text' });
                 }
@@ -57,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         data.append('Operadora',document.getElementById('operadoraQuitar').value);
         data.append('Cantidad', document.getElementById('cantidadQuitar').value);
         data.append('Metodo', 'Quitar');
+        data.append('Comentarios',document.getElementById('observacionesQuitar').value);
         fetch('modificar',{
             method: 'POST',
             body: data
@@ -67,9 +71,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     M.toast({ html: res.Msg, classes: 'green white-text' });
                     datosOperadoras();
                     document.getElementById('cantidadQuitar').value = '';
+                    document.getElementById('observacionesQuitar').value = '';
+                    cargarMovimientos();
                 } else {
                     M.toast({ html: res.Msg, classes: 'red white-text' });
                 }
+            });
+    }
+
+    function cargarMovimientos(){
+        const tableMovimientos = document.getElementById('Movimientos');
+        fetch('logAlmacen')
+            .then(res => res.json())
+            .then(res =>{
+                tableMovimientos.innerHTML = '';
+                res.forEach(x => {
+                    tableMovimientos.insertAdjacentHTML('beforeend',`
+                        <tr>
+                            <td>${x.Mensaje}</td>
+                            <td>${x.Observaciones}</td>
+                            <td>${x.Fecha}</td>
+                        </tr>
+                    `);
+                });
             });
     }
 });

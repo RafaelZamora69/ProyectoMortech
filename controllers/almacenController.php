@@ -21,4 +21,9 @@ class almacenController {
         $agregar = new operadora();
         echo $agregar->Modificar($_POST['Operadora'], $_POST['Cantidad'],$_POST['Metodo'],$_POST['Comentarios']);
     }
+
+    public function logAlmacen(){
+        $log = new operadora();
+        echo $log->obtenerMovimientos();
+    }
 }

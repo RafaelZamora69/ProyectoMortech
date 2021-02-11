@@ -122,7 +122,7 @@ class user
 
     public function getUserName($userId){
         if($query = $this->connection->query("select Nombre from empleado where idEmpleado = {$userId}")){
-            $row = $query->fetch_row();
+            $row = $query->fetch_assoc();
             return $row['Nombre'];
         }
     }

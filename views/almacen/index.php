@@ -7,7 +7,7 @@ require_once  'views/layouts/navbar.php';
 require_once  'views/layouts/sidenav.php';
 ?>
 <h4>Almacén</h4>
-    <div class="row">
+<div class="row">
         <div class="col s12 m3">
             <div class="card deep-purple darken-1">
                 <div class="card-content white-text">
@@ -54,7 +54,7 @@ require_once  'views/layouts/sidenav.php';
             </div>
         </div>
     </div>
-    <div class="row">
+<div class="row">
         <h5>Agregar sims</h5>
         <div class="input-field col s12 m3">
             <select id="operadoraAgregar">
@@ -93,6 +93,19 @@ require_once  'views/layouts/sidenav.php';
     <div class="input-field col s12 m3">
         <a id="quitarSims" class="btn red waves-effect waves-light white-text">Quitar</a>
     </div>
+</div>
+<div class="row">
+    <h5>Movimientos</h5>
+    <table class="centered responsive-table">
+        <thead>
+            <tr>
+                <th>Mensaje</th>
+                <th>Observaciones</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody id="Movimientos"></tbody>
+    </table>
 </div>
 <?php include_once 'views/layouts/footer.php'; ?>
 <script src="<?= base_url ?>js/almacen/index.js"></script>

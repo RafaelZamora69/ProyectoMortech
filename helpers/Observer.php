@@ -10,12 +10,26 @@ class Observer {
     }
 
     public function NotificarIngresoAlmacen($idEmpleado, $Operadora, $Sims, $Comentarios){
-        $user = new user();
-        $name = $user->getUserName($idEmpleado);
+        $name = $this->getUserName($idEmpleado);
         $message = "{$name} ha ingresado {$Sims} tarjetas de {$Operadora}";
+        $this->ActualizarLogAlmacen($idEmpleado,$message,$Comentarios);
+    }
+
+    public function NotificarSalidaAlmacen($idEmpleado, $Operadora, $Sims, $Comentarios){
+        $name = $this->getUserName($idEmpleado);
+        $message = "{$name} ha eliminado {$Sims} tarjetas de {$Operadora}";
+        $this->ActualizarLogAlmacen($idEmpleado,$message,$Comentarios);
+    }
+
+    //Private
+    private function ActualizarLogAlmacen($idEmpleado, $message, $comentarios){
         $query = $this->connection->prepare("insert into movimientos(Tabla, Fecha, idEmpleado, Descripcion, Comentarios) values('Operadoras',current_timestamp(),?,?,?)");
-        $query->bind_param('iss',$idEmpleado,$message,$Comentarios);
-        var_dump($query);
-        echo $query;
+        $query->bind_param('iss',$idEmpleado,$message,$comentarios);
+        $query->execute();
+    }
+
+    private function getUserName($idEmpleado){
+        $user = new user();
+        return $user->getUserName($idEmpleado);
     }
 }
