@@ -1,5 +1,6 @@
 <?php
 require_once 'models/operadora.php';
+require_once './helpers/Observer.php';
 
 class almacenController {
 

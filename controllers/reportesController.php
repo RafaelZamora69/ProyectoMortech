@@ -2,11 +2,27 @@
 require_once 'models/user.php';
 require_once 'models/reportes.php';
 require_once 'models/venta.php';
+require_once 'models/numero.php';
 class reportesController {
 
     public function index()
     {
         require_once 'views/reportes.php';
+    }
+
+    public function borrarVenta(){
+        $venta = new venta();
+        echo $venta->borrarVenta($_POST['id'],$_POST['operadora']);
+    }
+
+    public function infoNemi(){
+        $numero = new numero();
+        echo $numero->infoNumero($_POST['numero']);
+    }
+
+    public function actualizarNemi(){
+        $numero = new numero();
+        echo $numero->actualizarNemi($_POST['serie'],$_POST['activada']);
     }
 
     public function obtenerEmpleados()

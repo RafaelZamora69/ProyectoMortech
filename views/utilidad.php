@@ -32,7 +32,7 @@ require_once 'views/layouts/sidenav.php';
 </div>
 <div class="row">
     <div class="col s12">
-        <h4>Cargar numeros</h4>
+        <h4>Cargar Servicios</h4>
         <form id="cargaNumeros">
             <div class="row">
                 <div class="col s12">

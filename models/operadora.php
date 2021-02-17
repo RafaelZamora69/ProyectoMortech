@@ -9,6 +9,15 @@ class operadora {
         $this->observer = new Observer();
     }
 
+    public function obtenerIdOperadora(string $operadora){
+        $query = $this->connection->prepare('select idOperadora from operadoras where Nombre = ?');
+        $query->bind_param('s',$operadora);
+        $query->execute();
+        $result = $query->get_result();
+        $row = $result->fetch_assoc();
+        return $row['idOperadora'];
+    }
+
     public function datosOperadoras(){
         if($query = $this->connection->query('select * from datosoperadoras')){
             $data = [];

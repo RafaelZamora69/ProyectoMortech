@@ -267,7 +267,9 @@ document.addEventListener('DOMContentLoaded', function () {
             datos = new FormData(document.getElementById('RecargaExterna'));
             datos.append('Numeros', JSON.stringify(document.getElementsByClassName('chips')[1].M_Chips.chipsData));
             datos.append('Vendedor', document.getElementById('empleadoExterno').value);
+            datos.append('Plan', document.getElementById('OperadoraExterna').value);
             document.getElementById('pagadoExterna').checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
+            document.getElementsByClassName('recargaExterna')[0].checked ? datos.append('Recarga', 1) : datos.append('Recarga', 0);
             datos.append('Tipo', 'Externa');
         }
         else {

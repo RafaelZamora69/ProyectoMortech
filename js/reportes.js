@@ -36,10 +36,20 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.addEventListener('click', (e) => {
         if (e.target.classList.contains('infoVenta')) {
             obtenerDatos(e.target.id.replace('detalles-', ''));
-        } else if(e.target.classList.contains('DetallesCorte')){
-            RecargasCorte(e.target.id.replace('Detalles-',''));
+            return;
         }
-
+        if(e.target.classList.contains('DetallesCorte')){
+            RecargasCorte(e.target.id.replace('Detalles-',''));
+            return;
+        }
+        if(e.target.classList.contains('borrar')){
+            borrarVenta(e.target.id.replace('borrar-',''),document.getElementById('operadoraBorrar'));
+            return;
+        }
+        if(e.target.classList.contains('infoNemi')){
+            infoNemi(e.target.id);
+            return;
+        }
     });
     document.getElementById("Consultar").addEventListener('click', Consultar);
     document.getElementById('buscarVenta').addEventListener('keypress', function(e){
@@ -65,6 +75,61 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     obtenerEmpleados();
     obtenerClientes();
+
+    function borrarVenta(id,operadora){
+        const data = new FormData();
+        data.append('id',id);
+        data.append('operadora',operadora);
+        fetch('borrarVenta',{
+            body: data,
+            method: 'POST'
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+            })
+    }
+
+    function infoNemi(numero){
+        const data = new FormData();
+        data.append('numero',numero);
+        fetch('infoNemi',{
+            body: data,
+            method: 'POST'
+        })
+            .then(res => res.json())
+            .then(res => {
+                const modalCuerpo = document.getElementById('modalDetallesCuerpo');
+                const modalFooter = document.getElementById('modalFooter');
+                modalCuerpo.innerHTML = `
+                    <div class="row">
+                        <div class="col s12"><h5>#Serie: <span id="nSerie">${res.NumSerie}</span></h5></div>
+                        <div class="col s12"><h6>#Teléfono: ${res.NumNemi}</h6></div>
+                        <div class="col s12">
+                            <p><label><input type="checkbox" ${res.Activada === 1 ? 'checked' : ''} id="activada"><span>Activada</span></label></p>
+                        </div>
+                    </div>
+                `;
+                modalFooter.innerHTML = `<a class="btn waves-effect waves-light" href="#!" id="actualizarNemi">Actualizar</a>`;
+                modalDetalles.open();
+                document.getElementById('actualizarNemi').addEventListener('click', e => actualizarNemi(document.getElementById('nSerie').textContent));
+            })
+    }
+
+    function actualizarNemi(numSerie){
+        const data = new FormData();
+        data.append('serie', numSerie);
+        data.append('activada', document.getElementById('activada').checked === true ? 1 : 0);
+        fetch('actualizarNemi',{
+            body: data,
+            method: 'POST'
+        })
+            .then(res => res.json())
+            .then(res => {
+                M.toast({ html: res.Msg, classes: 'green white-text' });
+                modalDetalles.close();
+            })
+    }
 
     function reporteNemi(){
         fetch('reporteNemi')
@@ -327,13 +392,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             <tr>
                                 <td>${i.Empleado}</td>
                                 <td>${i.Cliente}</td>
-                                <td>${i.Telefono}</td>
+                                <td>${i.Operadora === 'MT' ? `<a class="infoNemi" href="#!" id="${i.Telefono}">${i.Telefono}</a>` : `${i.Telefono}`}</td>
                                 <td>${i.Serie == null ? '- - -' : i.Serie.slice(i.Serie.length - 6, i.Serie.length)}</td>
-                                <td>${i.Operadora}</td>
+                                <td><span id="operadoraBorrar">${i.Operadora}</span></td>
                                 <td>${i.Monto}</td>
                                 <td>${i.Venta}</td>
                                 <td>${i.Fecha}</td>
-                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${i.idVenta}">Detalles</a></td>
+                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${i.idVenta}">Detalles</a>
+                                    <a class="borrar btn waves-effect red white-text" id="borrar-${i.idVenta}">Eliminar</a></td>
                             </tr>
                         `));
                 } else {

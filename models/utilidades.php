@@ -14,8 +14,8 @@ class utilidades {
         if(($gestor = fopen($Archivo,"r")) != false){
             $query = '';
             while(($datos = fgetcsv($gestor,10000,",")) != false){
-                $query = "update venta set NumeroTelefono = '{$datos[2]}', Operadora = '{$datos[1]}' where fecha = date_add('{$datos[0]}', interval 1 hour);";
-                echo $query . '<br>';
+                $query = "update venta set NombreServicio = '{$datos[1]}' where idVenta = {$datos[0]};";
+                $this->connection->query($query);
             }
         }
     }

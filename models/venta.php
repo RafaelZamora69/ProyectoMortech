@@ -2,7 +2,7 @@
 include_once 'models/operadora.php';
 class venta
 {
-    private $connection, $api, $mensajes = [];
+    private $connection, $api, $mensajes = [], $observer;
 
     function __construct()
     {
@@ -12,6 +12,7 @@ class venta
         $client->setUser($_SESSION['identity']['Usuario']);
         $client->setPassword($_SESSION['identity']['Password']);
         $this->api = $client;
+        $this->observer = new Observer();
     }
 
     private function registrarCliente($NombreCliente)
@@ -161,6 +162,7 @@ class venta
             } else {
                 $this->ActivarNemi($tel);
                 $this->descontar($Operadora['idOperadora']);
+                $this->observer->NotificarVenta($idEmpleado,$tel,$Operadora['Operadora']);
                 return json_encode(array('Tel' => $tel, 'Codigo' => 0, 'Mensaje' => 'Venta registrada'));
             }
         } catch (Exception $e) {
@@ -204,6 +206,9 @@ class venta
                     }
                     if(strcmp($Recarga, 0) == 0){
                         $this->descontar($Operadora['idOperadora']);
+                        $this->observer->NotificarRecarga($idEmpleado,$tel,$Operadora['Operadora']);
+                    } else {
+                        $this->observer->NotificarVenta($idEmpleado,$tel,$Operadora['Operadora']);
                     }
                 }
             }
@@ -225,6 +230,12 @@ class venta
                 $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
                 $Observaciones = $this->limpiarEspacios($Observaciones);
                 $venta->bind_param("iisddis", $idCliente, $idEmpleado, $NombreServicio, $Usd, $Mxn, $Pagado, $Observaciones);
+                if(!$venta->execute()){
+                    $this->mensajes[] = array('Mensaje' => $venta->error, 'Codigo' => 1);
+                } else {
+                    $this->mensajes[] = array('Mensaje'=>'Servicio registrado', 'Codigo' => 0);
+                    $this->observer->NotificarServicio($_SESSION['identity']['id'],$NombreServicio);
+                }
                 !$venta->execute() ?
                     $this->mensajes[] = array('Mensaje' => $venta->error, 'Codigo' => 1) :
                     $this->mensajes[] = array('Mensaje' => 'Venta registrada', 'Codigo' => 0);
@@ -265,6 +276,7 @@ class venta
                 $compra->bind_param('issdis', $idEmpleado, $Proveedor, $Referencia, $Total, $idImagen, $Pagada);
                 if($compra->execute()){
                     $this->connection->commit();
+                    $this->observer->NotificarCompra($_SESSION['identity']['id'],$Proveedor,$Total);
                     return json_encode(array("Codigo" => 0, "Message" => "Compra registrada"));
                 }
                 $this->connection->rollback();
@@ -278,10 +290,6 @@ class venta
         }
     }
 
-    /**
-     * Devuelve una lista de los proveedores
-     * @return json
-     */
     function getProveedores(){
         $query = $this->connection->query("select distinct(Proveedor) As Proveedor from compra");
         $proveedores = [];
@@ -319,26 +327,16 @@ class venta
         }
     }
 
-    /***
-     * Establecer el cliente de una venta a pendiente, esto es por garantias o devoluciones
-     */
     function ventaPendiente($idVenta){
         $query = $this->connection->prepare('update venta set idCliente = 33, Pagado = 0 where idVenta = ?');
         $query->bind_param('i',$idVenta);
         if($query->execute()){
             return json_encode(array('Code' => 0, 'Msg' => 'Venta actualizada'));
         } else {
-            var_dump($query);
             return json_encode(array('Code' => 1, 'Msg' => 'Error al actualizar'));
         }
     }
 
-    /***
-     * Cambiar el empleado de una venta
-     * @param $idVenta
-     * @param $idEmpleado
-     * @return array|false|string
-     */
     function miVenta($idVenta, $Nombre){
         $idEmpleado = $this->getIdEmpleado($Nombre);
         $query = $this->connection->prepare('update venta set idEmpleado = ?, Pagado = 1 where idVenta = ?;');
@@ -350,9 +348,6 @@ class venta
         }
     }
 
-    /***
-     * Cambiar el estado de una venta a pagada
-     */
     function pagada($idVenta){
         $data = $this->connection->query("select Pagado from venta where idVenta = {$idVenta}");
         $row = $data->fetch_assoc();
@@ -366,12 +361,6 @@ class venta
         }
     }
 
-    /***
-     * Cambiar el cliente al que se le ha vendido
-     * @param $idVenta
-     * @param $idCliente
-     * @return array
-     */
     function actualizarCliente($idVenta, $idCliente){
         $query = $this->connection->prepare('update venta set idCliente = ? where idVenta = ?');
         $query->bind_param('ii', $idCliente, $idVenta);
@@ -379,6 +368,17 @@ class venta
             return json_encode(array('Code' => 0, 'Msg' => 'Venta actualizada'));
         } else {
             return json_encode(array('Code' => 1, 'Msg' => 'Error al actualizar'));
+        }
+    }
+
+    function borrarVenta($id,string $operadoraBorrar){
+        $query = $this->connection->prepare('delete from venta where idVenta = ?');
+        $query->bind_param('i',$id);
+        if($query->execute()){
+            $operadora = new operadora();
+            $idOperadora = $operadora->obtenerIdOperadora($operadoraBorrar);
+            $operadora->Modificar($idOperadora,1,'Agregar',"se borró la venta #{$id}");
+            return json_encode(array('Code'=>0,'Msg'=>'Venta borrada'));
         }
     }
 }

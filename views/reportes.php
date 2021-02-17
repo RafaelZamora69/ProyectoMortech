@@ -253,7 +253,7 @@ require_once 'views/layouts/sidenav.php';
         <div class="modal-content" id="modalDetallesCuerpo">
 
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" id="modalFooter">
 
         </div>
     </div>
