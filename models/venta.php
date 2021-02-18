@@ -192,12 +192,12 @@ class venta
                 }
                 if ($this->recarga($Operadora['idOperadora'], $tel, $Operadora['Costo'])) {
                     insertar:
-                    $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha, Verificada) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 2 hour ),?);");
+                    $venta = $this->connection->prepare("insert into venta(idCliente,idEmpleado,NombreServicio,NumeroTelefono,Operadora,Monto,Usd,Mxn,Utilidad,Pagado,Observaciones,Fecha,Verificada,Recarga) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 2 hour ),?,?);");
                     $idCliente = $this->getIdCliente($NombreCliente);
                     $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
                     $Utilidad = $this->getUtilidad($Operadora['Costo'], $Usd, $Mxn);
                     $Verificado = $Utilidad <= 0 ? 0 : 1;
-                    $venta->bind_param("iisssddddisi", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora['Operadora'], $Operadora['Costo'], $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado);
+                    $venta->bind_param("iisssddddisii",$idCliente,$idEmpleado,$NombreServicio,$tel,$Operadora['Operadora'],$Operadora['Costo'],$Usd,$Mxn,$Utilidad,$Pagado,$Observaciones,$Verificado,$Recarga);
                     if (!$venta->execute()) {
                         return json_encode('Error en la inserción ' . $venta->error);
                     }
@@ -371,13 +371,28 @@ class venta
         }
     }
 
+    function obtenerVenta($idVenta){
+        $query = $this->connection->prepare('select * from venta where idVenta = ?');
+        $query->bind_param('i',$idVenta);
+        $query->execute();
+        $result = $query->get_result();
+        $row = $result->fetch_assoc();
+        return array('idVenta'=>$row['idVenta'],'idCorte'=>$row['idCorte'],'idCliente'=>$row['idCliente'],'idEmpleado'=>$row['idEmpleado'],'NombreServicio'=>$row['NombreServicio'],
+                    'NumeroTelefono'=>$row['NumeroTelefono'],'Operadora'=>$row['Operadora'],'Monto'=>$row['Monto'],'Usd'=>$row['Usd'],'Mxn',$row['Mxn'],'Utilidad'=>$row['Utilidad'],
+                    'Pagado'=>$row['Pagado'],'Observaciones'=>$row['Observaciones'],'Fecha'=>$row['fecha'],'Corte'=>$row['Corte'],'Verificada'=>$row['Verificada'],'Recarga'=>$row['Recarga']);
+    }
+
     function borrarVenta($id,string $operadoraBorrar){
         $query = $this->connection->prepare('delete from venta where idVenta = ?');
         $query->bind_param('i',$id);
+        $venta = new venta();
+        $arr = $venta->obtenerVenta($id);
         if($query->execute()){
-            $operadora = new operadora();
-            $idOperadora = $operadora->obtenerIdOperadora($operadoraBorrar);
-            $operadora->Modificar($idOperadora,1,'Agregar',"se borró la venta #{$id}");
+            if($arr['Recarga'] == 0){
+                $operadora = new operadora();
+                $idOperadora = $operadora->obtenerIdOperadora($operadoraBorrar);
+                $operadora->Modificar($idOperadora,1,'Agregar',"se borró la venta #{$id}");
+            }
             return json_encode(array('Code'=>0,'Msg'=>'Venta borrada'));
         }
     }

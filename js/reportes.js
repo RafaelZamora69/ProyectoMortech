@@ -43,7 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         if(e.target.classList.contains('borrar')){
-            borrarVenta(e.target.id.replace('borrar-',''),document.getElementById('operadoraBorrar'));
+            var id = e.target.id.replaceAll('borrar-','');
+            borrarVenta(id,document.getElementById(`operadoraBorrar-${id}`).textContent);
             return;
         }
         if(e.target.classList.contains('infoNemi')){
@@ -86,7 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res);
+                M.toast({ html: res.Msg, classes: 'green white-text' });
+                Consultar();
             })
     }
 
@@ -394,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td>${i.Cliente}</td>
                                 <td>${i.Operadora === 'MT' ? `<a class="infoNemi" href="#!" id="${i.Telefono}">${i.Telefono}</a>` : `${i.Telefono}`}</td>
                                 <td>${i.Serie == null ? '- - -' : i.Serie.slice(i.Serie.length - 6, i.Serie.length)}</td>
-                                <td><span id="operadoraBorrar">${i.Operadora}</span></td>
+                                <td><span id="operadoraBorrar-${i.idVenta}">${i.Operadora}</span></td>
                                 <td>${i.Monto}</td>
                                 <td>${i.Venta}</td>
                                 <td>${i.Fecha}</td>
