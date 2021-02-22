@@ -196,6 +196,7 @@ require_once 'views/layouts/sidenav.php';
     <div id="modalEditar" class="modal">
         <div class="modal-content">
             <h4 id="idVenta"></h4>
+            <h5 id="nombreServicio"></h5>
             <form action="" id="dataActualizar">
                 <div class="row">
                     <div class="col s12 m6 input-field">
@@ -223,19 +224,25 @@ require_once 'views/layouts/sidenav.php';
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s4">
+                    <div class="col s3">
                         <label>
                             <input type="checkbox" id="EstaPagado">
                             <span>Pagado</span>
                         </label>
                     </div>
-                    <div class="col s4">
+                    <div class="col s3">
                         <label>
                             <input type="checkbox" id="Verificada">
                             <span>Verificada</span>
                         </label>
                     </div>
-                    <div class="col s4">
+                    <div class="col s3">
+                        <label>
+                            <input type="checkbox" id="Recarga">
+                            <span>Recarga</span>
+                        </label>
+                    </div>
+                    <div class="col s3">
                         <div class="input-field">
                             <textarea name="Observaciones" id="Observaciones" class="materialize-textarea"
                                       placeholder="Observaciones"></textarea>

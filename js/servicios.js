@@ -70,7 +70,10 @@ document.addEventListener('DOMContentLoaded', function () {
             RecargaSaldo(e);
         }
     });
-    formServicio.addEventListener('submit', VentaServicio);
+    formServicio.addEventListener('submit', (e) => {
+        document.getElementById('finalizarServicio').classList.add('disabled');
+        VentaServicio(e);
+    });
     chips.addEventListener('input', agregarNumero);
     document.getElementById('Agregar').addEventListener('click', () => {
         telefonos.addChip({ tag: value.value });
@@ -336,6 +339,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function VentaServicio(e) {
+        e.stopPropagation();
         e.preventDefault();
         let nombre = document.getElementById("Name");
         let form = document.getElementById('FormServicio');
@@ -349,14 +353,15 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                res[0].Codigo == 0 ?
+                res[0].Codigo === 0 ?
                     M.toast({ html: res[0].Mensaje, classes: 'green white-text' }) :
                     M.toast({ html: 'Error ' + res[0].Mensaje, classes: 'red white-text' })
-                if (res[0].Codigo == 0) {
+                if (res[0].Codigo === 0) {
                     formServicio.reset();
                 } else {
                     formServicio.data
                 }
+                document.getElementById('finalizarServicio').classList.remove('disabled');
             })
         form.reset();
     }

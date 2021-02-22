@@ -614,6 +614,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = new FormData(document.getElementById('dataActualizar'));
         const pagado = document.getElementById('EstaPagado').checked ? 1 : 0;
         const verificada = document.getElementById('Verificada').checked ? 1 : 0;
+        const recarga = document.getElementById('Recarga').checked ? 1 : 0;
         data.append('pagado', pagado);
         data.append('idVenta', idVenta);
         data.append('Verificada', verificada);
@@ -639,15 +640,17 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(res => res.json())
             .then(res => {
+                document.getElementById('nombreServicio').innerText = res[0].Servicio
                 document.getElementById('idVenta').innerText = '# ' + res[0].idVenta;
                 document.getElementById("NombreEmpleado").value = res[0].Empleado;
                 document.getElementById("NombreCliente").value = res[0].Cliente;
                 document.getElementById("Mxn").value = res[0].Mxn;
                 document.getElementById("Usd").value = res[0].Usd;
                 document.getElementById("Observaciones").value = res[0].Observaciones;
-                document.getElementById("EstaPagado").checked = res[0].Pagado == 0 ?  false : true;
-                res[0].Corte == 0 ? document.getElementById("Actualizar").classList.remove("disabled") : document.getElementById("Actualizar").classList.add("disabled")
-                document.getElementById('Verificada').checked = res[0].Verificada == 0 ?  false : true;
+                document.getElementById('Recarga').checked = res[0].Recarga !== 0;
+                document.getElementById("EstaPagado").checked = res[0].Pagado !== 0;
+                res[0].Corte === 0 ? document.getElementById("Actualizar").classList.remove("disabled") : document.getElementById("Actualizar").classList.add("disabled")
+                document.getElementById('Verificada').checked = res[0].Verificada !== 0;
                 modal.open();
             }).catch(function (){
             M.toast({ html: 'Venta no encontrada', classes: 'red white-text'})
