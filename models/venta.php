@@ -236,9 +236,6 @@ class venta
                     $this->mensajes[] = array('Mensaje'=>'Servicio registrado', 'Codigo' => 0);
                     $this->observer->NotificarServicio($_SESSION['identity']['id'],$NombreServicio);
                 }
-                !$venta->execute() ?
-                    $this->mensajes[] = array('Mensaje' => $venta->error, 'Codigo' => 1) :
-                    $this->mensajes[] = array('Mensaje' => 'Venta registrada', 'Codigo' => 0);
                 return json_encode($this->mensajes);
             } else {
                 $this->mensajes[] = array('Mensaje' => 'Servicio duplicado', 'Codigo' => 1);

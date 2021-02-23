@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     formServicio.addEventListener('submit', (e) => {
+        e.stopImmediatePropagation();
         document.getElementById('finalizarServicio').classList.add('disabled');
         VentaServicio(e);
     });
@@ -339,7 +340,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function VentaServicio(e) {
-        e.stopPropagation();
         e.preventDefault();
         let nombre = document.getElementById("Name");
         let form = document.getElementById('FormServicio');
@@ -364,6 +364,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('finalizarServicio').classList.remove('disabled');
             })
         form.reset();
+        pass = 0;
     }
 
     function obtenerPlanes(){
