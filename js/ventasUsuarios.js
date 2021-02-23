@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.getElementById('clienteFiltro').addEventListener('keydown', (e) => {
         if(e.code === 'Enter'){
-            mostrarVentas(ventas.filter(x => x.Cliente === document.getElementById('clienteFiltro').value));
+            mostrarVentas(ventas);
         }
     });
     document.getElementById('Telefono').addEventListener('keydown', (e) => {
@@ -145,7 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function pagada(idVenta){
-        cambiarCliente(idVenta);
         const data = new FormData();
         data.append('idVenta', idVenta);
         fetch('pagada',{
@@ -194,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function mostrarVentas(res){
+        res = filtrar(res);
         const tableVentas = document.getElementById('tableVentas');
         tableVentas.innerHTML = '';
         res.forEach(x => {
@@ -211,5 +211,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         </tr>
             `);
         });
+    }
+
+    function filtrar(res){
+        if(document.getElementById('clienteFiltro').value !== ""){
+            res = res.filter(x => x.Cliente === document.getElementById('clienteFiltro').value);
+        }
+        if(document.getElementById('Telefono').value !== ""){
+            res = res.filter(x => x.Cliente === document.getElementById('Telefono').value);
+        }
+        return res;
     }
 });
