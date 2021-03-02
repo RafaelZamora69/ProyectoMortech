@@ -15,6 +15,11 @@ class reportesController {
         echo $venta->borrarVenta($_POST['id'],$_POST['operadora']);
     }
 
+    public function borrar_venta_simple(){
+        $venta = new venta();
+        echo $venta->borrar_venta($_POST['id']);
+    }
+
     public function infoNemi(){
         $numero = new numero();
         echo $numero->infoNumero($_POST['numero']);

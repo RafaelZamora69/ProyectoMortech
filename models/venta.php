@@ -150,7 +150,7 @@ class venta
         $NombreCliente = $this->limpiarEspacios($NombreCliente);
         $Operadora = $this->obtenerOperadora($Plan);
         try{
-            $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha, Verificada) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 2 hour ),?);");
+            $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha, Verificada) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 1 hour ),?);");
             $idCliente = $this->getIdCliente($NombreCliente);
             $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
             $Utilidad = $this->getUtilidad($Operadora['Costo'], $Usd, $Mxn);
@@ -192,7 +192,7 @@ class venta
                 }
                 if ($this->recarga($Operadora['idOperadora'], $tel, $Operadora['Costo'])) {
                     insertar:
-                    $venta = $this->connection->prepare("insert into venta(idCliente,idEmpleado,NombreServicio,NumeroTelefono,Operadora,Monto,Usd,Mxn,Utilidad,Pagado,Observaciones,Fecha,Verificada,Recarga) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 2 hour ),?,?);");
+                    $venta = $this->connection->prepare("insert into venta(idCliente,idEmpleado,NombreServicio,NumeroTelefono,Operadora,Monto,Usd,Mxn,Utilidad,Pagado,Observaciones,Fecha,Verificada,Recarga) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 1 hour ),?,?);");
                     $idCliente = $this->getIdCliente($NombreCliente);
                     $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
                     $Utilidad = $this->getUtilidad($Operadora['Costo'], $Usd, $Mxn);
@@ -225,7 +225,7 @@ class venta
             if(!$this->buscarOrden($NombreServicio)){
                 $NombreCliente = $this->limpiarEspacios($NombreCliente);
                 $this->mensajes = [];
-                $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, Usd, Mxn, Pagado, Observaciones, Verificada, Utilidad, fecha) values (?,?,?,?,?,?,?,0,0,date_add(now(), interval 2 hour ))");
+                $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, Usd, Mxn, Pagado, Observaciones, Verificada, Utilidad, fecha) values (?,?,?,?,?,?,?,0,0,date_add(now(), interval 1 hour ))");
                 $idCliente = $this->getIdCliente($NombreCliente);
                 $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
                 $Observaciones = $this->limpiarEspacios($Observaciones);
@@ -268,7 +268,7 @@ class venta
             mysqli_begin_transaction($this->connection);
             $idEmpleado = $this->getIdEmpleado($Empleado);
             if($this->guardarImagen($idEmpleado)){
-                $compra = $this->connection->prepare("insert into compra(idEmpleado, Proveedor, Referencia, Total, Fecha, idImagen, Pagada) values (?,?,?,?,date_add(now(), interval 2 hour ),?,?)");
+                $compra = $this->connection->prepare("insert into compra(idEmpleado, Proveedor, Referencia, Total, Fecha, idImagen, Pagada) values (?,?,?,?,date_add(now(), interval 1 hour ),?,?)");
                 $idImagen = $this->obtenerIdImagen($idEmpleado);
                 $compra->bind_param('issdis', $idEmpleado, $Proveedor, $Referencia, $Total, $idImagen, $Pagada);
                 if($compra->execute()){
@@ -379,8 +379,17 @@ class venta
                     'Pagado'=>$row['Pagado'],'Observaciones'=>$row['Observaciones'],'Fecha'=>$row['fecha'],'Corte'=>$row['Corte'],'Verificada'=>$row['Verificada'],'Recarga'=>$row['Recarga']);
     }
 
-    function borrarVenta($id,string $operadoraBorrar){
-        $query = $this->connection->prepare('delete from venta where idVenta = ?');
+    function borrar_venta($id){
+        $query = $this->connection->prepare('update venta set Eliminada = 1 where idVenta = ?');
+        $query->bind_param('i', $id);
+        if($query->execute()){
+            return json_encode(array('Code' => 0, 'Msg' => 'Venta eliminada'));
+        }
+        return json_encode(array('Code'=>1,'Msg'=>'Error al eliminar'));
+    }
+
+    function borrar_venta_recarga($id,string $operadoraBorrar){
+        $query = $this->connection->prepare('update venta set Eliminada = 1 where idVenta = ?');
         $query->bind_param('i',$id);
         $venta = new venta();
         $arr = $venta->obtenerVenta($id);

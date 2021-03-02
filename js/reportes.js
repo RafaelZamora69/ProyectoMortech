@@ -51,6 +51,15 @@ document.addEventListener('DOMContentLoaded', () => {
             infoNemi(e.target.id);
             return;
         }
+        if(e.target.classList.contains('borrarVenta')){
+            document.getElementById('modalDetallesCuerpo').innerHTML = `<h3>Eliminar venta?</h3>`;
+            document.getElementById('modalFooter').innerHTML = `<a class="btn red white-text" id=${e.target.id.replace('confirmar-','')}>Eliminar</a>`;
+            document.getElementById(`${e.target.id.replace('confirmar-','')}`).onclick = (e) => {
+                borrar_venta_simple(e.target.id.replace('confirmar-',''));
+                modalDetalles.close();
+            };
+            modalDetalles.open();
+        }
     });
     document.getElementById("Consultar").addEventListener('click', Consultar);
     document.getElementById('buscarVenta').addEventListener('keypress', function(e){
@@ -90,6 +99,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 M.toast({ html: res.Msg, classes: 'green white-text' });
                 Consultar();
             })
+    }
+
+    function borrar_venta_simple(id){
+        const data = new FormData();
+        data.append('id',id);
+        fetch('borrar_venta_simple',{
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(res => {
+                M.toast({ html: res.Msg, classes: 'green white-text' });
+                Consultar();
+            });
     }
 
     function infoNemi(numero){
@@ -329,20 +352,24 @@ document.addEventListener('DOMContentLoaded', () => {
                             <tbody id="serviciosBody"></tbody>
                         </table>
                     `;
-                    for(i in res){
-                        document.getElementById('serviciosBody').innerHTML += `
+                    const serviciosBody = document.getElementById('serviciosBody');
+                    res.forEach(i => {
+                        serviciosBody.insertAdjacentHTML('beforeend',`
                             <tr>
-                                <td>${res[i].Empleado}</td>
-                                <td>${res[i].Cliente}</td>
-                                <td>${res[i].Servicio}</td>
-                                <td>${res[i].Venta}</td>
-                                <td>${res[i].Fecha}</td>
-                                <td>${res[i].Pagado}</td>
-                                <td>${res[i].Verificada}</td>
-                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${res[i].idVenta}">Detalles</a></td>
+                                <td>${i.Empleado}</td>
+                                <td>${i.Cliente}</td>
+                                <td>${i.Servicio}</td>
+                                <td>${i.Venta}</td>
+                                <td>${i.Fecha}</td>
+                                <td>${i.Pagado}</td>
+                                <td>${i.Verificada}</td>
+                                <td>
+                                    <a class="infoVenta btn waves-effect yellow black-text" id="detalles-${i.idVenta}">Detalles</a>
+                                    <a class="borrarVenta btn waves-effect red white-text" id="confirmar-${i.idVenta}">Eliminar</a>
+                                </td>
                             </tr>
-                        `;
-                    }
+                        `)
+                    });
                 } else {
                     document.getElementById('Tabla').innerHTML = `
                         <h4 class="center-align">No hay datos que mostrar</h4>
@@ -444,7 +471,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td>${i.Servicio}</td>
                                 <td>${i.Venta}</td>
                                 <td>${i.Pagado}</td>
-                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${i.idVenta}">Detalles</a></td>
+                                <td>
+                                    <a class="infoVenta btn waves-effect yellow black-text" id="detalles-${i.idVenta}">Detalles</a>
+                                </td>
                         </tr>
                     `));
                 } else {

@@ -9,7 +9,7 @@ require_once 'views/layouts/header.php';
 require_once 'views/layouts/navbar.php';
 require_once 'views/layouts/sidenav.php';
 ?>
-    <h3>Reportes</h3>
+    <h3></h3>
     <ul class="collapsible">
         <li>
             <div class="collapsible-header"><i class="material-icons">filter_list</i>Filtros</div>
@@ -160,8 +160,8 @@ require_once 'views/layouts/sidenav.php';
                         </p>
                         <p id="Cortes">
                             <label>
-                                <input type="radio" name="Cortes" id="Todas" checked>
-                                <span>Todas</span>
+                                <input type="radio" name="Cortes" id="Ambos" checked>
+                                <span>Ambos</span>
                             </label>
                             <label>
                                 <input type="radio" name="Cortes" id="EnCorte">
@@ -187,11 +187,8 @@ require_once 'views/layouts/sidenav.php';
         </div>
     </div>
     <div class="row">
-        <div class="col s12" id="Detalles">
-        </div>
-        <div class="col s12" id="Tabla">
-
-        </div>
+        <div class="col s12" id="Detalles"></div>
+        <div class="col s12" id="Tabla"></div>
     </div>
     <div id="modalEditar" class="modal">
         <div class="modal-content">
