@@ -43,8 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         if(e.target.classList.contains('borrar')){
-            var id = e.target.id.replaceAll('borrar-','');
-            borrarVenta(id,document.getElementById(`operadoraBorrar-${id}`).textContent);
+            document.getElementById('modalDetallesCuerpo').innerHTML = `<h3>Eliminar venta?</h3>`;
+            document.getElementById('modalFooter').innerHTML = `<a class="btn red white-text" id=${e.target.id.replace('confirmar-','')}>Eliminar</a>`;
+            document.getElementById(`${e.target.id.replace('confirmar-','')}`).onclick = (e) => {
+                borrarVenta(e.target.id.replace('confirmar-',''),document.getElementById(`${e.target.id.replace('confirmar-','')}`).textContent);
+                modalDetalles.close();
+            };
+            modalDetalles.open();
             return;
         }
         if(e.target.classList.contains('infoNemi')){
@@ -428,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td>${i.Venta}</td>
                                 <td>${i.Fecha}</td>
                                 <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${i.idVenta}">Detalles</a>
-                                    <a class="borrar btn waves-effect red white-text" id="borrar-${i.idVenta}">Eliminar</a></td>
+                                    <a class="borrar btn waves-effect red white-text" id="confirmar-${i.idVenta}">Eliminar</a></td>
                             </tr>
                         `));
                 } else {

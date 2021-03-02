@@ -12,7 +12,7 @@ class reportesController {
 
     public function borrarVenta(){
         $venta = new venta();
-        echo $venta->borrarVenta($_POST['id'],$_POST['operadora']);
+        echo $venta->borrar_venta_recarga($_POST['id'],$_POST['operadora']);
     }
 
     public function borrar_venta_simple(){
