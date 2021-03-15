@@ -399,6 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <th>Empleado</th>
                                     <th>Cliente</th> 
                                     <th>Teléfono</th>
+                                    <th>Recarga</th>
                                     <th># Serie</th>
                                     <th>Operadora</th>
                                     <th>Monto</th>
@@ -427,6 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td>${i.Empleado}</td>
                                 <td>${i.Cliente}</td>
                                 <td>${i.Operadora === 'MT' ? `<a class="infoNemi" href="#!" id="${i.Telefono}">${i.Telefono}</a>` : `${i.Telefono}`}</td>
+                                <td>${i.Recarga}</td>
                                 <td>${i.Serie == null ? '- - -' : i.Serie.slice(i.Serie.length - 6, i.Serie.length)}</td>
                                 <td><span id="operadoraBorrar-${i.idVenta}">${i.Operadora}</span></td>
                                 <td>${i.Monto}</td>

@@ -396,7 +396,7 @@ class venta
         if($query->execute()){
             if($arr['Recarga'] == 0){
                 $operadora = new operadora();
-                $idOperadora = $operadora->obtenerIdOperadora($operadoraBorrar);
+                $idOperadora = $operadora->obtenerIdOperadora($arr['Operadora']);
                 $operadora->Modificar($idOperadora,1,'Agregar',"se borró la venta #{$id}");
             }
             return json_encode(array('Code'=>0,'Msg'=>'Venta borrada'));
