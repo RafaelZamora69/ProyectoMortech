@@ -89,6 +89,12 @@ class operadora {
         }
     }
 
+    public function obtenerPlan($idPlan){
+        $query = $this->connection->query("select * from planes where idPlan = {$idPlan}");
+        $row = $query->fetch_assoc();
+        return json_encode(array('id'=>$row['idPlan'],'operadora'=>$row['idOperadora'],'nombre'=>$row['Nombre'],'costo'=>$row['costo']));
+    }
+
     //private
     private function obtenerSimsOperadora($idOperadora){
         if($query = $this->connection->query("select Almacen from operadoras where idOperadora = {$idOperadora};")){

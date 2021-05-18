@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const empleados = document.getElementById('empleadoExterno');
     const empleadosExterna = M.Autocomplete.init(empleados);
     formSaldo.addEventListener('submit', (e) => {
-        if(document.getElementById('idNemi').value.length == 5){
+        if(document.getElementById('idNemi').value.length === 5){
             e.preventDefault();
             obtenerNumeroNemi(document.getElementById('idNemi').value);
         } else {
@@ -164,14 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('ActivarNemi').addEventListener('click', (e) => {
                         e.stopPropagation();
                         modal.close()
-                        RecargaNemi(res.Tel);
-                        document.getElementById('copy').innerHTML = `<input type="text" value="${res.Serie}" id="Nums">`;
-                        document.getElementById('Nums').select();
-                        document.execCommand('selectAll');
-                        if (document.execCommand('copy')) {
-                            window.open('https://admin.nemi.tel/recargaNewClientExist', '_blank');
-                        }
-                        document.getElementById('Nums').style.visibility = 'hidden';
+                        RecargaNemi(res.Serie);
                         document.getElementById('FormSaldo').reset();
                     });
                 } else {
@@ -244,12 +237,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function RecargaNemi(Tel){
+    async function RecargaNemi(Serie){
+
         datos = new FormData(document.getElementById('FormSaldo'));
-        datos.append('Numeros',Tel);
+        datos.append('Serie',Serie);
         datos.append('Vendedor', document.getElementById("Name").innerText);
         datos.append('Plan', document.getElementById('Operadora').value);
         document.getElementsByClassName('pagado')[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
+        obtenerPlan(Serie, document.getElementById('Operadora').value)
+        return
         fetch('recargaNemi',{
             method: 'POST',
             body: datos
@@ -396,5 +392,55 @@ document.addEventListener('DOMContentLoaded', function () {
                     M.FormSelect.init(document.getElementById('OperadoraExterna'));
                 }
             });
+    }
+
+    function activaNemi(serie,plan){
+        /*
+        insert into nemi(NumSerie,NumNemi,Activada)values ('8952140061811810510F','000000000',0), ('8952140061811810520F','000000001',0), ('8952140061811810530F','000000002',0), ('8952140061811810540F','000000003',0), ('8952140061811810550F','000000004',0), ('8952140061811810560F','000000005',0), ('8952140061811810570F','000000006',0), ('8952140061811810580F','000000007',0)
+         */
+        //TODO falta MT2 {id: 1000090, code: 'MT2'}
+        const planes = [{id: '1000090', code: 'MT1'},{id: '1000075', code: 'MT1A'},{id:'1000077', code: 'MT3'},
+            {id: '1000087', code: 'MT4'},{id: '1000088', code: 'MT5'},{id: '1000160', code: 'MT6'}]
+        let code = ''
+        planes.forEach(stream => {
+            if(stream.code === plan){
+                code = stream.id
+            }
+        })
+        const data = {
+            "entorno": "desarrollo",
+            "serie": serie,
+            "plan": code,
+            "cbpartnerid": "1000630"
+        }
+        console.log(data)
+        fetch('http://cdn.nemi.tel/services/activacion/1001174/activaSim',{
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: new Headers({
+                'Content-Type': 'application/json',
+            })
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+            })
+    }
+
+    function obtenerPlan(serie, id){
+        const planes = ['MT1','MT1A','MT2','MT3','MT4','MT5','MT6']
+        const data = new FormData()
+        data.append('id', id)
+        fetch('obtenerPlan',{
+            method: 'POST',
+            body: data
+        }).then(res => res.json())
+            .then(res => {
+                planes.forEach(name => {
+                    if(res.nombre.includes(name)){
+                        activaNemi(serie,name)
+                    }
+                })
+            })
     }
 });

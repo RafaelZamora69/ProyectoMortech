@@ -10,6 +10,11 @@ class serviciosController
         require_once 'views/servicio.php';
     }
 
+    public function obtenerPlan(){
+        $plan = new operadora();
+        echo $plan->obtenerPlan($_POST['id']);
+    }
+
     public function recargaSaldo()
     {
         if (isset($_POST)) {
