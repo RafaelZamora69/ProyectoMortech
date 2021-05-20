@@ -67,13 +67,14 @@ class serviciosController
             echo $venta->recargaNemi(
                 $_POST['Name'],
                 $_POST['Vendedor'],
-                $_POST['Numeros'],
+                $_POST['Numero'],
                 'Recarga de saldo',
                 $_POST['PagoMxn'],
                 $_POST['PagoUsd'],
                 $_POST['Pagado'],
                 $_POST['Nota'],
-                $_POST['Plan']
+                $_POST['Plan'],
+                $_POST['Recarga']
             );
         }
     }

@@ -141,8 +141,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
                 modalFooter.innerHTML = `<a class="btn waves-effect waves-light" href="#!" id="actualizarNemi">Actualizar</a>`;
-                modalDetalles.open();
                 document.getElementById('actualizarNemi').addEventListener('click', e => actualizarNemi(document.getElementById('nSerie').textContent));
+                saldoNemi(res.NumNemi)
+            })
+    }
+
+    function saldoNemi(numero){
+        const data = {"numero": numero, "entorno": "desarrollo"}
+        fetch('https://cdn.nemi.tel/services/bolsa/1001174/consultaBolsa',{
+            mode: 'no-cors',
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                modalDetalles.open();
             })
     }
 

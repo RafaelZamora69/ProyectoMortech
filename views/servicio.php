@@ -54,14 +54,14 @@ require_once 'views/layouts/sidenav.php';
                         </div>
                         <div class="col s6 m3">
                             <div class="input-field">
-                                <input type="text" id="idNemi" maxlength="5">
+                                <input type="text" id="idNemi" maxlength="5" value="10520">
                                 <label for="idNemi">N° Serie Nemi</label>
                             </div>
                         </div>
                         <div class="col s3 m3">
                             <p>
                                 <label>
-                                    <input type="checkbox" class="recarga">
+                                    <input type="checkbox" class="recarga" id="recarga">
                                     <span>Recarga</span>
                                 </label>
                             </p>

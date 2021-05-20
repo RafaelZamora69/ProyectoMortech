@@ -146,24 +146,23 @@ class venta
         }
     }
 
-    function recargaNemi($NombreCliente, $NombreEmpleado, $telefonos, $NombreServicio, $Mxn, $Usd, $Pagado, $Observaciones, $Plan){
+    function recargaNemi($NombreCliente, $NombreEmpleado, $telefono, $NombreServicio, $Mxn, $Usd, $Pagado, $Observaciones, $Plan, $Recarga){
         $NombreCliente = $this->limpiarEspacios($NombreCliente);
         $Operadora = $this->obtenerOperadora($Plan);
         try{
-            $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha, Verificada) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 1 hour ),?);");
+            $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha, Verificada,Recarga) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 1 hour ),?,?);");
             $idCliente = $this->getIdCliente($NombreCliente);
             $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
             $Utilidad = $this->getUtilidad($Operadora['Costo'], $Usd, $Mxn);
             $Verificado = $Utilidad <= 0 ? 0 : 1;
-            $tel = json_decode($telefonos,true);
-            $venta->bind_param("iisssddddisi", $idCliente, $idEmpleado, $NombreServicio, $tel, $Operadora['Operadora'], $Operadora['Costo'], $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado);
+            $venta->bind_param("iisssddddisii", $idCliente, $idEmpleado, $NombreServicio, $telefono, $Operadora['Operadora'], $Operadora['Costo'], $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado,$Recarga);
             if (!$venta->execute()) {
                 return json_encode('Error en la inserción ' . $venta->error);
             } else {
-                $this->ActivarNemi($tel);
+                $this->ActivarNemi($telefono);
                 $this->descontar($Operadora['idOperadora']);
-                $this->observer->NotificarVenta($idEmpleado,$tel,$Operadora['Operadora']);
-                return json_encode(array('Tel' => $tel, 'Codigo' => 0, 'Mensaje' => 'Venta registrada'));
+                $this->observer->NotificarVenta($idEmpleado,$telefono,$Operadora['Operadora']);
+                return json_encode(array('Tel' => $telefono, 'Codigo' => 0, 'Mensaje' => 'Venta registrada'));
             }
         } catch (Exception $e) {
             return json_encode($e->getMessage());
