@@ -3,7 +3,7 @@ class dbConnect
 {
     public function connect()
     {
-        $connection = mysqli_connect('localhost', 'root', '', 'mortech_saldo');
+        $connection = mysqli_connect('localhost', 'root', 'root', 'mortech_saldo');
         return $connection;
     }
 
