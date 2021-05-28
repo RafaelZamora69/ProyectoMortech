@@ -162,9 +162,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         modalNemiFooter.innerHTML = `<a id="ActivarNemi" class="ActivarNemi">Confirmar</a>`
                     const modal = M.Modal.init(document.getElementById('modalNemi')).open();
                     document.getElementById('ActivarNemi').addEventListener('click', (e) => {
-                        e.stopPropagation();
+                        e.stopPropagation()
+                        obtenerPlan(res.Serie, document.getElementById('Operadora').value,res.Tel)
                         modal.close()
-                        obtenerPlan(res.serie, document.getElementById('Operadora').value,res.Tel)
                     });
                 } else {
                     M.toast({ html: 'N° Serie no existe', classes: 'red white-text' });
@@ -383,34 +383,35 @@ document.addEventListener('DOMContentLoaded', function () {
             "cbpartnerid": "1000630"
         }
         fetch('https://cdn.nemi.tel/services/activacion/1001174/activaSim',{
-            mode: 'no-cors',
             method: 'POST',
-            body: JSON.stringify(data),
-            headers: new Headers({
-                'Content-Type': 'application/json',
-            })
+            body: JSON.stringify(data)
         })
             .then(res => res.json())
             .then(res => {
-                //registrarVentaNemi()
+                if(res.result === 'success'){
+                    const modalNemi =M.Modal.init(document.querySelector('#modalAvisoNemi'))
+                    modalNemi.innerHTML += `
+                        <h1>Sim activada</h1>
+                        <h3>Folio: ${res.cOrderDocumentno}</h3>
+                    `;
+                    modalNemi.open()
+                    registrarVentaNemi(tel)
+                } else {
+                    M.toast({ html: `Error en API Nemi c: <br> ${res.Error}`, classes: 'red white-text' })
+                }
             })
-        registrarVentaNemi(tel)
     }
 
     function recargaNemi(numero, plan,tel){
         const data = {"numero": numero, "plan": plan, "entorno": "desarrollo"}
-        fetch('http://cdn.nemi.tel/services/recarga/1001174/recargaNumero',{
+        fetch('https://cdn.nemi.tel/services/recarga/1001174/recargaNumero',{
             method: 'POST',
-            body: JSON.stringify(data),
-            mode: 'no-cors',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-            })})
+            body: JSON.stringify(data)})
             .then(res => res.json())
             .then(res => {
                 console.log(res)
+                //registrarVentaNemi(tel)
             })
-        registrarVentaNemi(tel)
     }
 
     function registrarVentaNemi(tel){
@@ -444,6 +445,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => {
                 planes.forEach(name => {
                     if(res.nombre.includes(name)){
+                        console.log('hola')
                         const code = codigoNemi(name)
                         document.getElementsByClassName('recarga')[0].checked ? recargaNemi(serie,code,tel) : activaNemi(serie,code,tel)
                     }

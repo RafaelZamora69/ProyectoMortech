@@ -54,7 +54,7 @@ require_once 'views/layouts/sidenav.php';
                         </div>
                         <div class="col s6 m3">
                             <div class="input-field">
-                                <input type="text" id="idNemi" maxlength="5" value="10520">
+                                <input type="text" id="idNemi" maxlength="5" value="10530">
                                 <label for="idNemi">N° Serie Nemi</label>
                             </div>
                         </div>
@@ -329,7 +329,12 @@ require_once 'views/layouts/sidenav.php';
 <div id="modalNemi" class="modal">
     <div class="modal-content" id="modalNemiContent"></div>
     <div class="modal-footer" id="modalNemiFooter">
-
+    </div>
+</div>
+<div id="modalAvisoNemi" class="modal">
+    <div class="modal-content"></div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Ok</a>
     </div>
 </div>
 <div id="copy"></div>
