@@ -63,9 +63,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const empleados = document.getElementById('empleadoExterno');
     const empleadosExterna = M.Autocomplete.init(empleados);
     formSaldo.addEventListener('submit', (e) => {
+        e.preventDefault()
         if(document.getElementById('idNemi').value.length === 5){
-            e.preventDefault();
             obtenerNumeroNemi(document.getElementById('idNemi').value);
+        } else if(esNemi(document.getElementById('Operadora').value)){
+            solo_obtener_plan(document.querySelector('#Operadora').value,e)
         } else {
             RecargaSaldo(e);
         }
@@ -237,7 +239,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function RecargaSaldo(e) {
-        e.preventDefault();
         const table = document.getElementById("table");
         document.getElementById('finalizarVenta').disabled = true;
         let datos;
@@ -249,8 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('pagadoExterna').checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
             document.getElementsByClassName('recargaExterna')[0].checked ? datos.append('Recarga', 1) : datos.append('Recarga', 0);
             datos.append('Tipo', 'Externa');
-        }
-        else {
+        } else {
             document.getElementById("progress").style.visibility = "visible";
             datos = new FormData(document.getElementById('FormSaldo'));
             datos.append('Numeros', JSON.stringify(document.getElementsByClassName('chips')[0].M_Chips.chipsData));
@@ -389,28 +389,29 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 if(res.result === 'success'){
-                    const modalNemi =M.Modal.init(document.querySelector('#modalAvisoNemi'))
-                    modalNemi.innerHTML += `
-                        <h1>Sim activada</h1>
-                        <h3>Folio: ${res.cOrderDocumentno}</h3>
-                    `;
-                    modalNemi.open()
+                    M.toast({ html: `Activación correcta`, classes: 'green white-text' })
                     registrarVentaNemi(tel)
                 } else {
                     M.toast({ html: `Error en API Nemi c: <br> ${res.Error}`, classes: 'red white-text' })
                 }
+                document.getElementById("progress").style.visibility = "hidden";
             })
     }
 
-    function recargaNemi(numero, plan,tel){
-        const data = {"numero": numero, "plan": plan, "entorno": "desarrollo"}
+    function recargaNemi(plan,tel,e){
+        const data = {"numero": tel, "plan": plan, "entorno": "desarrollo"}
         fetch('https://cdn.nemi.tel/services/recarga/1001174/recargaNumero',{
             method: 'POST',
             body: JSON.stringify(data)})
             .then(res => res.json())
             .then(res => {
-                console.log(res)
-                //registrarVentaNemi(tel)
+                if(res.responseCode === '200'){
+                    M.toast({ html: `Recarga correcta`, classes: 'green white-text' })
+                    registrarVentaNemi(tel)
+                } else {
+                    M.toast({ html: `${res.descripcion}`, classes: 'red white-text truncate' })
+                }
+                document.getElementById("progress").style.visibility = "hidden";
             })
     }
 
@@ -434,7 +435,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    function obtenerPlan(serie,id,tel){
+    function solo_obtener_plan(id,e){
+        document.getElementById("progress").style.visibility = "visible";
         const planes = ['MT1','MT1A','MT2','MT3','MT4','MT5','MT6']
         const data = new FormData()
         data.append('id', id)
@@ -443,13 +445,35 @@ document.addEventListener('DOMContentLoaded', function () {
             body: data
         }).then(res => res.json())
             .then(res => {
-                planes.forEach(name => {
-                    if(res.nombre.includes(name)){
-                        console.log('hola')
-                        const code = codigoNemi(name)
-                        document.getElementsByClassName('recarga')[0].checked ? recargaNemi(serie,code,tel) : activaNemi(serie,code,tel)
+                for (i in planes){
+                    if(res.nombre.includes(planes[i])){
+                        const code = codigoNemi(planes[i])
+                        for(i in document.querySelector('#chips').M_Chips.chipsData){
+                            recargaNemi(code,document.querySelector('#chips').M_Chips.chipsData[i].tag,e)
+                        }
+                        break
                     }
-                })
+                }
+            })
+    }
+
+    function obtenerPlan(serie,id,tel){
+        document.getElementById("progress").style.visibility = "visible";
+        const planes = ['MT1','MT1A','MT2','MT3','MT4','MT5','MT6']
+        const data = new FormData()
+        data.append('id', id)
+        fetch('obtenerPlan',{
+            method: 'POST',
+            body: data
+        }).then(res => res.json())
+            .then(res => {
+                for (i in planes){
+                    if(res.nombre.includes(planes[i])){
+                        const code = codigoNemi(planes[i])
+                        activaNemi(serie,code,tel)
+                        break
+                    }
+                }
             })
     }
 
@@ -463,5 +487,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         })
         return id
+    }
+
+    function esNemi(id){
+        return [26,25,27,28,29,35,34].includes(parseInt(id))
     }
 });
