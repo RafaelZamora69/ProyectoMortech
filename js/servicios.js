@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const planes = []
     const externa = document.getElementById('exterior');
     const elems = document.getElementById('modal2');
     const modal2 = M.Modal.init(elems);
@@ -165,13 +166,81 @@ document.addEventListener('DOMContentLoaded', function () {
                     const modal = M.Modal.init(document.getElementById('modalNemi')).open();
                     document.getElementById('ActivarNemi').addEventListener('click', (e) => {
                         e.stopPropagation()
-                        obtenerPlan(res.Serie, document.getElementById('Operadora').value,res.Tel)
                         modal.close()
+                        const modalNemi = M.Modal.init(document.querySelector('#modalAvisoNemi'))
+                        document.querySelector('#contenidoAvisoNemi').innerHTML = `
+                            <div class="row"> 
+                                <div class="col s12"> 
+                                    <h6>Obteniendo información de SIM</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                            <div class="col s12"><div class="progress">
+                            <div class="indeterminate"></div>
+                            </div></div>
+                            </div>
+                        `
+                        modalNemi.open()
+                        obtenerInfoNemi(res.Serie, res.Tel)
                     });
                 } else {
                     M.toast({ html: 'N° Serie no existe', classes: 'red white-text' });
                 }
             }).catch((e) => {});
+    }
+
+    function obtenerInfoNemi(serie,tel){
+        fetch('https://cdn.nemi.tel/services/activacion/1001174/validaSim',{
+            method: 'POST',
+            body: JSON.stringify({
+                "entorno": "desarrollo",
+                "serie": serie
+            })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if(res.responseCode === 200){
+                    res.productos.forEach(producto => {
+                        planes.push({id: producto.id, name: product.name, precio: product.precioVentaFinal})
+                    })
+                    document.querySelector('#contenidoAvisoNemi').innerHTML = `
+                        <div class="row">
+                            <div class="col s12"> 
+                                <h6>Seleccione plan</h6>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col s12"> 
+                            <select name="" id="planesNemi"></select>
+                            <label for="planesNemi">Seleccione plan</label>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col s12"><a href="#!" class="button green white-text waves-effect" id="activaNemi">Aceptar</a></div>
+                        </div>
+                    `
+                    const select = document.querySelector('#planesNemi')
+                    let index = 0
+                    planes.forEach(plan => {
+                        select.innerHTML += `<option value="${index}">${plan.name.concat(' ', codigoNemi(plan.name))}</option>`
+                        index++
+                    })
+                    document.querySelector('#activaNemi').addEventListener('click',activaNemi(serie, planes[document.querySelector('#planesNemi').value],tel))
+                } else {
+                    document.querySelector('#contenidoAvisoNemi').innerHTML = `
+                        <div class="row">
+                            <div class="col s12">
+                                <h6>Error en API Nemi</h6>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <p class="red-text">${res.Error}</p>
+                            </div>
+                        </div>   
+                    `
+                }
+            })
     }
 
     function registrarCompra(e){
@@ -478,15 +547,30 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function codigoNemi(plan){
-        const planes = [{id: '1000090', code: 'MT1'},{id: '1000075', code: 'MT1A'},{id: '1000076', code: 'MT2'},{id:'1000077', code: 'MT3'},
-            {id: '1000087', code: 'MT4'},{id: '1000088', code: 'MT5'},{id: '1000160', code: 'MT6'}]
-        let id = ''
-        planes.forEach(stream => {
-            if(stream.code === plan){
-                id = stream.id
+        /**
+         MT1 = OFERTA NEMI 30 días 20 GB Tethering
+         MT1A = OFERTA NEMI 30 días 20 GB
+         MT2 = OFERTA NEMI 7 días 5 GB
+         MT3 = OFERTA NEMI 14 días 10 GB
+         MT4 = OFERTA NEMI 30 días 8 GB Tethering
+         MT5 = OFERTA NEMI 30 días 5 GB Tethering
+         MT6 = OFERTA NEMI 30 días 50 GB Tethering
+         */
+        const planes = [{code: 'MT1', name: 'OFERTA NEMI 30 días 20 GB Tethering'},
+            {code: 'MT1A', name: 'OFERTA NEMI 30 días 20 GB'},
+            {code: 'MT2', name: 'OFERTA NEMI 7 días 5 GB'},
+            {code: 'MT3', name: 'OFERTA NEMI 14 días 10 GB'},
+            {code: 'MT4', name: 'OFERTA NEMI 30 días 8 GB Tethering'},
+            {code: 'MT5', name: 'OFERTA NEMI 30 días 5 GB Tethering'},
+            {code: 'MT6', name: 'OFERTA NEMI 30 días 50 GB Tethering'},]
+        let code = ''
+        for(stream of planes){
+            if(stream.contains(plan)){
+                code = steram.code
+                break
             }
-        })
-        return id
+        }
+        return code
     }
 
     function esNemi(id){

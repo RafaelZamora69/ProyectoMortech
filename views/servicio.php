@@ -333,9 +333,6 @@ require_once 'views/layouts/sidenav.php';
 </div>
 <div id="modalAvisoNemi" class="modal">
     <div class="modal-content" id="contenidoAvisoNemi"></div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Ok</a>
-    </div>
 </div>
 <div id="copy"></div>
 <script src="<?= base_url ?>js/servicios.js"></script>
