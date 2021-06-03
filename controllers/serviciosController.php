@@ -73,8 +73,9 @@ class serviciosController
                 $_POST['PagoUsd'],
                 $_POST['Pagado'],
                 $_POST['Nota'],
-                $_POST['Plan'],
-                $_POST['Recarga']
+                $_POST['Operadora'],
+                $_POST['Recarga'],
+                $_POST['Monto']
             );
         }
     }

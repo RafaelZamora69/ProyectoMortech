@@ -331,7 +331,7 @@ require_once 'views/layouts/sidenav.php';
     <div class="modal-footer" id="modalNemiFooter">
     </div>
 </div>
-<div id="modalAvisoNemi" class="modal">
+<div id="modalAvisoNemi" class="modal" style="height: 90vh;">
     <div class="modal-content" id="contenidoAvisoNemi"></div>
 </div>
 <div id="copy"></div>

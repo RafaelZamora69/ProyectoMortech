@@ -146,16 +146,16 @@ class venta
         }
     }
 
-    function recargaNemi($NombreCliente, $NombreEmpleado, $telefono, $NombreServicio, $Mxn, $Usd, $Pagado, $Observaciones, $Plan, $Recarga){
+    function recargaNemi($NombreCliente, $NombreEmpleado, $telefono, $NombreServicio, $Mxn, $Usd, $Pagado, $Observaciones, $Plan, $Recarga, $Monto){
         $NombreCliente = $this->limpiarEspacios($NombreCliente);
         $Operadora = $this->obtenerOperadora($Plan);
         try{
             $venta = $this->connection->prepare("insert into venta(idCliente, idEmpleado, NombreServicio, NumeroTelefono, Operadora, Monto, Usd, Mxn, Utilidad,Pagado, Observaciones, Fecha, Verificada,Recarga) values (?,?,?,?,?,?,?,?,?,?,?, date_add(now(), interval 1 hour ),?,?);");
             $idCliente = $this->getIdCliente($NombreCliente);
             $idEmpleado = $this->getIdEmpleado($NombreEmpleado);
-            $Utilidad = $this->getUtilidad($Operadora['Costo'], $Usd, $Mxn);
+            $Utilidad = $this->getUtilidad($Monto, $Usd, $Mxn);
             $Verificado = $Utilidad <= 0 ? 0 : 1;
-            $venta->bind_param("iisssddddisii", $idCliente, $idEmpleado, $NombreServicio, $telefono, $Operadora['Operadora'], $Operadora['Costo'], $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado,$Recarga);
+            $venta->bind_param("iisssddddisii", $idCliente, $idEmpleado, $NombreServicio, $telefono, $Operadora['Operadora'], $Monto, $Usd, $Mxn, $Utilidad, $Pagado, $Observaciones, $Verificado,$Recarga);
             if (!$venta->execute()) {
                 return json_encode('Error en la inserción ' . $venta->error);
             } else {
