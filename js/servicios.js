@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const select = document.querySelector('#planesNemi')
                     let index = 0
                     planes.forEach(plan => {
-                        select.innerHTML += `<option value="${index}">${plan.name.concat(' ', codigoNemi(plan.name))}</option>`
+                        select.innerHTML += `<option value="${index}">${codigoNemi(plan.name)}</option>`
                         index++
                     })
                     M.FormSelect.init(select)
@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const select = document.querySelector('#planesNemi')
                     let index = 0
                     planes.forEach(plan => {
-                        select.innerHTML += `<option value="${index}">${plan.name.concat(' ', codigoNemi(plan.name))}</option>`
+                        select.innerHTML += `<option value="${index}">${codigoNemi(plan.name)}</option>`
                         index++
                     })
                     M.FormSelect.init(select)
@@ -480,15 +480,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (document.getElementById('OperadoraExterna') != undefined) {
                     optionOperadoraExt = document.getElementById('OperadoraExterna');
                 }
-                const operadoras = ['MT', 'Space', 'AT&T', 'Movistar', 'Telcel', 'Unefon'];
+                const operadoras = ['Space', 'AT&T', 'Movistar', 'Telcel', 'Unefon'];
+                optionOperadora.insertAdjacentHTML('beforeend', `<option value="26" selected>Nemi</option>`);
+                if(optionOperadoraExt !== undefined){
+                    optionOperadoraExt.insertAdjacentHTML('beforeend', `<option value="26" selected>Nemi</option>`);
+                }
                 operadoras.forEach(i => {
                     let filter = res.filter(x => x.Operadora === i);
                     filter.forEach(x => {
-                        if (x.id == 26) {
-                            optionOperadora.insertAdjacentHTML('beforeend', `<option value="${x.id}" selected>${x.Operadora}: ${x.Plan}</option>`);
-                        } else {
-                            optionOperadora.insertAdjacentHTML('beforeend', `<option value="${x.id}">${x.Operadora}: ${x.Plan}</option>`);
-                        }
+                        optionOperadora.insertAdjacentHTML('beforeend', `<option value="${x.id}">${x.Operadora}: ${x.Plan}</option>`);
                         if (optionOperadoraExt != undefined) {
                             optionOperadoraExt.insertAdjacentHTML('beforeend', `<option value="${x.id}">${x.Operadora}: ${x.Plan}</option>`);
                         }
@@ -589,22 +589,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function codigoNemi(plan) {
-        /**
-         MT1 = OFERTA NEMI 30 días 20 GB Tethering
-         MT1A = OFERTA NEMI 30 días 20 GB
-         MT2 = OFERTA NEMI 7 días 5 GB
-         MT3 = OFERTA NEMI 14 días 10 GB
-         MT4 = OFERTA NEMI 30 días 8 GB Tethering
-         MT5 = OFERTA NEMI 30 días 5 GB Tethering
-         MT6 = OFERTA NEMI 30 días 50 GB Tethering
-
+        /*
          MT1 NEMI Movilidad 30 días 20GB Tethering PROMO 225 MXN
          MT1A NEMI Movilidad 30 días 20GB PROMO 150 MXN
          MT5 NEMI Movilidad 30 días 5GB Tethering PROMO 75 MXN
          MT6 NEMI Movilidad 30 días 50GB Tethering PROMO 399 MXN
          */
-        const planes = [{code: 'MT1', name: 'OFERTA NEMI 30 días 20GB Tethering'},
-            {code: 'MT1A', name: 'OFERTA NEMI 30 días 20GB'},
+        const planes = [
+            {code: 'MT1', name: 'OFERTA NEMI 30 días 20GB Tethering'},
+            {code: 'MT1A', name: 'OFERTA NEMI 30 días 20GB '},
             {code: 'MT2', name: 'OFERTA NEMI 7 días 5GB'},
             {code: 'MT3', name: 'OFERTA NEMI 14 días 10GB'},
             {code: 'MT4', name: 'OFERTA NEMI 30 días 8GB Tethering'},
@@ -612,15 +605,22 @@ document.addEventListener('DOMContentLoaded', function () {
             {code: 'MT6', name: 'OFERTA NEMI 30 días 50GB Tethering'},]
         let code = ''
         for (stream of planes) {
-            if (stream.name.match(plan)) {
-                code = stream.code
+            if (stream.name === plan) {
+                code = stream.code.concat(' ', plan)
                 break
             }
         }
-        return code
+        if (code === ''){
+            return truncatePlan('NO USAR!!! '.concat(plan))
+        }
+        return truncatePlan(code)
     }
 
     function esNemi(id) {
         return [26, 25, 27, 28, 29, 35, 34].includes(parseInt(id))
+    }
+
+    function truncatePlan(text){
+        return text.length > 15 ? text.substring(0, (15 - 3)) + '...' : text
     }
 });
