@@ -225,9 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 if (res.responseCode === "200") {
-                    res.productos.forEach(producto => {
-                        planes.push({id: producto.id, name: producto.name, precio: producto.precioVentaFinal})
-                    })
+                    res.productos.forEach(producto => codigoNemi(producto))
                     document.querySelector('#contenidoAvisoNemi').innerHTML = `
                         <div class="row">
                             <div class="col s12"> 
@@ -247,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const select = document.querySelector('#planesNemi')
                     let index = 0
                     planes.forEach(plan => {
-                        select.innerHTML += `<option value="${index}">${codigoNemi(plan.name)}</option>`
+                        select.innerHTML += `<option value="${index}">${plan.name}</option>`
                         index++
                     })
                     M.FormSelect.init(select)
@@ -294,9 +292,8 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                res.productos.forEach(producto => {
-                    planes.push({id: producto.id, name: producto.name, precio: producto.precioVentaFinal})
-                    document.querySelector('#contenidoAvisoNemi').innerHTML = `
+                res.productos.forEach(producto => codigoNemi(producto))
+                document.querySelector('#contenidoAvisoNemi').innerHTML = `
                         <div class="row">
                             <div class="col s12"> 
                                 <h6>Seleccione plan</h6>
@@ -312,15 +309,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="col s12"><a href="#!" class="green white-text waves-effect btn" id="activaNemi">Aceptar</a></div>
                         </div>
                     `
-                    const select = document.querySelector('#planesNemi')
-                    let index = 0
-                    planes.forEach(plan => {
-                        select.innerHTML += `<option value="${index}">${codigoNemi(plan.name)}</option>`
-                        index++
-                    })
-                    M.FormSelect.init(select)
-                    document.querySelector('#activaNemi').addEventListener('click', (e) => recargaNemi(tel, planes[document.querySelector('#planesNemi').value]))
+                const select = document.querySelector('#planesNemi')
+                let index = 0
+                planes.forEach(plan => {
+                    select.innerHTML += `<option value="${index}">${plan.name}</option>`
+                    index++
                 })
+                M.FormSelect.init(select)
+                document.querySelector('#activaNemi').addEventListener('click', (e) => recargaNemi(tel, planes[document.querySelector('#planesNemi').value]))
             })
     }
 
@@ -615,14 +611,14 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    function codigoNemi(plan) {
+    function codigoNemi(producto) {
         /*
          MT1 NEMI Movilidad 30 días 20GB Tethering PROMO 225 MXN
          MT1A NEMI Movilidad 30 días 20GB PROMO 150 MXN
          MT5 NEMI Movilidad 30 días 5GB Tethering PROMO 75 MXN
          MT6 NEMI Movilidad 30 días 50GB Tethering PROMO 399 MXN
          */
-        const planes = [
+        const validos = [
             {code: 'MT1', name: 'OFERTA NEMI 30 días 20GB Tethering'},
             {code: 'MT1A', name: 'OFERTA NEMI 30 días 20GB '},
             {code: 'MT2', name: 'OFERTA NEMI 7 días 5GB'},
@@ -631,16 +627,13 @@ document.addEventListener('DOMContentLoaded', function () {
             {code: 'MT5', name: 'OFERTA NEMI 30 días 5GB Tethering'},
             {code: 'MT6', name: 'OFERTA NEMI 30 días 50GB Tethering'},]
         let code = ''
-        for (stream of planes) {
-            if (stream.name === plan) {
-                code = stream.code.concat(' ', plan)
+        for (stream of validos) {
+            if (stream.name === producto.name.trim()) {
+                code = stream.code.concat(' ', producto.name)
+                planes.push({id: producto.id, name: truncatePlan(code), precio: producto.precioVentaFinal})
                 break
             }
         }
-        if (code === ''){
-            return truncatePlan('NO USAR!!! '.concat(plan))
-        }
-        return truncatePlan(code)
     }
 
     function esNemi(id) {
