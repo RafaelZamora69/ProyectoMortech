@@ -53,7 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         if(e.target.classList.contains('infoNemi')){
-            infoNemi(e.target.id);
+            saldoNemi(e.target.id)
+            //infoNemi(e.target.id);
             return;
         }
         if(e.target.classList.contains('borrarVenta')){
@@ -146,16 +147,100 @@ document.addEventListener('DOMContentLoaded', () => {
             })
     }
 
-    function saldoNemi(numero){
-        const data = {"numero": numero, "entorno": "desarrollo"}
-        fetch('https://cdn.nemi.tel/services/bolsa/1001174/consultaBolsa',{
-            mode: 'no-cors',
-            body: JSON.stringify(data)
+    function consultaRecargas(data){
+        fetch('consultaRecargas',{
+            method: 'POST',
+            body: data
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res)
-                modalDetalles.open();
+                res = filtrar(res, 'Saldo');
+                if(res.length > 0){
+                    document.getElementById('Tabla').innerHTML = `
+                        <table class="responsive-table centered">
+                            <thead>
+                                <tr>
+                                    <th>Empleado</th>
+                                    <th>Cliente</th> 
+                                    <th>Teléfono</th>
+                                    <th>Recarga</th>
+                                    <th># Serie</th>
+                                    <th>Operadora</th>
+                                    <th>Monto</th>
+                                    <th>Venta</th>
+                                    <th>fecha</th>
+                                    <th><a class="btn waves-effect waves-light" id="Copiar">Copiar números</a></th>
+                                </tr>
+                            </thead>
+                            <tbody id="recargasBody"></tbody>
+                        </table>
+                    `;
+                    document.getElementById('Copiar').addEventListener('click',(e) => {
+                        document.getElementById('Tabla').innerHTML += `
+                            <input type="text" value="${Numeros(res)}" id="Nums">
+                        `;
+                        const cop = document.getElementById('Nums');
+                        cop.select();
+                        document.execCommand('selectAll');
+                        document.execCommand('copy');
+                        cop.style.visibility = 'hidden';
+                        M.toast({ html: 'Numeros copiados', classes: 'green white-text' });
+                    });
+                    const recargasBody = document.getElementById('recargasBody');
+                    res.forEach(i => {
+                        recargasBody.insertAdjacentHTML('beforeend', `
+                            <tr>
+                                <td>${i.Empleado}</td>
+                                <td>${i.Cliente}</td>
+                                <td>
+                                    ${i.Operadora === 'MT' ? `<a class="infoNemi" href="#!" id="${i.Telefono}">${i.Telefono}</a>` : `${i.Telefono}`} 
+                                    <div id="progress-${i.idVenta}"> 
+                                        <div class="progress">
+                                            <div class="indeterminate"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>${i.Recarga}</td>
+                                <td>${i.Serie == null ? '- - -' : i.Serie.slice(i.Serie.length - 6, i.Serie.length)}</td>
+                                <td><span id="operadoraBorrar-${i.idVenta}">${i.Operadora}</span></td>
+                                <td>${i.Monto}</td>
+                                <td>${i.Venta}</td>
+                                <td>${i.Fecha}</td>
+                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${i.idVenta}">Detalles</a>
+                                    <a class="borrar btn waves-effect red white-text" id="confirmar-${i.idVenta}">Eliminar</a></td>
+                            </tr>
+                        `)
+                        saldoNemi(i.Telefono, i.idVenta)
+                    });
+                } else {
+                    document.getElementById('Tabla').innerHTML = `
+                        <h4 class="center-align">No hay datos que mostrar</h4>
+                    `;
+                }
+            });
+    }
+
+    function saldoNemi(numero, progress){
+        fetch('https://cdn.nemi.tel/services/bolsa/1001174/consultaBolsa',{
+            method: 'POST',
+            body: JSON.stringify({"numero": numero, "entorno": "desarrollo"})
+        })
+            .then(res => res.json())
+            .then(res => {
+                if(res.result === 'success'){
+                    let total = 0, unused = 0
+                    res.bolsas = res.bolsas.filter(bolsa => bolsa.tipo === 'Datos')
+                    res.bolsas.forEach(bolsa => {
+                        total += parseFloat(bolsa.initialAmt)
+                        unused += parseFloat(bolsa.unusedAmt)
+                    })
+                    document.querySelector(`#progress-${progress}`).innerHTML = `
+                        <div class="progress"><div class="determinate" style="width: ${(unused * 100) / total}%"></div></div>
+                        <p>${unused} / ${total}</p>
+                    `
+                } else {
+                    document.querySelector(`#progress-${progress}`).innerHTML = `<p class="red-text">${res.description}</p>`
+                }
             })
     }
 
@@ -388,69 +473,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             </tr>
                         `)
                     });
-                } else {
-                    document.getElementById('Tabla').innerHTML = `
-                        <h4 class="center-align">No hay datos que mostrar</h4>
-                    `;
-                }
-            });
-    }
-
-    function consultaRecargas(data){
-        fetch('consultaRecargas',{
-            method: 'POST',
-            body: data
-        })
-            .then(res => res.json())
-            .then(res => {
-                res = filtrar(res, 'Saldo');
-                if(res.length > 0){
-                    document.getElementById('Tabla').innerHTML = `
-                        <table class="responsive-table centered">
-                            <thead>
-                                <tr>
-                                    <th>Empleado</th>
-                                    <th>Cliente</th> 
-                                    <th>Teléfono</th>
-                                    <th>Recarga</th>
-                                    <th># Serie</th>
-                                    <th>Operadora</th>
-                                    <th>Monto</th>
-                                    <th>Venta</th>
-                                    <th>fecha</th>
-                                    <th><a class="btn waves-effect waves-light" id="Copiar">Copiar números</a></th>
-                                </tr>
-                            </thead>
-                            <tbody id="recargasBody"></tbody>
-                        </table>
-                    `;
-                    document.getElementById('Copiar').addEventListener('click',(e) => {
-                        document.getElementById('Tabla').innerHTML += `
-                            <input type="text" value="${Numeros(res)}" id="Nums">
-                        `;
-                        const cop = document.getElementById('Nums');
-                       cop.select();
-                       document.execCommand('selectAll');
-                       document.execCommand('copy');
-                       cop.style.visibility = 'hidden';
-                       M.toast({ html: 'Numeros copiados', classes: 'green white-text' });
-                    });
-                    const recargasBody = document.getElementById('recargasBody');
-                    res.map(i => recargasBody.insertAdjacentHTML('beforeend', `
-                            <tr>
-                                <td>${i.Empleado}</td>
-                                <td>${i.Cliente}</td>
-                                <td>${i.Operadora === 'MT' ? `<a class="infoNemi" href="#!" id="${i.Telefono}">${i.Telefono}</a>` : `${i.Telefono}`}</td>
-                                <td>${i.Recarga}</td>
-                                <td>${i.Serie == null ? '- - -' : i.Serie.slice(i.Serie.length - 6, i.Serie.length)}</td>
-                                <td><span id="operadoraBorrar-${i.idVenta}">${i.Operadora}</span></td>
-                                <td>${i.Monto}</td>
-                                <td>${i.Venta}</td>
-                                <td>${i.Fecha}</td>
-                                <td><a class="infoVenta btn waves-effect yellow black-text" id="detalles-${i.idVenta}">Detalles</a>
-                                    <a class="borrar btn waves-effect red white-text" id="confirmar-${i.idVenta}">Eliminar</a></td>
-                            </tr>
-                        `));
                 } else {
                     document.getElementById('Tabla').innerHTML = `
                         <h4 class="center-align">No hay datos que mostrar</h4>
