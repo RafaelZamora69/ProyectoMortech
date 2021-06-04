@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     let planes = []
+    let modalNemi = null
     const externa = document.getElementById('exterior');
     const elems = document.getElementById('modal2');
     const modal2 = M.Modal.init(elems);
@@ -42,11 +43,9 @@ document.addEventListener('DOMContentLoaded', function () {
     //Clientes
     var autocom = document.getElementById('autocompleteName');
     var clientesSaldo = M.Autocomplete.init(autocom);
-    var autocom = document.getElementById('autocompleteNameExterna');
-    var clientesSaldoExterna = M.Autocomplete.init(autocom);
+    var clientesSaldoExterna = M.Autocomplete.init(document.querySelector('#autocompleteNameExterna'));
     //Numeros de teléfono
-    var chips = document.getElementById('chips');
-    var telefonos = M.Chips.init(chips, {
+    var telefonos = M.Chips.init(document.querySelector('#chips'), {
         placeholder: "Numeros",
         secondaryPlaceholder: "+Numero"
     });
@@ -55,8 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
     //Modal de aviso
     var modal = document.getElementById('modal1');
     var modalAviso = M.Modal.init(modal);
-    //Números de teléfono
-    const value = document.getElementById('numeros');
     //Monto a pagar
     let formSaldo = document.getElementById('FormSaldo');
     let formServicio = document.getElementById('FormServicio');
@@ -80,9 +77,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     chips.addEventListener('input', agregarNumero);
     document.getElementById('Agregar').addEventListener('click', () => {
-        telefonos.addChip({tag: value.value});
+        telefonos.addChip({tag: document.querySelector('#numeros').value});
         count = 0;
-        value.value = '';
+        document.querySelector('#numeros').value = '';
     });
     document.getElementById('registrarCompra').addEventListener('click', (e) => {
         registrarCompra(e);
@@ -90,32 +87,56 @@ document.addEventListener('DOMContentLoaded', function () {
     //funciones
     ObtenerClientes();
     obtenerProveedores();
-    var chipsExterna, telefonosExterna;
+    //FORM EXTERNO
     if (document.getElementById('exterior')) {
         obtenerEmpleados();
-        const numeroExterno = document.getElementById('numeroExterno');
-        chipsExterna = document.getElementById('chipsExterna');
-        telefonosExterna = M.Chips.init(chipsExterna, {
+        const telefonosExterna = M.Chips.init(document.querySelector('#chipsExterna'), {
             placeholder: "Numeros",
             secondaryPlaceholder: "+Numero"
-        });
-        document.getElementById('RecargaExterna').addEventListener('submit', RecargaSaldo);
+        })
         document.getElementById('AgregarExterna').addEventListener('click', () => {
-            telefonosExterna.addChip({tag: value[0].value});
+            telefonosExterna.addChip({tag: document.querySelector('#numeroExterno').value});
             count = 0;
-            value[0].value = '';
+            document.querySelector('#numeroExterno').value = '';
         });
         chipsExterna.addEventListener('input', agregarNumeroExterno);
+        document.querySelector('#RecargaExterna').addEventListener('submit', (e) => {
+            e.preventDefault()
+            if(esNemi(document.querySelector('#OperadoraExterna').value)){
+                modalNemi = M.Modal.init(document.querySelector('#modalAvisoNemi'))
+                document.querySelector('#contenidoAvisoNemi').innerHTML = `
+                    <div class="row"> 
+                        <div class="input-field col s6"> 
+                            <input type="number" id="montoNemi">
+                            <label for="montoNemi">Ingrese monto</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                    <div class="col s6"> 
+                        <a href="#!" class="green white-text btn" id="recargaNemi">Aceptar</a>
+                    </div>
+                    </div>
+                `
+                document.querySelector('#recargaNemi').addEventListener('click', (e) => {
+                    registrarVentaNemi(document.querySelector('#chipsExterna').M_Chips.chipsData[0].tag,
+                        document.querySelector('#montoNemi').value,
+                        document.querySelector('#empleadoExterno').value)
+                })
+                modalNemi.open()
+            } else {
+                RecargaSaldo()
+            }
+        })
 
         function agregarNumeroExterno(e) {
             if (e.inputType === 'deleteContentBackward' && count >= 0) {
                 count--;
             } else if (Number.isInteger(parseInt(e.data))) {
                 count++;
-                if (count == 10) {
-                    telefonosExterna.addChip({tag: numeroExterno.value});
+                if (count === 10) {
+                    telefonosExterna.addChip({tag: document.querySelector('#numeroExterno').value});
                     count = 0;
-                    numeroExterno.value = '';
+                    document.querySelector('#numeroExterno').value = '';
                 }
             }
         }
@@ -359,10 +380,10 @@ document.addEventListener('DOMContentLoaded', function () {
             count--;
         } else if (Number.isInteger(parseInt(e.data))) {
             count++;
-            if (count == 10) {
-                telefonos.addChip({tag: value.value});
+            if (count === 10) {
+                telefonos.addChip({tag: document.querySelector('#numeros').value});
                 count = 0;
-                value.value = '';
+                document.querySelector('#numeros').value = '';
             }
         }
     }
@@ -373,9 +394,9 @@ document.addEventListener('DOMContentLoaded', function () {
         let datos;
         if (e.target.classList.contains('Externa')) {
             datos = new FormData(document.getElementById('RecargaExterna'));
-            datos.append('Numeros', JSON.stringify(document.getElementsByClassName('chips')[1].M_Chips.chipsData));
-            datos.append('Vendedor', document.getElementById('empleadoExterno').value);
-            datos.append('Plan', document.getElementById('OperadoraExterna').value);
+            datos.append('Numeros', JSON.stringify(document.querySelector('#chipsExterna').M_Chips.chipsData));
+            datos.append('Vendedor', document.querySelector('#empleadoExterno').value);
+            datos.append('Plan', document.querySelector('#OperadoraExterna').value);
             document.getElementById('pagadoExterna').checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
             document.getElementsByClassName('recargaExterna')[0].checked ? datos.append('Recarga', 1) : datos.append('Recarga', 0);
             datos.append('Tipo', 'Externa');
@@ -396,7 +417,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(res => {
                 if (e.target.classList.contains('Externa')) {
-                    res.Codigo == 0 ?
+                    res.Codigo === 0 ?
                         M.toast({html: res.Mensaje, classes: 'green white-text'}) :
                         M.toast({html: 'Error ' + res.Mensaje, classes: 'red white-text'})
                     if (res.Codigo == 0) {
@@ -567,9 +588,9 @@ document.addEventListener('DOMContentLoaded', function () {
             })
     }
 
-    function registrarVentaNemi(tel, total) {
+    function registrarVentaNemi(tel, total, vendedor = null) {
         const datos = new FormData(document.getElementById('FormSaldo'))
-        datos.append('Vendedor', document.getElementById("Name").innerText)
+        datos.append('Vendedor', vendedor === null ? document.getElementById("Name").innerText : vendedor)
         datos.append('Numero', tel)
         datos.append('Plan', document.getElementById('Operadora').value)
         datos.append('Monto', total)
@@ -584,6 +605,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (res.Codigo === 0) {
                     M.toast({html: res.Mensaje, classes: 'green white-text'});
                     document.getElementById('FormSaldo').reset();
+                    if(document.querySelector('#exterior') !== undefined){
+                        document.querySelector('#RecargaExterna').reset()
+                        if(modalNemi !== null) {
+                            modalNemi.close()
+                        }
+                    }
                 }
             });
     }
