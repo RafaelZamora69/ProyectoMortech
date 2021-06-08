@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.querySelector('#recargaNemi').addEventListener('click', (e) => {
                     registrarVentaNemi(document.querySelector('#chipsExterna').M_Chips.chipsData[0].tag,
                         document.querySelector('#montoNemi').value,
-                        document.querySelector('#empleadoExterno').value)
+                        document.querySelector('#empleadoExterno').value,'externa')
                 })
                 modalNemi.open()
             } else {
@@ -215,17 +215,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function obtenerInfoNemi(serie, tel) {
         planes = []
-        fetch('https://cdn.nemi.tel/services/activacion/1001174/validaSim', {
+        fetch('https://cdn.nemi.tel/services/activacion/1003489/validaSim', {
             method: 'POST',
             body: JSON.stringify({
-                "entorno": "desarrollo",
+                "entorno": "produccion",
+                "secret": "fba00acd8f69744f88d3fe91303ed594",
                 "serie": serie
             })
         })
             .then(res => res.json())
             .then(res => {
                 if (res.responseCode === "200") {
-                    res.productos.forEach(producto => codigoNemi(producto))
+                    res.productos.forEach(producto => codigoNemi(producto3))
                     document.querySelector('#contenidoAvisoNemi').innerHTML = `
                         <div class="row">
                             <div class="col s12"> 
@@ -283,11 +284,12 @@ document.addEventListener('DOMContentLoaded', function () {
                             </div>
                         `
         modalNemi.open()
-        fetch('https://cdn.nemi.tel/services/recarga/1001174/consultaNumero', {
+        fetch('https://cdn.nemi.tel/services/recarga/1003489/consultaNumero', {
             method: 'POST',
             body: JSON.stringify({
                 "numero": tel,
-                "entorno": "desarrollo"
+                "entorno": "produccion",
+                "secret": "fba00acd8f69744f88d3fe91303ed594"
             })
         })
             .then(res => res.json())
@@ -530,12 +532,13 @@ document.addEventListener('DOMContentLoaded', function () {
         insert into nemi(NumSerie,NumNemi,Activada)values ('8952140061811810510F','000000000',0), ('8952140061811810520F','000000001',0), ('8952140061811810530F','000000002',0), ('8952140061811810540F','000000003',0), ('8952140061811810550F','000000004',0), ('8952140061811810560F','000000005',0), ('8952140061811810570F','000000006',0), ('8952140061811810580F','000000007',0)
          */
         const data = {
-            "entorno": "desarrollo",
+            "entorno": "produccion",
+            "secret": "fba00acd8f69744f88d3fe91303ed594",
             "serie": serie,
             "plan": plan.id,
             "cbpartnerid": "1000630"
         }
-        fetch('https://cdn.nemi.tel/services/activacion/1001174/activaSim', {
+        fetch('https://cdn.nemi.tel/services/activacion/1003489/activaSim', {
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -563,8 +566,8 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="row">
             <div class="col s12"><div class="progress"><div class="indeterminate"></div></div></div></div>
         `
-        const data = {"numero": tel, "plan": plan.id, "entorno": "desarrollo"}
-        fetch('https://cdn.nemi.tel/services/recarga/1001174/recargaNumero', {
+        const data = {"numero": tel, "plan": plan.id, "entorno": "produccion", "secret": "fba00acd8f69744f88d3fe91303ed594"}
+        fetch('https://cdn.nemi.tel/services/recarga/1003489/recargaNumero', {
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -584,33 +587,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
     }
 
-    function registrarVentaNemi(tel, total, vendedor = null) {
-        const datos = new FormData(document.getElementById('FormSaldo'))
-        datos.append('Vendedor', vendedor === null ? document.getElementById("Name").innerText : vendedor)
-        datos.append('Numero', tel)
-        datos.append('Plan', document.getElementById('Operadora').value)
-        datos.append('Monto', total)
-        document.getElementsByClassName('pagado')[0].checked ? datos.append('Pagado', 1) : datos.append('Pagado', 0);
-        document.getElementsByClassName('recarga')[0].checked ? datos.append('Recarga', 1) : datos.append('Recarga', 0);
-        fetch('recargaNemi', {
-            method: 'POST',
-            body: datos
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.Codigo === 0) {
-                    M.toast({html: res.Mensaje, classes: 'green white-text'});
-                    document.getElementById('FormSaldo').reset();
-                    if(document.querySelector('#exterior') !== undefined){
-                        document.querySelector('#RecargaExterna').reset()
-                        if(modalNemi !== null) {
-                            modalNemi.close()
-                        }
-                    }
-                }
-            });
-    }
-
     function codigoNemi(producto) {
         /*
          MT1 NEMI Movilidad 30 días 20GB Tethering PROMO 225 MXN
@@ -619,18 +595,18 @@ document.addEventListener('DOMContentLoaded', function () {
          MT6 NEMI Movilidad 30 días 50GB Tethering PROMO 399 MXN
          */
         const validos = [
-            {code: 'MT1', name: 'OFERTA NEMI 30 días 20GB Tethering'},
-            {code: 'MT1A', name: 'OFERTA NEMI 30 días 20GB '},
-            {code: 'MT2', name: 'OFERTA NEMI 7 días 5GB'},
-            {code: 'MT3', name: 'OFERTA NEMI 14 días 10GB'},
-            {code: 'MT4', name: 'OFERTA NEMI 30 días 8GB Tethering'},
-            {code: 'MT5', name: 'OFERTA NEMI 30 días 5GB Tethering'},
-            {code: 'MT6', name: 'OFERTA NEMI 30 días 50GB Tethering'},]
+            {code: 'MT1', name: 'OFERTA NEMI 30 días 20GB Tethering', precio: 300},
+            {code: 'MT1A', name: 'OFERTA NEMI 30 días 20GB ', precio: 200},
+            {code: 'MT2', name: 'OFERTA NEMI 7 días 5GB', precio: 50},
+            {code: 'MT3', name: 'OFERTA NEMI 14 días 10GB', precio: 100},
+            {code: 'MT4', name: 'OFERTA NEMI 30 días 8GB Tethering', precio: 150},
+            {code: 'MT5', name: 'OFERTA NEMI 30 días 5GB Tethering', precio: 100},
+            {code: 'MT6', name: 'OFERTA NEMI 30 días 50GB Tethering', precio: 500},]
         let code = ''
         for (stream of validos) {
             if (stream.name === producto.name.trim()) {
                 code = stream.code.concat(' ', producto.name)
-                planes.push({id: producto.id, name: truncatePlan(code), precio: producto.precioVentaFinal})
+                planes.push({id: producto.id, name: truncatePlan(code), precio: stream.precio})
                 break
             }
         }
