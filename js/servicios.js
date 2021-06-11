@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(res => res.json())
             .then(res => {
-                res.productos.forEach(producto => codigoNemi(producto))
+                res.productos.forEach(producto => codigoNemiRecarga(producto))
                 document.querySelector('#contenidoAvisoNemi').innerHTML = `
                         <div class="row">
                             <div class="col s12"> 
@@ -588,12 +588,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function codigoNemi(producto) {
-        /*
-         MT1 NEMI Movilidad 30 días 20GB Tethering PROMO 225 MXN
-         MT1A NEMI Movilidad 30 días 20GB PROMO 150 MXN
-         MT5 NEMI Movilidad 30 días 5GB Tethering PROMO 75 MXN
-         MT6 NEMI Movilidad 30 días 50GB Tethering PROMO 399 MXN
-         */
+        const validos = [
+            {code: 'MT1', name: 'OFERTA NEMI 30 días 20GB Tethering', precio: 300},
+            {code: 'MT1A', name: 'OFERTA NEMI 30 días 20GB ', precio: 200},
+            {code: 'MT2', name: 'OFERTA NEMI 7 días 5GB', precio: 50},
+            {code: 'MT3', name: 'OFERTA NEMI 14 días 10GB', precio: 100},
+            {code: 'MT4', name: 'OFERTA NEMI 30 días 8GB Tethering', precio: 150},
+            {code: 'MT5', name: 'OFERTA NEMI 30 días 5GB Tethering', precio: 100},
+            {code: 'MT6', name: 'OFERTA NEMI 30 días 50GB Tethering', precio: 500},]
+        let code = ''
+        for (stream of validos) {
+            if (stream.name === producto.name.trim()) {
+                code = stream.code.concat(' ', producto.name)
+                planes.push({id: producto.id, name: truncatePlan(code), precio: stream.precio})
+                break
+            }
+        }
+    }
+
+    function codigoNemiRecarga(producto){
         const validos = [
             {code: 'MT1', name: 'OFERTA NEMI 30 días 20GB Tethering', precio: 300},
             {code: 'MT1A', name: 'OFERTA NEMI 30 días 20GB ', precio: 200},
